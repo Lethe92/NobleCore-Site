@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asil AI Studio — NobleCore</title>
+  <meta name="description" content="Node tabanlı karakter/görsel ve 3D üretim stüdyosu. Asil AI Studio'yu Windows için ücretsiz indir." />
+  <link rel="icon" href="assets/logo.png" />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --bg-alt: #14161c;
+      --card: #1c1f28;
+      --border: #23262f;
+      --text: #e6e8ee;
+      --text-muted: #9aa1b3;
+      --accent: #4f7cff;
+      --accent-hover: #3d69f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---- Header ---- */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(11, 12, 16, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-lg {
+      padding: 14px 28px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: var(--card);
+    }
+
+    /* ---- Hero ---- */
+
+    .hero {
+      padding: 64px 0 48px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: 44px;
+      font-weight: 800;
+      margin: 0 0 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      max-width: 560px;
+      margin: 0 auto 32px;
+      color: var(--text-muted);
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .hero-note {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .hero-banner-wrap {
+      margin-top: 48px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-banner-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ---- Features ---- */
+
+    .section {
+      padding: 72px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-header h2 {
+      font-size: 30px;
+      margin: 0 0 10px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      display: block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: #3a3f4e;
+    }
+
+    .feature-thumb {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: var(--bg-alt);
+    }
+
+    .feature-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .feature-play {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.65);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .feature-body {
+      padding: 14px 16px 16px;
+    }
+
+    .feature-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .feature-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* ---- Workflow strip ---- */
+
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      text-align: center;
+    }
+
+    .strip-item {
+      padding: 24px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .strip-item-icon {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .strip-item-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .strip-item-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ---- Download CTA ---- */
+
+    .cta {
+      background: radial-gradient(circle at 30% 20%, #26314f 0%, #14161c 70%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px 40px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 28px;
+      margin: 0 0 12px;
+    }
+
+    .cta p {
+      color: var(--text-muted);
+      margin: 0 0 28px;
+    }
+
+    .platform-note {
+      margin-top: 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ---- Footer ---- */
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 860px) {
+      .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero h1 {
+        font-size: 32px;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .strip {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <img src="assets/logo.png" alt="" />
+        Asil AI Studio
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Öne Çıkanlar</a>
+        <a href="#workflow">Nasıl Çalışır</a>
+        <a href="#download">İndir</a>
+      </nav>
+      <a class="btn" href="#download">İndir</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <span class="hero-eyebrow">Windows için ücretsiz</span>
+      <h1>Node tabanlı karakter,<br />görsel ve 3D üretim stüdyosu</h1>
+      <p>
+        Bir referans görsel yükle, node'ları birbirine bağla; yapay zekâ ile yeni görseller ve oyuna hazır 3D
+        modeller üret. Kod bilmene gerek yok.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-lg" href="#download">⬇ Windows için indir</a>
+        <a class="btn btn-lg btn-outline" href="#features">Örnekleri gör</a>
+      </div>
+      <div class="hero-note">v1.0.0 · Windows 10/11 · ~93 MB</div>
+
+      <div class="hero-banner-wrap">
+        <img src="assets/hero-banner.jpg" alt="Asil AI Studio node tabanlı iş akışı" />
+      </div>
+    </section>
+
+    <section class="section" id="workflow">
+      <div class="container">
+        <div class="section-header">
+          <h2>Nasıl çalışır</h2>
+          <p>Dört adımda karakterinden oyuna hazır 3D modele.</p>
+        </div>
+        <div class="strip">
+          <div class="strip-item">
+            <div class="strip-item-icon">🖼️</div>
+            <div class="strip-item-title">Referans yükle</div>
+            <div class="strip-item-desc">Bir karakter veya obje görseli sürükle bırak.</div>
+          </div>
+          <div class="strip-item">
+            <div class="strip-item-icon">🔗</div>
+            <div class="strip-item-title">Node'ları bağla</div>
+            <div class="strip-item-desc">Text-to-Image, Multi View, Re-Angle gibi node'ları zincirle.</div>
+          </div>
+          <div class="strip-item">
+            <div class="strip-item-icon">✨</div>
+            <div class="strip-item-title">AI ile üret</div>
+            <div class="strip-item-desc">Gemini "Nano Banana" ile yeni görseller ve varyasyonlar üret.</div>
+          </div>
+          <div class="strip-item">
+            <div class="strip-item-icon">🧊</div>
+            <div class="strip-item-title">3D'ye dönüştür</div>
+            <div class="strip-item-desc">Görselden GLB/OBJ/FBX formatında oyuna hazır model çıkar.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <h2>Öne Çıkanlar</h2>
+          <p>Topluluktan ilham verici iş akışları ve teknikler.</p>
+        </div>
+        <div class="feature-grid">
+          <a class="feature-card" href="https://www.youtube.com/watch?v=0TGkhdMI3tc" target="_blank" rel="noopener">
+            <div class="feature-thumb">
+              <img src="assets/feature-gorsel-uretim.jpg" alt="" />
+              <span class="feature-play">▶</span>
+            </div>
+            <div class="feature-body">
+              <div class="feature-tag" style="color:#6fcf97">YENİ</div>
+              <div class="feature-title">This Is How 3D Artists Will Work in 2027 — Pro AI Character Workflow</div>
+            </div>
+          </a>
+          <a class="feature-card" href="https://www.youtube.com/watch?v=JzQrUAVPmr4" target="_blank" rel="noopener">
+            <div class="feature-thumb">
+              <img src="assets/feature-multiview.jpg" alt="" />
+              <span class="feature-play">▶</span>
+            </div>
+            <div class="feature-body">
+              <div class="feature-tag" style="color:#4f7cff">ÖZELLİK</div>
+              <div class="feature-title">Unreal Engine 5.8 Mesh Terrain — Full Deep Dive</div>
+            </div>
+          </a>
+          <a class="feature-card" href="https://www.youtube.com/watch?v=Ff_tdMsndzQ" target="_blank" rel="noopener">
+            <div class="feature-thumb">
+              <img src="assets/feature-image-to-3d.jpg" alt="" />
+              <span class="feature-play">▶</span>
+            </div>
+            <div class="feature-body">
+              <div class="feature-tag" style="color:#d99a3c">ÖZELLİK</div>
+              <div class="feature-title">The Best Local 3D AI Workflow for Game-Ready Characters (6GB VRAM)</div>
+            </div>
+          </a>
+          <a class="feature-card" href="https://www.youtube.com/watch?v=Jn9Zl5SO4EU" target="_blank" rel="noopener">
+            <div class="feature-thumb">
+              <img src="assets/feature-texture-trim-sheet.jpg" alt="" />
+              <span class="feature-play">▶</span>
+            </div>
+            <div class="feature-body">
+              <div class="feature-tag" style="color:#e8735f">ÖZELLİK</div>
+              <div class="feature-title">How AAA Studios Texture Huge Worlds | The Last of Us & Valorant Trim Sheet Workflows</div>
+            </div>
+          </a>
+          <a class="feature-card" href="https://www.youtube.com/watch?v=AR4V-MVv4rw" target="_blank" rel="noopener">
+            <div class="feature-thumb">
+              <img src="assets/feature-ac-blackflag-kit.jpg" alt="" />
+              <span class="feature-play">▶</span>
+            </div>
+            <div class="feature-body">
+              <div class="feature-tag" style="color:#4f7cff">ÖZELLİK</div>
+              <div class="feature-title">AC Black Flag Resynced: 1 Kit = 100 Buildings</div>
+            </div>
+          </a>
+          <a class="feature-card" href="https://www.youtube.com/watch?v=MF_wkqanBFI" target="_blank" rel="noopener">
+            <div class="feature-thumb">
+              <img src="assets/feature-blackflag-materials-tech.jpg" alt="" />
+              <span class="feature-play">▶</span>
+            </div>
+            <div class="feature-body">
+              <div class="feature-tag" style="color:#6fcf97">ÖZELLİK</div>
+              <div class="feature-title">Tricks Behind Black Flag Resynced's Materials and Tech</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="download">
+      <div class="container">
+        <div class="cta">
+          <h2>Şimdi indir, dakikalar içinde başla</h2>
+          <p>Windows 10/11 için ücretsiz. Kod bilmene gerek yok.</p>
+          <a class="btn btn-lg" id="download-btn" href="#" download>⬇ Windows için indir (.exe)</a>
+          <div class="platform-note">v1.0.0 · ~93 MB · Kod imzalı değildir, ilk açılışta SmartScreen uyarısı normaldir.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">© 2026 Asil AI Studio · NobleCore.net</div>
+  </footer>
+
+  <script>
+    // TODO: .exe yüklendiği yere göre burayı güncelle (örn. GitHub Releases linki).
+    document.getElementById('download-btn').addEventListener('click', function (e) {
+      if (this.getAttribute('href') === '#') {
+        e.preventDefault()
+        alert('İndirme linki henüz eklenmedi.')
+      }
+    })
+  </script>
+</body>
+</html>
