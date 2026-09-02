@@ -94381,6 +94381,7 @@ const SIDEBAR_MIN = 280;
 const SIDEBAR_MAX = 380;
 const SIDEBAR_DEFAULT = 280;
 const RAIL_WIDTH = 72;
+const MESSAGE_MAX_LENGTH = 1200;
 function formatTime(ts) {
   return new Date(ts).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 }
@@ -95355,6 +95356,7 @@ function NobleCoreView({
                               value: editDraft,
                               onChange: (e2) => setEditDraft(e2.target.value),
                               autoFocus: true,
+                              maxLength: MESSAGE_MAX_LENGTH,
                               onKeyDown: (e2) => e2.key === "Escape" && cancelEditMessage()
                             }
                           ),
@@ -95500,7 +95502,8 @@ function NobleCoreView({
                     onSelect: (e2) => updateMentionFromCursor(e2.target.value, e2.target.selectionStart),
                     onKeyDown: handleComposerKeyDown,
                     onPaste: handlePaste,
-                    disabled: !activeChannelId
+                    disabled: !activeChannelId,
+                    maxLength: MESSAGE_MAX_LENGTH
                   }
                 ),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
