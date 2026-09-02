@@ -6236,4 +6236,12 @@ button.launcher-featured-card:hover {
     display: flex;
     flex-shrink: 0;
   }
+
+  /* .noblecore-bottom-panel (kullanici paneli + ses banner'i) "position:fixed;
+     bottom:8px" ile ekranin gercek altina sabitleniyor (bkz. tanimi) — bu,
+     akisin icinde olan .noblecore-mobile-tabbar'in USTUNE biniyordu. Mobilde
+     tabbar'in yuksekligi kadar yukari itiyoruz ki ikisi ust uste binmesin. */
+  .noblecore-bottom-panel {
+    bottom: 45px;
+  }
 }
