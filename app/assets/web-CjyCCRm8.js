@@ -424,6 +424,7 @@ window.api = {
     return { ok: true };
   }
 };
+window.addEventListener("contextmenu", (e) => e.preventDefault());
 client.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(React.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(WebApp, {}) })
 );
