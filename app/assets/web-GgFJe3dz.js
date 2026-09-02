@@ -1,4 +1,4 @@
-import { r as reactExports, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, d as mergeHubContent, A as APPS, j as jsxRuntimeExports, n as noblecoreLogo, f as NobleCoreAuthModal, e as AppIcon, N as NobleCoreView, h as heroBanner, S as ServerModal, i as client, R as React } from "./index-DeVnfiWG.js";
+import { r as reactExports, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, d as mergeHubContent, A as APPS, j as jsxRuntimeExports, n as noblecoreLogo, f as NobleCoreAuthModal, e as AppIcon, N as NobleCoreView, h as heroBanner, S as ServerModal, i as client, R as React } from "./index-BQY5OmkW.js";
 const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);

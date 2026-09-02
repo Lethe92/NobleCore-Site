@@ -899,7 +899,7 @@ body {
   color: #9aa1b3;
 }
 
-.modal a {
+.modal a:not(.btn) {
   color: #4f7cff;
 }
 
