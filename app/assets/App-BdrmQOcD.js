@@ -95188,7 +95188,7 @@ function NobleCoreView({
   const activeChannel = channels.find((c2) => c2.id === activeChannelId);
   const textChannels = channels.filter((c2) => c2.type !== "voice");
   const voiceChannels = channels.filter((c2) => c2.type === "voice");
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-view", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-view${activeChannelId ? " noblecore-view-channel-open" : ""}`, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-sidebar", style: { width: sidebarWidth }, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
@@ -95437,6 +95437,7 @@ function NobleCoreView({
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-no-text-channel-desc", children: "Kendini garip bir yerde buldun. Bu sunucuda hiçbir yazı kanalına erişimin yok veya hiçbir yazı kanalı yok." })
         ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-chat-header", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-chat-back-btn", onClick: () => setActiveChannelId(null), title: "Kanallara dön", children: "←" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
               "# ",
               activeChannel?.name || ""

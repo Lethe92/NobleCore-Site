@@ -2533,6 +2533,23 @@ body {
   cursor: default;
 }
 
+/* Sadece mobil genislikte gorunur (bkz. @media bloku) — masaustunde/genis
+   tarayicida .noblecore-channel-sidebar zaten hep gorunur oldugu icin
+   "kanallara don" butonuna gerek yok. */
+.noblecore-chat-back-btn {
+  display: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #e6e8ee;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .noblecore-message-list {
   flex: 1;
   overflow-y: auto;
@@ -6115,4 +6132,62 @@ button.launcher-featured-card:hover {
   font-size: 14px;
   margin: 0 0 20px;
   max-width: 340px;
+}
+
+/* ---- Mobil sohbet gorunumu (Discord mobil web'i gibi tek panelli gezinme) ----
+   Masaustunde .noblecore-view uc panel yan yana (kanal listesi + sohbet +
+   uye listesi, toplam sabit genislikleri 375-414px'lik bir telefon ekranina
+   hic sigmiyordu). Mobilde sadece TEK panel gorunur: hicbir kanal secili
+   degilse kanal listesi tam genislikte, bir kanal seciliyse ("noblecore-view
+   -channel-open" sinifi, bkz. NobleCoreView.jsx) sohbet tam genislikte ve
+   geri donmek icin bir "←" butonu (.noblecore-chat-back-btn) cikar. Uye
+   listesi mobilde hic gosterilmiyor (v1 basitlestirmesi). */
+@media (max-width: 768px) {
+  .launcher-server-rail {
+    width: 56px;
+    padding: 8px 0;
+  }
+
+  .launcher-rail-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .launcher-rail-brand {
+    width: 44px;
+    height: 44px;
+    margin-top: 8px;
+  }
+
+  .launcher-rail-brand .launcher-rail-brand-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .noblecore-channel-sidebar {
+    width: 100% !important;
+  }
+
+  .noblecore-sidebar-resize-handle {
+    display: none;
+  }
+
+  .noblecore-view-channel-open .noblecore-channel-sidebar {
+    display: none;
+  }
+
+  .noblecore-view:not(.noblecore-view-channel-open) .noblecore-chat {
+    display: none;
+  }
+
+  .noblecore-chat-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .noblecore-member-sidebar {
+    display: none;
+  }
 }
