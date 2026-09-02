@@ -1,4 +1,4 @@
-import { r as reactExports, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, d as mergeHubContent, A as APPS, j as jsxRuntimeExports, n as noblecoreLogo, f as NobleCoreAuthModal, e as AppIcon, N as NobleCoreView, h as heroBanner, S as ServerModal, i as client, R as React } from "./index-BQY5OmkW.js";
+import { r as reactExports, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, a as mergeHubContent, b as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, c as client, R as React } from "./App-DZTdN7FC.js";
 const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);
@@ -11,6 +11,11 @@ function WebApp() {
   const [serverModalOpen, setServerModalOpen] = reactExports.useState(false);
   const [checkingSession, setCheckingSession] = reactExports.useState(true);
   const [desktopPromptOpen, setDesktopPromptOpen] = reactExports.useState(false);
+  const [showStudio, setShowStudio] = reactExports.useState(false);
+  function handlePlayClick() {
+    if (activeApp === "board" || activeApp === "ref") setDesktopPromptOpen(true);
+    else setShowStudio(true);
+  }
   reactExports.useEffect(() => {
     let cancelled = false;
     window.api.getNobleCoreToken().then(async (savedToken) => {
@@ -82,6 +87,9 @@ function WebApp() {
   const app = mergeHubContent(APPS[activeApp], hubContent[activeApp]);
   if (checkingSession) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "web-landing" });
+  }
+  if (showStudio) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(StudioApp, { onExitStudio: () => setShowStudio(false) });
   }
   if (!token) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "web-landing", children: [
@@ -179,7 +187,7 @@ function WebApp() {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-fade" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-side-art-footer", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: () => setDesktopPromptOpen(true), children: activeApp === "hub" ? "AI Studio" : app.title }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: handlePlayClick, children: activeApp === "hub" ? "AI Studio" : app.title }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-version", children: "Sürüm: 1.0.0" })
             ] })
           ] }),
@@ -234,8 +242,48 @@ function WebApp() {
   ] });
 }
 const NOBLECORE_BASE_URL = "https://api.noblecore.net";
+function getToken() {
+  return localStorage.getItem("nobleCoreToken") || "";
+}
+async function callGenerateEndpoint(path, body) {
+  const token = getToken();
+  if (!token) throw new Error("Üretim yapabilmek için NobleCore hesabına giriş yapmalısın.");
+  const res = await fetch(`${NOBLECORE_BASE_URL}/generate${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body)
+  });
+  if (res.status === 401) throw new Error("Oturumun sona ermiş, NobleCore'a tekrar giriş yap.");
+  if (res.status === 402) throw new Error("Yetersiz kredi. Devam etmek için bakiyene kredi eklemen gerekiyor.");
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.error || "Üretim başarısız oldu.");
+  return json;
+}
+function readProjects() {
+  try {
+    return JSON.parse(localStorage.getItem("aiStudioProjects") || "{}");
+  } catch {
+    return {};
+  }
+}
+function writeProjects(projects) {
+  localStorage.setItem("aiStudioProjects", JSON.stringify(projects));
+}
+function defaultProjectNodes() {
+  return [{ id: "upload-1", type: "imageUpload", position: { x: 200, y: 200 }, data: {} }];
+}
+function downloadBlob(blob, fileName) {
+  const blobUrl = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = blobUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(blobUrl);
+}
 window.api = {
-  getNobleCoreToken: async () => localStorage.getItem("nobleCoreToken") || "",
+  getNobleCoreToken: async () => getToken(),
   setNobleCoreToken: async (token) => {
     if (token) localStorage.setItem("nobleCoreToken", token);
     else localStorage.removeItem("nobleCoreToken");
@@ -244,9 +292,6 @@ window.api = {
   // Electron'daki nobleCore:loginWithGoogle handler'iyla ayni akis (bkz.
   // src/main/index.js): bir "state" uretip Google giris sayfasini yeni
   // sekmede acar, sonucu sunucudan periyodik yoklayarak (polling) alir.
-  // Orijinali sistem tarayicisi acmak zorunda oldugu icin boyle tasarlanmisti
-  // (Electron gomulu OAuth'a izin vermiyor) — ama akisin kendisi zaten sadece
-  // fetch + window.open kullaniyor, tarayicida da oldugu gibi calisiyor.
   loginWithGoogle: async () => {
     const state = crypto.randomUUID();
     window.open(`${NOBLECORE_BASE_URL}/auth/google/start?state=${state}`, "_blank", "noopener");
@@ -264,6 +309,34 @@ window.api = {
     }
     throw new Error("Giriş zaman aşımına uğradı, tekrar dene.");
   },
+  // ---- AI Studio: uretim (sunucuya proxy) ----
+  extractProps: (imageDataUrl) => callGenerateEndpoint("/extract-props", { imageDataUrl }),
+  generatePart: async (imageDataUrl, part) => (await callGenerateEndpoint("/part", { imageDataUrl, part })).dataUrl,
+  generateView: async (imageDataUrl, view) => (await callGenerateEndpoint("/view", { imageDataUrl, view })).dataUrl,
+  generateAngle: async (imageDataUrl, params) => (await callGenerateEndpoint("/angle", { imageDataUrl, ...params })).dataUrl,
+  generateFromPrompt: async (prompt) => (await callGenerateEndpoint("/from-prompt", { prompt })).dataUrl,
+  editImageWithPrompt: async (imageDataUrl, prompt) => (await callGenerateEndpoint("/edit-image", { imageDataUrl, prompt })).dataUrl,
+  // 3D modeller: masaustu bunlari indirip yerel diske yaziyor (asil-file://
+  // protokolu ile servis etmek icin), web'de buna gerek yok -- fal.ai/
+  // WaveSpeedAI'nin kendi https URL'leri dogrudan <model-viewer src> ve
+  // indirme linkleri icin kullanilabiliyor, hicbir proxy/onbellekleme gerekmez.
+  generate3DModel: async (views) => {
+    const { modelUrl, objUrl, fbxUrl, thumbnailDataUrl } = await callGenerateEndpoint("/model", { views });
+    return {
+      modelUrl,
+      modelPath: modelUrl,
+      objUrl: objUrl || null,
+      objPath: objUrl || null,
+      fbxUrl: fbxUrl || null,
+      fbxPath: fbxUrl || null,
+      thumbnailDataUrl
+    };
+  },
+  generate3DModelCheap: async (views) => {
+    const { modelUrl } = await callGenerateEndpoint("/model-cheap", { views });
+    return { modelUrl, modelPath: modelUrl };
+  },
+  // ---- Dosya indirme (Electron'un "Farklı Kaydet" dialogunun karsiligi) ----
   saveImage: async (dataUrl, fileName) => {
     const a = document.createElement("a");
     a.href = dataUrl;
@@ -272,6 +345,83 @@ window.api = {
     a.click();
     a.remove();
     return { saved: true };
+  },
+  // sourceUrl burada yerel bir dosya yolu degil, yukaridaki generate3DModel'in
+  // dondurdugu uzak (https) URL -- fetch'leyip Blob olarak indiriyoruz.
+  save3DModel: async (sourceUrl, suggestedName) => {
+    try {
+      const res = await fetch(sourceUrl);
+      if (!res.ok) return { saved: false };
+      downloadBlob(await res.blob(), suggestedName || "model.glb");
+      return { saved: true };
+    } catch {
+      return { saved: false };
+    }
+  },
+  saveModelText: async (content, suggestedName) => {
+    downloadBlob(new Blob([content], { type: "text/plain" }), suggestedName || "model.obj");
+    return { saved: true };
+  },
+  // ---- Projeler (tarayicida localStorage — bkz. yukaridaki not) ----
+  listProjects: async () => {
+    const projects = readProjects();
+    return Object.values(projects).sort((a, b) => b.updatedAt - a.updatedAt);
+  },
+  createProject: async () => {
+    const id = `proj-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const now = Date.now();
+    const project = { id, name: "İsimsiz Proje", createdAt: now, updatedAt: now, nodes: defaultProjectNodes(), edges: [] };
+    const projects = readProjects();
+    projects[id] = project;
+    writeProjects(projects);
+    return project;
+  },
+  saveProject: async ({ id, nodes, edges }) => {
+    const projects = readProjects();
+    const existing = projects[id];
+    if (!existing) throw new Error("Proje bulunamadı.");
+    existing.nodes = nodes;
+    existing.edges = edges;
+    existing.updatedAt = Date.now();
+    writeProjects(projects);
+    return existing;
+  },
+  renameProject: async (id, name) => {
+    const projects = readProjects();
+    const existing = projects[id];
+    if (!existing) throw new Error("Proje bulunamadı.");
+    existing.name = name;
+    existing.updatedAt = Date.now();
+    writeProjects(projects);
+    return existing;
+  },
+  deleteProject: async (id) => {
+    const projects = readProjects();
+    delete projects[id];
+    writeProjects(projects);
+    return true;
+  },
+  // ---- Kredi ----
+  getCreditBalance: async () => {
+    const token = getToken();
+    if (!token) return null;
+    const res = await fetch(`${NOBLECORE_BASE_URL}/credits/me`, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) return null;
+    const { balance, hasPendingRequest } = await res.json();
+    return { balance, hasPendingRequest };
+  },
+  requestCredits: async () => {
+    const token = getToken();
+    if (!token) throw new Error("Kredi isteyebilmek için NobleCore hesabına giriş yapmalısın.");
+    const res = await fetch(`${NOBLECORE_BASE_URL}/credits/request`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || "Kredi isteği gönderilemedi.");
+    }
+    return { ok: true };
   }
 };
 client.createRoot(document.getElementById("root")).render(
