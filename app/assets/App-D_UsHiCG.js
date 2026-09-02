@@ -94570,6 +94570,7 @@ function NobleCoreView({
   const [mentionIndex, setMentionIndex] = reactExports.useState(0);
   const [emojiPickerOpen, setEmojiPickerOpen] = reactExports.useState(false);
   const [blockedIds, setBlockedIds] = reactExports.useState(() => /* @__PURE__ */ new Set());
+  const [messageTooLongLength, setMessageTooLongLength] = reactExports.useState(null);
   const composerInputRef = reactExports.useRef(null);
   const socketRef = reactExports.useRef(socket);
   reactExports.useEffect(() => {
@@ -94819,7 +94820,7 @@ function NobleCoreView({
     const content = applyEmojiShortcuts(draft.trim());
     if (!content && !pendingAttachment || !activeChannelId) return;
     if (content.length > MESSAGE_MAX_LENGTH) {
-      alert(`Mesajın karakter limitini aştın (${content.length}/${MESSAGE_MAX_LENGTH}). Lütfen kısaltıp tekrar dene.`);
+      setMessageTooLongLength(content.length);
       return;
     }
     setMentionQuery(null);
@@ -95694,7 +95695,19 @@ function NobleCoreView({
           onLogout();
         }
       }
-    )
+    ),
+    messageTooLongLength !== null && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: () => setMessageTooLongLength(null), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal noblecore-limit-modal", onClick: (e2) => e2.stopPropagation(), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-limit-modal-icon", children: "✂️" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Mesajın çok uzun…" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "noblecore-limit-modal-sub", children: [
+        MESSAGE_MAX_LENGTH,
+        " karakter sınırına ",
+        messageTooLongLength - MESSAGE_MAX_LENGTH,
+        " karakter fazlasıyla ulaştın."
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Mesajını kısaltıp tekrar göndermeyi dene." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: () => setMessageTooLongLength(null), children: "Tamam" }) })
+    ] }) })
   ] });
 }
 function ScreenShareIcon() {
