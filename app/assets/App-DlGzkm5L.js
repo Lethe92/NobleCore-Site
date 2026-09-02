@@ -94705,7 +94705,7 @@ function NobleCoreView({
   const [resizing, setResizing] = reactExports.useState(false);
   const resizeRef = reactExports.useRef(null);
   const [activeChannelId, setActiveChannelId] = reactExports.useState(null);
-  const [mobileSection, setMobileSection] = reactExports.useState("chat");
+  const [mobileSection, setMobileSection] = reactExports.useState("channels");
   const [messages, setMessages] = reactExports.useState([]);
   const [draft, setDraft] = reactExports.useState("");
   const [addingChannel, setAddingChannel] = reactExports.useState(false);
@@ -94916,6 +94916,9 @@ function NobleCoreView({
     const s2 = sec % 60;
     return `${m2}:${String(s2).padStart(2, "0")}`;
   }
+  reactExports.useEffect(() => {
+    if (activeChannelId) setMobileSection("chat");
+  }, [activeChannelId]);
   reactExports.useEffect(() => {
     if (!activeChannelId) return;
     lastActiveChannelByServer.set(server.id, activeChannelId);
