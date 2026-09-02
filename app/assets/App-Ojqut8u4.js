@@ -94795,6 +94795,9 @@ function NobleCoreView({
   reactExports.useEffect(() => {
     const socket = connectSocket(token);
     socketRef.current = socket;
+    socket.on("connect_error", (err2) => {
+      setError("Sunucuya bağlanılamadı: " + (err2?.message || "bilinmeyen hata") + ". İnternet bağlantını kontrol et.");
+    });
     socket.on("message:new", (msg) => {
       if (msg.channel_id === activeChannelIdRef.current) {
         setMessages((prev) => [...prev, msg]);
@@ -95032,10 +95035,14 @@ function NobleCoreView({
       clearTimeout(typingStopTimerRef.current);
       socketRef.current?.emit("typing:stop", { channelId: activeChannelId });
     }
-    socketRef.current?.emit(
+    socketRef.current?.timeout(8e3).emit(
       "message:send",
       { channelId: activeChannelId, content, attachmentDataUrl: pendingAttachment },
-      (res) => {
+      (err2, res) => {
+        if (err2) {
+          setError("Mesaj gönderilemedi — sunucuya bağlanılamıyor, bağlantını kontrol et.");
+          return;
+        }
         if (res?.error) setError(res.error);
       }
     );
