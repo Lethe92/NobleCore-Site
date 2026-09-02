@@ -96399,12 +96399,12 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
         onServerReady: handleServerReady
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
+    activeServer && /* @__PURE__ */ jsxRuntimeExports.jsx(
       VoiceStatusBar,
       {
         myVoice: connection.myVoice,
         voiceCall: connection.voiceCall,
-        raised: !!activeServer,
+        raised: true,
         onLeaveVoice: (channelId) => connection.handleLeaveVoice(channelId, nobleCoreUser.id),
         onOpenServer: (serverId) => setActiveServerId(serverId)
       }

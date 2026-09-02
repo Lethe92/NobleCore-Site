@@ -1,4 +1,4 @@
-import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, a as mergeHubContent, b as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, c as client, R as React } from "./App-D4FQaqBe.js";
+import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, a as mergeHubContent, b as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, c as client, R as React } from "./App-ofINpF6b.js";
 const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);
@@ -241,12 +241,12 @@ function WebApp() {
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(NobleCoreAuthModal, { open: authModalOpen, onClose: () => setAuthModalOpen(false), onAuthenticated: handleAuthenticated }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ServerModal, { open: serverModalOpen, onClose: () => setServerModalOpen(false), token, username: user?.username, onServerReady: handleServerReady }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
+    activeServer && /* @__PURE__ */ jsxRuntimeExports.jsx(
       VoiceStatusBar,
       {
         myVoice: connection.myVoice,
         voiceCall: connection.voiceCall,
-        raised: !!activeServer,
+        raised: true,
         onLeaveVoice: (channelId) => connection.handleLeaveVoice(channelId, user.id),
         onOpenServer: (serverId) => setActiveServerId(serverId)
       }
