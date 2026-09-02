@@ -336,6 +336,14 @@
       color: var(--text-muted);
     }
 
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
     /* ---- Footer ---- */
 
     footer {
@@ -513,8 +521,11 @@
         <div class="cta">
           <h2>Şimdi indir, dakikalar içinde başla</h2>
           <p>Windows 10/11 için ücretsiz. Kod bilmene gerek yok.</p>
-          <a class="btn btn-lg" id="download-btn" href="https://github.com/Lethe92/NobleCore-Site/releases/download/v1.0.0/Asil.AI.Studio.Setup.1.0.0.exe" download>⬇ Windows için indir (.exe)</a>
-          <div class="platform-note">v1.0.0 · ~92 MB · Kod imzalı değildir, ilk açılışta SmartScreen uyarısı normaldir.</div>
+          <div class="cta-actions">
+            <a class="btn btn-lg" id="store-btn" href="https://apps.microsoft.com/detail/9NKLQ2P3X6DZ" target="_blank" rel="noopener">🛒 Microsoft Store'dan Al</a>
+            <a class="btn btn-lg btn-outline" id="download-btn" href="https://github.com/Lethe92/NobleCore-Site/releases/download/v1.0.0/Asil.AI.Studio.Setup.1.0.0.exe" download>⬇ .exe olarak indir</a>
+          </div>
+          <div class="platform-note">v1.0.0 · Store sürümü otomatik güncellenir ve SmartScreen uyarısı çıkarmaz (önerilen). .exe sürümü ~92 MB, kod imzalı değildir, ilk açılışta SmartScreen uyarısı normaldir.</div>
         </div>
       </div>
     </section>
