@@ -94767,19 +94767,25 @@ function NobleCoreView({
     setMentionIndex(0);
   }
   function handleComposerKeyDown(e2) {
-    if (mentionQuery === null || mentionSuggestions.length === 0) return;
-    if (e2.key === "ArrowDown") {
+    if (mentionQuery !== null && mentionSuggestions.length > 0) {
+      if (e2.key === "ArrowDown") {
+        e2.preventDefault();
+        setMentionIndex((i2) => (i2 + 1) % mentionSuggestions.length);
+      } else if (e2.key === "ArrowUp") {
+        e2.preventDefault();
+        setMentionIndex((i2) => (i2 - 1 + mentionSuggestions.length) % mentionSuggestions.length);
+      } else if (e2.key === "Enter" || e2.key === "Tab") {
+        e2.preventDefault();
+        insertMention(mentionSuggestions[mentionIndex]);
+      } else if (e2.key === "Escape") {
+        setMentionQuery(null);
+        setMentionStart(null);
+      }
+      return;
+    }
+    if (e2.key === "Enter" && !e2.shiftKey) {
       e2.preventDefault();
-      setMentionIndex((i2) => (i2 + 1) % mentionSuggestions.length);
-    } else if (e2.key === "ArrowUp") {
-      e2.preventDefault();
-      setMentionIndex((i2) => (i2 - 1 + mentionSuggestions.length) % mentionSuggestions.length);
-    } else if (e2.key === "Enter" || e2.key === "Tab") {
-      e2.preventDefault();
-      insertMention(mentionSuggestions[mentionIndex]);
-    } else if (e2.key === "Escape") {
-      setMentionQuery(null);
-      setMentionStart(null);
+      submitMessage();
     }
   }
   function handleComposerChange(rawValue, rawCursorPos) {
@@ -94809,10 +94815,13 @@ function NobleCoreView({
       socketRef.current?.emit("typing:stop", { channelId: activeChannelId });
     }
   }
-  function handleSend(e2) {
-    e2.preventDefault();
+  function submitMessage() {
     const content = applyEmojiShortcuts(draft.trim());
     if (!content && !pendingAttachment || !activeChannelId) return;
+    if (content.length > MESSAGE_MAX_LENGTH) {
+      alert(`Mesajın karakter limitini aştın (${content.length}/${MESSAGE_MAX_LENGTH}). Lütfen kısaltıp tekrar dene.`);
+      return;
+    }
     setMentionQuery(null);
     setMentionStart(null);
     if (typingStateRef.current) {
@@ -94833,6 +94842,10 @@ function NobleCoreView({
     );
     setDraft("");
     setPendingAttachment(null);
+  }
+  function handleSend(e2) {
+    e2.preventDefault();
+    submitMessage();
   }
   function startEditMessage(m2) {
     setEditingMessageId(m2.id);
@@ -94863,6 +94876,12 @@ function NobleCoreView({
     const timer2 = setTimeout(() => setError(null), 5e3);
     return () => clearTimeout(timer2);
   }, [error2]);
+  reactExports.useEffect(() => {
+    const el2 = composerInputRef.current;
+    if (!el2) return;
+    el2.style.height = "auto";
+    el2.style.height = `${Math.min(el2.scrollHeight, 220)}px`;
+  }, [draft]);
   reactExports.useEffect(() => {
     getBlockedUsers(token).then((res) => setBlockedIds(new Set(res.blockedIds || []))).catch(() => {
     });
@@ -95491,21 +95510,34 @@ function NobleCoreView({
                     m2.id
                   );
                 }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    ref: composerInputRef,
-                    className: "noblecore-composer-input",
-                    placeholder: activeChannel ? `#${activeChannel.name} kanalına mesaj yaz…` : "Mesaj yaz…",
-                    value: draft,
-                    onChange: (e2) => handleComposerChange(e2.target.value, e2.target.selectionStart),
-                    onSelect: (e2) => updateMentionFromCursor(e2.target.value, e2.target.selectionStart),
-                    onKeyDown: handleComposerKeyDown,
-                    onPaste: handlePaste,
-                    disabled: !activeChannelId,
-                    maxLength: MESSAGE_MAX_LENGTH
-                  }
-                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-composer-input-wrap", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "textarea",
+                    {
+                      ref: composerInputRef,
+                      className: "noblecore-composer-input",
+                      rows: 1,
+                      placeholder: activeChannel ? `#${activeChannel.name} kanalına mesaj yaz…` : "Mesaj yaz…",
+                      value: draft,
+                      onChange: (e2) => handleComposerChange(e2.target.value, e2.target.selectionStart),
+                      onSelect: (e2) => updateMentionFromCursor(e2.target.value, e2.target.selectionStart),
+                      onKeyDown: handleComposerKeyDown,
+                      onPaste: handlePaste,
+                      disabled: !activeChannelId
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "span",
+                    {
+                      className: `noblecore-composer-counter${draft.length > MESSAGE_MAX_LENGTH ? " noblecore-composer-counter-over" : ""}`,
+                      children: [
+                        draft.length,
+                        "/",
+                        MESSAGE_MAX_LENGTH
+                      ]
+                    }
+                  )
+                ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "button",
                   {

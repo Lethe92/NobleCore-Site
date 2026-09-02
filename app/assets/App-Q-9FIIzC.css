@@ -3212,6 +3212,12 @@ body {
   position: relative;
 }
 
+.noblecore-composer-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+}
+
 .noblecore-composer-input {
   flex: 1;
   padding: 10px 12px;
@@ -3220,11 +3226,32 @@ body {
   border-radius: 8px;
   color: #e6e8ee;
   font-size: 13px;
+  font-family: inherit;
+  line-height: 1.4;
   outline: none;
+  resize: none;
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 .noblecore-composer-input:focus {
   border-color: #4f7cff;
+}
+
+.noblecore-composer-counter {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  font-size: 11px;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  user-select: none;
+}
+
+.noblecore-composer-counter-over {
+  color: #ef4444;
+  font-weight: 700;
 }
 
 .noblecore-member-sidebar {
