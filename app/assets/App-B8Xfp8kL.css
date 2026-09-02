@@ -2148,8 +2148,31 @@ body {
   padding-top: 2px;
 }
 
+/* Ses banner'i artik NobleCoreView'in DISINDA (bkz. VoiceStatusBar.jsx,
+   WebApp.jsx/HubScreen.jsx seviyesinde render ediliyor) — hem Hub'da hem
+   sunucu icinde AYNI sabit konumda kalsin diye kendi position:fixed'i var.
+   Sunucu icindeyken altta kullanici paneli (.noblecore-bottom-panel) de
+   oldugu icin "-raised" sinifiyla onun ustune itiliyor. */
+.noblecore-voice-status-bar {
+  position: fixed;
+  left: 8px;
+  bottom: 8px;
+  z-index: 55;
+  width: 260px;
+  max-width: calc(100vw - 16px);
+}
+
+.noblecore-voice-status-bar-raised {
+  bottom: 90px;
+}
+
 .noblecore-voice-banner {
   padding: 10px 10px 8px;
+  /* Eskiden .noblecore-bottom-panel'in (arkaplan/kose saglayan ortak
+     kapsayici) icindeydi, artik VoiceStatusBar.jsx'te tek basina kullanildigi
+     icin kendi arkaplanini/kosesini tasiyor. */
+  background: #1c1f28;
+  border-radius: 12px;
 }
 
 .noblecore-voice-banner-header {

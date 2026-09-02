@@ -1,4 +1,4 @@
-import { r as reactExports, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, a as mergeHubContent, b as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, c as client, R as React } from "./App-Ojqut8u4.js";
+import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, a as mergeHubContent, b as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, c as client, R as React } from "./App-D4FQaqBe.js";
 const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);
@@ -12,6 +12,7 @@ function WebApp() {
   const [checkingSession, setCheckingSession] = reactExports.useState(true);
   const [desktopPromptOpen, setDesktopPromptOpen] = reactExports.useState(false);
   const [showStudio, setShowStudio] = reactExports.useState(false);
+  const connection = useNobleCoreConnection(token);
   function handlePlayClick() {
     if (activeApp === "board" || activeApp === "ref") setDesktopPromptOpen(true);
     else setShowStudio(true);
@@ -144,7 +145,16 @@ function WebApp() {
           onTokenRefresh: (newToken) => {
             window.api.setNobleCoreToken(newToken);
             setTokenState(newToken);
-          }
+          },
+          socket: connection.socket,
+          joinServerRoom: connection.joinServerRoom,
+          voiceCall: connection.voiceCall,
+          myVoice: connection.myVoice,
+          voiceJoinedAt: connection.voiceJoinedAt,
+          voiceElapsed: connection.voiceElapsed,
+          voiceParticipants: connection.voiceParticipants,
+          onJoinVoice: connection.handleJoinVoice,
+          onLeaveVoice: connection.handleLeaveVoice
         }
       ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-topbar", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-tabs", children: [
@@ -231,6 +241,16 @@ function WebApp() {
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(NobleCoreAuthModal, { open: authModalOpen, onClose: () => setAuthModalOpen(false), onAuthenticated: handleAuthenticated }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ServerModal, { open: serverModalOpen, onClose: () => setServerModalOpen(false), token, username: user?.username, onServerReady: handleServerReady }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      VoiceStatusBar,
+      {
+        myVoice: connection.myVoice,
+        voiceCall: connection.voiceCall,
+        raised: !!activeServer,
+        onLeaveVoice: (channelId) => connection.handleLeaveVoice(channelId, user.id),
+        onOpenServer: (serverId) => setActiveServerId(serverId)
+      }
+    ),
     desktopPromptOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: () => setDesktopPromptOpen(false), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal", onClick: (e) => e.stopPropagation(), children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Masaüstü uygulaması gerekiyor" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "AI Studio, Kanban ve NobleRef gibi üretim araçları şu an sadece Windows masaüstü uygulamasında çalışıyor. Bu tarayıcı sürümü sadece sohbet özelliklerini içerir." }),

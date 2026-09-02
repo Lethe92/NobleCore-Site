@@ -94377,175 +94377,6 @@ const DURATION_MS = {
   "3 gün boyunca": 3 * DAY
   // "Her Zaman" kasitli olarak yok — suresiz demek, zamanlayici kurulmaz.
 };
-const FALLBACK_ICE_SERVERS = [{ urls: "stun:stun.l.google.com:19302" }];
-function useVoiceCall() {
-  const [remoteStreams, setRemoteStreams] = reactExports.useState({});
-  const [muted, setMuted] = reactExports.useState(false);
-  const [micError, setMicError] = reactExports.useState(null);
-  const localStreamRef = reactExports.useRef(null);
-  const peersRef = reactExports.useRef(/* @__PURE__ */ new Map());
-  const pendingCandidatesRef = reactExports.useRef(/* @__PURE__ */ new Map());
-  const channelIdRef = reactExports.useRef(null);
-  const iceServersRef = reactExports.useRef(FALLBACK_ICE_SERVERS);
-  const closePeer = reactExports.useCallback((userId) => {
-    const pc2 = peersRef.current.get(userId);
-    if (pc2) {
-      pc2.close();
-      peersRef.current.delete(userId);
-    }
-    pendingCandidatesRef.current.delete(userId);
-    setRemoteStreams((prev) => {
-      if (!(userId in prev)) return prev;
-      const next = { ...prev };
-      delete next[userId];
-      return next;
-    });
-  }, []);
-  const closeAllPeers = reactExports.useCallback(() => {
-    for (const userId of Array.from(peersRef.current.keys())) closePeer(userId);
-  }, [closePeer]);
-  function createPeerConnection(socket, targetUserId, channelId) {
-    const pc2 = new RTCPeerConnection({ iceServers: iceServersRef.current });
-    if (localStreamRef.current) {
-      for (const track of localStreamRef.current.getTracks()) {
-        pc2.addTrack(track, localStreamRef.current);
-      }
-    }
-    pc2.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit("voice:signal", { channelId, targetUserId, type: "ice-candidate", candidate: event.candidate });
-      }
-    };
-    pc2.ontrack = (event) => {
-      setRemoteStreams((prev) => ({ ...prev, [targetUserId]: event.streams[0] }));
-    };
-    pc2.onconnectionstatechange = () => {
-      if (pc2.connectionState === "failed" || pc2.connectionState === "closed") closePeer(targetUserId);
-    };
-    peersRef.current.set(targetUserId, pc2);
-    return pc2;
-  }
-  async function flushPendingCandidates(userId) {
-    const pc2 = peersRef.current.get(userId);
-    const queue = pendingCandidatesRef.current.get(userId);
-    if (!pc2 || !queue) return;
-    for (const candidate of queue) {
-      try {
-        await pc2.addIceCandidate(candidate);
-      } catch {
-      }
-    }
-    pendingCandidatesRef.current.delete(userId);
-  }
-  const startCall = reactExports.useCallback(async (socket, channelId, peers, token) => {
-    channelIdRef.current = channelId;
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      localStreamRef.current = stream;
-      setMuted(false);
-      setMicError(null);
-    } catch {
-      localStreamRef.current = null;
-      setMicError("Mikrofona erişilemedi. Sadece dinleyebilirsin — tarayıcı/işletim sistemi izinlerini kontrol et.");
-    }
-    try {
-      const { iceServers } = await getTurnCredentials(token);
-      if (iceServers?.length) iceServersRef.current = iceServers;
-    } catch {
-    }
-    for (const peer of peers) {
-      const pc2 = createPeerConnection(socket, peer.id, channelId);
-      const offer = await pc2.createOffer();
-      await pc2.setLocalDescription(offer);
-      socket.emit("voice:signal", { channelId, targetUserId: peer.id, type: "offer", sdp: offer });
-    }
-  }, []);
-  const endCall = reactExports.useCallback(() => {
-    if (localStreamRef.current) {
-      for (const track of localStreamRef.current.getTracks()) track.stop();
-      localStreamRef.current = null;
-    }
-    closeAllPeers();
-    channelIdRef.current = null;
-    setMuted(false);
-    setMicError(null);
-  }, [closeAllPeers]);
-  const handleSignal = reactExports.useCallback(async (socket, { channelId, fromUserId, type, sdp, candidate }) => {
-    if (channelId !== channelIdRef.current) return;
-    if (type === "offer") {
-      const pc2 = peersRef.current.get(fromUserId) || createPeerConnection(socket, fromUserId, channelId);
-      await pc2.setRemoteDescription(sdp);
-      await flushPendingCandidates(fromUserId);
-      const answer = await pc2.createAnswer();
-      await pc2.setLocalDescription(answer);
-      socket.emit("voice:signal", { channelId, targetUserId: fromUserId, type: "answer", sdp: answer });
-    } else if (type === "answer") {
-      const pc2 = peersRef.current.get(fromUserId);
-      if (pc2) {
-        await pc2.setRemoteDescription(sdp);
-        await flushPendingCandidates(fromUserId);
-      }
-    } else if (type === "ice-candidate") {
-      const pc2 = peersRef.current.get(fromUserId);
-      if (pc2 && pc2.remoteDescription) {
-        try {
-          await pc2.addIceCandidate(candidate);
-        } catch {
-        }
-      } else {
-        const queue = pendingCandidatesRef.current.get(fromUserId) || [];
-        queue.push(candidate);
-        pendingCandidatesRef.current.set(fromUserId, queue);
-      }
-    }
-  }, []);
-  const syncParticipants = reactExports.useCallback((participantIds) => {
-    const idSet = new Set(participantIds);
-    for (const peerId of Array.from(peersRef.current.keys())) {
-      if (!idSet.has(peerId)) closePeer(peerId);
-    }
-  }, [closePeer]);
-  const toggleMute = reactExports.useCallback(() => {
-    setMuted((prev) => {
-      const next = !prev;
-      if (localStreamRef.current) {
-        for (const track of localStreamRef.current.getTracks()) track.enabled = !next;
-      }
-      return next;
-    });
-  }, []);
-  return { remoteStreams, muted, micError, startCall, endCall, handleSignal, syncParticipants, toggleMute };
-}
-function playNote(freq, startDelay, duration = 0.16, peakGain = 0.55) {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = "triangle";
-    const t0 = ctx.currentTime + startDelay;
-    osc.frequency.setValueAtTime(freq, t0);
-    gain.gain.setValueAtTime(1e-4, t0);
-    gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.015);
-    gain.gain.exponentialRampToValueAtTime(1e-4, t0 + duration);
-    osc.start(t0);
-    osc.stop(t0 + duration + 0.05);
-    osc.onended = () => ctx.close();
-  } catch {
-  }
-}
-function playJoinSound() {
-  playNote(587, 0);
-  playNote(880, 0.1);
-}
-function playLeaveSound() {
-  playNote(740, 0);
-  playNote(494, 0.1);
-}
-function playMentionSound() {
-  playNote(1046, 0, 0.2, 0.5);
-}
 const SIDEBAR_MIN = 280;
 const SIDEBAR_MAX = 380;
 const SIDEBAR_DEFAULT = 280;
@@ -94675,13 +94506,6 @@ function InviteIcon() {
     /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M18 8v6M21 11h-6" })
   ] });
 }
-function ScreenShareIcon() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "2", y: "3", width: "15", height: "15", rx: "3" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M13 8h6v6" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M19 8 11 16" })
-  ] });
-}
 function GearIcon() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "12", cy: "12", r: "3" }),
@@ -94698,7 +94522,19 @@ function NobleCoreView({
   onServerLeftOrDeleted,
   onLogout,
   onUserUpdated,
-  onTokenRefresh
+  onTokenRefresh,
+  // Soket baglantisi + sesli gorusme durumu artik burada DEGIL, ust seviyede
+  // (bkz. useNobleCoreConnection.js) tutuluyor — "← Hub"a donmek bu bilesenin
+  // unmount olmasina yol acsa da soket/ses baglantisi kopmasin diye.
+  socket,
+  joinServerRoom,
+  voiceCall,
+  myVoice,
+  voiceJoinedAt,
+  voiceElapsed,
+  voiceParticipants,
+  onJoinVoice,
+  onLeaveVoice
 }) {
   const [channels, setChannels] = reactExports.useState([]);
   const [sidebarWidth, setSidebarWidth] = reactExports.useState(SIDEBAR_DEFAULT);
@@ -94724,10 +94560,6 @@ function NobleCoreView({
   const [isDraggingFile, setIsDraggingFile] = reactExports.useState(false);
   const [pendingAttachment, setPendingAttachment] = reactExports.useState(null);
   const [viewerImage, setViewerImage] = reactExports.useState(null);
-  const [voiceParticipants, setVoiceParticipants] = reactExports.useState({});
-  const [myVoiceChannelId, setMyVoiceChannelId] = reactExports.useState(null);
-  const [voiceJoinedAt, setVoiceJoinedAt] = reactExports.useState(null);
-  const [voiceElapsed, setVoiceElapsed] = reactExports.useState(0);
   const [editingMessageId, setEditingMessageId] = reactExports.useState(null);
   const [editDraft, setEditDraft] = reactExports.useState("");
   const [reactionPickerFor, setReactionPickerFor] = reactExports.useState(null);
@@ -94738,22 +94570,19 @@ function NobleCoreView({
   const [emojiPickerOpen, setEmojiPickerOpen] = reactExports.useState(false);
   const [blockedIds, setBlockedIds] = reactExports.useState(() => /* @__PURE__ */ new Set());
   const composerInputRef = reactExports.useRef(null);
-  const socketRef = reactExports.useRef(null);
+  const socketRef = reactExports.useRef(socket);
+  reactExports.useEffect(() => {
+    socketRef.current = socket;
+  }, [socket]);
   const typingStateRef = reactExports.useRef(false);
   const typingStopTimerRef = reactExports.useRef(null);
   const typingClearTimersRef = reactExports.useRef(/* @__PURE__ */ new Map());
   const messagesEndRef = reactExports.useRef(null);
   const activeChannelIdRef = reactExports.useRef(null);
-  const myVoiceChannelIdRef = reactExports.useRef(null);
-  const prevVoiceParticipantIdsRef = reactExports.useRef(/* @__PURE__ */ new Map());
   const dragCounterRef = reactExports.useRef(0);
-  const voiceCall = useVoiceCall();
   reactExports.useEffect(() => {
     activeChannelIdRef.current = activeChannelId;
   }, [activeChannelId]);
-  reactExports.useEffect(() => {
-    myVoiceChannelIdRef.current = myVoiceChannelId;
-  }, [myVoiceChannelId]);
   function handleChangeStatus(next, duration) {
     if (statusTimerRef.current) {
       clearTimeout(statusTimerRef.current);
@@ -94793,31 +94622,24 @@ function NobleCoreView({
     };
   }, [token, server.id]);
   reactExports.useEffect(() => {
-    const socket = connectSocket(token);
-    socketRef.current = socket;
-    socket.on("connect_error", (err2) => {
-      setError("Sunucuya bağlanılamadı: " + (err2?.message || "bilinmeyen hata") + ". İnternet bağlantını kontrol et.");
-    });
-    socket.on("message:new", (msg) => {
+    if (!socket) return;
+    const onMessageNew = (msg) => {
       if (msg.channel_id === activeChannelIdRef.current) {
         setMessages((prev) => [...prev, msg]);
       }
-    });
-    socket.on("message:edited", ({ id: id2, content, edited_at }) => {
+    };
+    const onMessageEdited = ({ id: id2, content, edited_at }) => {
       setMessages((prev) => prev.map((m2) => m2.id === id2 ? { ...m2, content, edited_at } : m2));
-    });
-    socket.on("message:deleted", ({ id: id2, deleted_at }) => {
+    };
+    const onMessageDeleted = ({ id: id2, deleted_at }) => {
       setMessages(
         (prev) => prev.map((m2) => m2.id === id2 ? { ...m2, content: "", attachment_url: null, deleted_at, reactions: [] } : m2)
       );
-    });
-    socket.on("mention:notify", () => {
-      playMentionSound();
-    });
-    socket.on("reaction:updated", ({ messageId, reactions }) => {
+    };
+    const onReactionUpdated = ({ messageId, reactions }) => {
       setMessages((prev) => prev.map((m2) => m2.id === messageId ? { ...m2, reactions } : m2));
-    });
-    socket.on("typing:update", ({ userId, username, typing }) => {
+    };
+    const onTypingUpdate = ({ userId, username, typing }) => {
       const timers = typingClearTimersRef.current;
       const existing = timers.get(userId);
       if (existing) clearTimeout(existing);
@@ -94834,33 +94656,11 @@ function NobleCoreView({
           setTypingUsers((prev) => prev.filter((u2) => u2.id !== userId));
         }, 4e3)
       );
-    });
-    socket.on("voice:participants", ({ channelId, participants }) => {
-      setVoiceParticipants((prev) => ({ ...prev, [channelId]: participants }));
-      if (channelId === myVoiceChannelIdRef.current) {
-        voiceCall.syncParticipants(participants.map((p2) => p2.id));
-        const newIds = new Set(participants.map((p2) => p2.id));
-        const prevIds = prevVoiceParticipantIdsRef.current.get(channelId);
-        if (prevIds) {
-          let joined = false;
-          let left = false;
-          for (const id2 of newIds) {
-            if (!prevIds.has(id2)) joined = true;
-          }
-          for (const id2 of prevIds) {
-            if (!newIds.has(id2)) left = true;
-          }
-          if (joined) playJoinSound();
-          if (left) playLeaveSound();
-        }
-        prevVoiceParticipantIdsRef.current.set(channelId, newIds);
-      }
-    });
-    socket.on("voice:signal", (msg) => voiceCall.handleSignal(socket, msg));
-    socket.on("members:changed", () => {
+    };
+    const onMembersChanged = () => {
       listMembers(token, server.id).then(({ members: list }) => setMembers(list));
-    });
-    socket.on("channel:deleted", ({ channelId }) => {
+    };
+    const onChannelDeleted = ({ channelId }) => {
       setChannels((prev) => {
         const next = prev.filter((c2) => c2.id !== channelId);
         setActiveChannelId(
@@ -94868,51 +94668,35 @@ function NobleCoreView({
         );
         return next;
       });
-      if (myVoiceChannelIdRef.current === channelId) {
-        voiceCall.endCall();
-        setMyVoiceChannelId(null);
-        setVoiceJoinedAt(null);
-      }
-    });
-    socket.emit("server:join", server.id, ({ voiceState }) => {
-      if (voiceState) setVoiceParticipants(voiceState);
-    });
-    return () => {
-      socket.disconnect();
-      socketRef.current = null;
-      voiceCall.endCall();
-      setMyVoiceChannelId(null);
-      setVoiceJoinedAt(null);
     };
-  }, [token, server.id]);
-  reactExports.useEffect(() => {
-    if (!voiceJoinedAt) return;
-    const interval2 = setInterval(() => setVoiceElapsed(Math.floor((Date.now() - voiceJoinedAt) / 1e3)), 1e3);
-    return () => clearInterval(interval2);
-  }, [voiceJoinedAt]);
-  function handleJoinVoice(channelId) {
-    const socket = socketRef.current;
-    socket?.emit("voice:join", channelId, (res) => {
-      if (res?.error) {
-        setError(res.error);
-        return;
-      }
-      setMyVoiceChannelId(channelId);
-      setVoiceJoinedAt(Date.now());
-      setVoiceElapsed(0);
-      voiceCall.startCall(socket, channelId, res.peers || [], token);
-      playJoinSound();
-      prevVoiceParticipantIdsRef.current.set(channelId, /* @__PURE__ */ new Set([...(res.peers || []).map((p2) => p2.id), user.id]));
-    });
+    const onConnectError = (err2) => {
+      setError("Sunucuya bağlanılamadı: " + (err2?.message || "bilinmeyen hata") + ". İnternet bağlantını kontrol et.");
+    };
+    socket.on("message:new", onMessageNew);
+    socket.on("message:edited", onMessageEdited);
+    socket.on("message:deleted", onMessageDeleted);
+    socket.on("reaction:updated", onReactionUpdated);
+    socket.on("typing:update", onTypingUpdate);
+    socket.on("members:changed", onMembersChanged);
+    socket.on("channel:deleted", onChannelDeleted);
+    socket.on("connect_error", onConnectError);
+    joinServerRoom?.(server.id);
+    return () => {
+      socket.off("message:new", onMessageNew);
+      socket.off("message:edited", onMessageEdited);
+      socket.off("message:deleted", onMessageDeleted);
+      socket.off("reaction:updated", onReactionUpdated);
+      socket.off("typing:update", onTypingUpdate);
+      socket.off("members:changed", onMembersChanged);
+      socket.off("channel:deleted", onChannelDeleted);
+      socket.off("connect_error", onConnectError);
+    };
+  }, [socket, token, server.id, joinServerRoom]);
+  function handleJoinVoice(channelId, channelName) {
+    onJoinVoice(server.id, server.name, channelId, channelName, user.id);
   }
   function handleLeaveVoice(channelId) {
-    playLeaveSound();
-    prevVoiceParticipantIdsRef.current.delete(channelId);
-    socketRef.current?.emit("voice:leave", channelId);
-    voiceCall.endCall();
-    setMyVoiceChannelId(null);
-    setVoiceJoinedAt(null);
-    setVoiceParticipants((prev) => ({ ...prev, [channelId]: (prev[channelId] || []).filter((p2) => p2.id !== user.id) }));
+    onLeaveVoice(channelId, user.id);
   }
   function formatElapsed(sec) {
     const m2 = Math.floor(sec / 60);
@@ -95318,7 +95102,7 @@ function NobleCoreView({
         ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-channel-list", children: voiceChannels.map((c2) => {
           const participants = voiceParticipants[c2.id] || [];
-          const iAmHere = myVoiceChannelId === c2.id;
+          const iAmHere = myVoice?.channelId === c2.id;
           return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-channel-group", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-channel-item${iAmHere ? " noblecore-channel-item-active" : ""}`, children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -95326,7 +95110,7 @@ function NobleCoreView({
                 {
                   className: "noblecore-channel-item-name",
                   onClick: () => {
-                    if (myVoiceChannelId !== c2.id) handleJoinVoice(c2.id);
+                    if (myVoice?.channelId !== c2.id) handleJoinVoice(c2.id, c2.name);
                   },
                   children: [
                     "🔊 ",
@@ -95369,81 +95153,49 @@ function NobleCoreView({
             ] }, p2.id))
           ] }, c2.id);
         }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-bottom-panel", style: { width: RAIL_WIDTH + sidebarWidth - 16 + 13, left: 9 }, children: [
-          myVoiceChannelId && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-header", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-icon", children: "📶" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-text", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-title", children: "Ses Bağlantısı Kuruldu" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-subtitle", children: [
-                  channels.find((c2) => c2.id === myVoiceChannelId)?.name || "",
-                  " / ",
-                  server.name
-                ] })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-wave", children: "📊" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "noblecore-voice-banner-hangup",
-                  title: "Sesten Ayrıl",
-                  onClick: () => handleLeaveVoice(myVoiceChannelId),
-                  children: "📞"
-                }
-              )
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-bottom-panel", style: { width: RAIL_WIDTH + sidebarWidth - 16 + 13, left: 9 }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-panel-info", onClick: () => setProfilePopoverOpen((v2) => !v2), children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-avatar", children: [
+              user.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: user.avatar_url, alt: "" }) : user.username?.[0]?.toUpperCase() || "?",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(StatusDot, { status: userStatus, size: 13, ring: true, className: "noblecore-user-status-dot" })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-actions", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "📹" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Ekran paylaşımı — yakında", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScreenShareIcon, {}) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "🎭" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "✋" })
-            ] }),
-            voiceCall.micError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-mic-error", children: voiceCall.micError })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-text", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-name", children: user.username }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-status", children: STATUS_LABELS[userStatus] })
+            ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-panel-info", onClick: () => setProfilePopoverOpen((v2) => !v2), children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-avatar", children: [
-                user.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: user.avatar_url, alt: "" }) : user.username?.[0]?.toUpperCase() || "?",
-                /* @__PURE__ */ jsxRuntimeExports.jsx(StatusDot, { status: userStatus, size: 13, ring: true, className: "noblecore-user-status-dot" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-text", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-name", children: user.username }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-status", children: STATUS_LABELS[userStatus] })
-              ] })
-            ] }),
-            profilePopoverOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
-              UserProfilePopover,
+          profilePopoverOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            UserProfilePopover,
+            {
+              user,
+              status: userStatus,
+              onChangeStatus: handleChangeStatus,
+              onClose: () => setProfilePopoverOpen(false),
+              onSwitchAccount: onLogout
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel-actions", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
               {
-                user,
-                status: userStatus,
-                onChangeStatus: handleChangeStatus,
-                onClose: () => setProfilePopoverOpen(false),
-                onSwitchAccount: onLogout
+                className: "noblecore-user-action-btn",
+                disabled: !myVoice,
+                title: !myVoice ? "Önce bir ses kanalına katıl" : voiceCall.muted ? "Mikrofonu Aç" : "Mikrofonu Kapat",
+                onClick: () => voiceCall.toggleMute(),
+                children: [
+                  voiceCall.muted ? "🔇" : "🎤",
+                  " ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
+                ]
               }
             ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel-actions", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                "button",
-                {
-                  className: "noblecore-user-action-btn",
-                  disabled: !myVoiceChannelId,
-                  title: !myVoiceChannelId ? "Önce bir ses kanalına katıl" : voiceCall.muted ? "Mikrofonu Aç" : "Mikrofonu Kapat",
-                  onClick: () => voiceCall.toggleMute(),
-                  children: [
-                    voiceCall.muted ? "🔇" : "🎤",
-                    " ",
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
-                  ]
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-action-btn", disabled: true, title: "Yakında", children: [
-                "🎧 ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-user-action-btn", onClick: () => setUserSettingsOpen(true), title: "Kullanıcı Ayarları", children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {}) })
-            ] })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-action-btn", disabled: true, title: "Yakında", children: [
+              "🎧 ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-user-action-btn", onClick: () => setUserSettingsOpen(true), title: "Kullanıcı Ayarları", children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {}) })
           ] })
-        ] })
+        ] }) })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
@@ -95920,6 +95672,345 @@ function NobleCoreView({
     ))
   ] });
 }
+function ScreenShareIcon() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "2", y: "3", width: "15", height: "15", rx: "3" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M13 8h6v6" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M19 8 11 16" })
+  ] });
+}
+function VoiceStatusBar({ myVoice, voiceCall, onLeaveVoice, onOpenServer, raised }) {
+  if (!myVoice) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `noblecore-voice-status-bar${raised ? " noblecore-voice-status-bar-raised" : ""}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "noblecore-voice-banner-header",
+        onClick: onOpenServer ? () => onOpenServer(myVoice.serverId) : void 0,
+        style: onOpenServer ? { cursor: "pointer" } : void 0,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-icon", children: "📶" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-text", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-title", children: "Ses Bağlantısı Kuruldu" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-subtitle", children: [
+              myVoice.channelName,
+              " / ",
+              myVoice.serverName
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-wave", children: "📊" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "noblecore-voice-banner-hangup",
+              title: "Sesten Ayrıl",
+              onClick: (e2) => {
+                e2.stopPropagation();
+                onLeaveVoice(myVoice.channelId);
+              },
+              children: "📞"
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-actions", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "📹" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Ekran paylaşımı — yakında", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScreenShareIcon, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "🎭" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "✋" })
+    ] }),
+    voiceCall.micError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-mic-error", children: voiceCall.micError })
+  ] }) });
+}
+const FALLBACK_ICE_SERVERS = [{ urls: "stun:stun.l.google.com:19302" }];
+function useVoiceCall() {
+  const [remoteStreams, setRemoteStreams] = reactExports.useState({});
+  const [muted, setMuted] = reactExports.useState(false);
+  const [micError, setMicError] = reactExports.useState(null);
+  const localStreamRef = reactExports.useRef(null);
+  const peersRef = reactExports.useRef(/* @__PURE__ */ new Map());
+  const pendingCandidatesRef = reactExports.useRef(/* @__PURE__ */ new Map());
+  const channelIdRef = reactExports.useRef(null);
+  const iceServersRef = reactExports.useRef(FALLBACK_ICE_SERVERS);
+  const closePeer = reactExports.useCallback((userId) => {
+    const pc2 = peersRef.current.get(userId);
+    if (pc2) {
+      pc2.close();
+      peersRef.current.delete(userId);
+    }
+    pendingCandidatesRef.current.delete(userId);
+    setRemoteStreams((prev) => {
+      if (!(userId in prev)) return prev;
+      const next = { ...prev };
+      delete next[userId];
+      return next;
+    });
+  }, []);
+  const closeAllPeers = reactExports.useCallback(() => {
+    for (const userId of Array.from(peersRef.current.keys())) closePeer(userId);
+  }, [closePeer]);
+  function createPeerConnection(socket, targetUserId, channelId) {
+    const pc2 = new RTCPeerConnection({ iceServers: iceServersRef.current });
+    if (localStreamRef.current) {
+      for (const track of localStreamRef.current.getTracks()) {
+        pc2.addTrack(track, localStreamRef.current);
+      }
+    }
+    pc2.onicecandidate = (event) => {
+      if (event.candidate) {
+        socket.emit("voice:signal", { channelId, targetUserId, type: "ice-candidate", candidate: event.candidate });
+      }
+    };
+    pc2.ontrack = (event) => {
+      setRemoteStreams((prev) => ({ ...prev, [targetUserId]: event.streams[0] }));
+    };
+    pc2.onconnectionstatechange = () => {
+      if (pc2.connectionState === "failed" || pc2.connectionState === "closed") closePeer(targetUserId);
+    };
+    peersRef.current.set(targetUserId, pc2);
+    return pc2;
+  }
+  async function flushPendingCandidates(userId) {
+    const pc2 = peersRef.current.get(userId);
+    const queue = pendingCandidatesRef.current.get(userId);
+    if (!pc2 || !queue) return;
+    for (const candidate of queue) {
+      try {
+        await pc2.addIceCandidate(candidate);
+      } catch {
+      }
+    }
+    pendingCandidatesRef.current.delete(userId);
+  }
+  const startCall = reactExports.useCallback(async (socket, channelId, peers, token) => {
+    channelIdRef.current = channelId;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      localStreamRef.current = stream;
+      setMuted(false);
+      setMicError(null);
+    } catch {
+      localStreamRef.current = null;
+      setMicError("Mikrofona erişilemedi. Sadece dinleyebilirsin — tarayıcı/işletim sistemi izinlerini kontrol et.");
+    }
+    try {
+      const { iceServers } = await getTurnCredentials(token);
+      if (iceServers?.length) iceServersRef.current = iceServers;
+    } catch {
+    }
+    for (const peer of peers) {
+      const pc2 = createPeerConnection(socket, peer.id, channelId);
+      const offer = await pc2.createOffer();
+      await pc2.setLocalDescription(offer);
+      socket.emit("voice:signal", { channelId, targetUserId: peer.id, type: "offer", sdp: offer });
+    }
+  }, []);
+  const endCall = reactExports.useCallback(() => {
+    if (localStreamRef.current) {
+      for (const track of localStreamRef.current.getTracks()) track.stop();
+      localStreamRef.current = null;
+    }
+    closeAllPeers();
+    channelIdRef.current = null;
+    setMuted(false);
+    setMicError(null);
+  }, [closeAllPeers]);
+  const handleSignal = reactExports.useCallback(async (socket, { channelId, fromUserId, type, sdp, candidate }) => {
+    if (channelId !== channelIdRef.current) return;
+    if (type === "offer") {
+      const pc2 = peersRef.current.get(fromUserId) || createPeerConnection(socket, fromUserId, channelId);
+      await pc2.setRemoteDescription(sdp);
+      await flushPendingCandidates(fromUserId);
+      const answer = await pc2.createAnswer();
+      await pc2.setLocalDescription(answer);
+      socket.emit("voice:signal", { channelId, targetUserId: fromUserId, type: "answer", sdp: answer });
+    } else if (type === "answer") {
+      const pc2 = peersRef.current.get(fromUserId);
+      if (pc2) {
+        await pc2.setRemoteDescription(sdp);
+        await flushPendingCandidates(fromUserId);
+      }
+    } else if (type === "ice-candidate") {
+      const pc2 = peersRef.current.get(fromUserId);
+      if (pc2 && pc2.remoteDescription) {
+        try {
+          await pc2.addIceCandidate(candidate);
+        } catch {
+        }
+      } else {
+        const queue = pendingCandidatesRef.current.get(fromUserId) || [];
+        queue.push(candidate);
+        pendingCandidatesRef.current.set(fromUserId, queue);
+      }
+    }
+  }, []);
+  const syncParticipants = reactExports.useCallback((participantIds) => {
+    const idSet = new Set(participantIds);
+    for (const peerId of Array.from(peersRef.current.keys())) {
+      if (!idSet.has(peerId)) closePeer(peerId);
+    }
+  }, [closePeer]);
+  const toggleMute = reactExports.useCallback(() => {
+    setMuted((prev) => {
+      const next = !prev;
+      if (localStreamRef.current) {
+        for (const track of localStreamRef.current.getTracks()) track.enabled = !next;
+      }
+      return next;
+    });
+  }, []);
+  return { remoteStreams, muted, micError, startCall, endCall, handleSignal, syncParticipants, toggleMute };
+}
+function playNote(freq, startDelay, duration = 0.16, peakGain = 0.55) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = "triangle";
+    const t0 = ctx.currentTime + startDelay;
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(1e-4, t0);
+    gain.gain.exponentialRampToValueAtTime(peakGain, t0 + 0.015);
+    gain.gain.exponentialRampToValueAtTime(1e-4, t0 + duration);
+    osc.start(t0);
+    osc.stop(t0 + duration + 0.05);
+    osc.onended = () => ctx.close();
+  } catch {
+  }
+}
+function playJoinSound() {
+  playNote(587, 0);
+  playNote(880, 0.1);
+}
+function playLeaveSound() {
+  playNote(740, 0);
+  playNote(494, 0.1);
+}
+function playMentionSound() {
+  playNote(1046, 0, 0.2, 0.5);
+}
+function useNobleCoreConnection(token) {
+  const [socket, setSocket] = reactExports.useState(null);
+  const socketRef = reactExports.useRef(null);
+  const voiceCall = useVoiceCall();
+  const [myVoice, setMyVoice] = reactExports.useState(null);
+  const myVoiceRef = reactExports.useRef(null);
+  const [voiceJoinedAt, setVoiceJoinedAt] = reactExports.useState(null);
+  const [voiceElapsed, setVoiceElapsed] = reactExports.useState(0);
+  const [voiceParticipants, setVoiceParticipants] = reactExports.useState({});
+  const prevVoiceParticipantIdsRef = reactExports.useRef(/* @__PURE__ */ new Map());
+  reactExports.useEffect(() => {
+    myVoiceRef.current = myVoice;
+  }, [myVoice]);
+  reactExports.useEffect(() => {
+    if (!token) {
+      setSocket(null);
+      socketRef.current = null;
+      return;
+    }
+    const s2 = connectSocket(token);
+    socketRef.current = s2;
+    setSocket(s2);
+    s2.on("mention:notify", () => playMentionSound());
+    s2.on("voice:participants", ({ channelId, participants }) => {
+      setVoiceParticipants((prev) => ({ ...prev, [channelId]: participants }));
+      if (channelId === myVoiceRef.current?.channelId) {
+        voiceCall.syncParticipants(participants.map((p2) => p2.id));
+        const newIds = new Set(participants.map((p2) => p2.id));
+        const prevIds = prevVoiceParticipantIdsRef.current.get(channelId);
+        if (prevIds) {
+          let joined = false;
+          let left = false;
+          for (const id2 of newIds) if (!prevIds.has(id2)) joined = true;
+          for (const id2 of prevIds) if (!newIds.has(id2)) left = true;
+          if (joined) playJoinSound();
+          if (left) playLeaveSound();
+        }
+        prevVoiceParticipantIdsRef.current.set(channelId, newIds);
+      }
+    });
+    s2.on("voice:signal", (msg) => voiceCall.handleSignal(s2, msg));
+    s2.on("channel:deleted", ({ channelId }) => {
+      if (myVoiceRef.current?.channelId === channelId) {
+        voiceCall.endCall();
+        setMyVoice(null);
+        setVoiceJoinedAt(null);
+      }
+    });
+    return () => {
+      s2.disconnect();
+      socketRef.current = null;
+      setSocket(null);
+      voiceCall.endCall();
+      setMyVoice(null);
+      setVoiceJoinedAt(null);
+    };
+  }, [token]);
+  reactExports.useEffect(() => {
+    if (!voiceJoinedAt) return;
+    const interval2 = setInterval(() => setVoiceElapsed(Math.floor((Date.now() - voiceJoinedAt) / 1e3)), 1e3);
+    return () => clearInterval(interval2);
+  }, [voiceJoinedAt]);
+  const joinServerRoom = reactExports.useCallback((serverId) => {
+    return new Promise((resolve) => {
+      const s2 = socketRef.current;
+      if (!s2) return resolve(null);
+      s2.emit("server:join", serverId, (res) => {
+        if (res?.voiceState) setVoiceParticipants((prev) => ({ ...prev, ...res.voiceState }));
+        resolve(res);
+      });
+    });
+  }, []);
+  const handleJoinVoice = reactExports.useCallback(
+    (serverId, serverName, channelId, channelName, currentUserId) => {
+      const s2 = socketRef.current;
+      if (!s2) return;
+      s2.emit("voice:join", channelId, (res) => {
+        if (res?.error) return;
+        setMyVoice({ serverId, serverName, channelId, channelName });
+        setVoiceJoinedAt(Date.now());
+        setVoiceElapsed(0);
+        voiceCall.startCall(s2, channelId, res.peers || [], token);
+        playJoinSound();
+        prevVoiceParticipantIdsRef.current.set(
+          channelId,
+          /* @__PURE__ */ new Set([...(res.peers || []).map((p2) => p2.id), currentUserId])
+        );
+      });
+    },
+    [token, voiceCall]
+  );
+  const handleLeaveVoice = reactExports.useCallback(
+    (channelId, currentUserId) => {
+      playLeaveSound();
+      prevVoiceParticipantIdsRef.current.delete(channelId);
+      socketRef.current?.emit("voice:leave", channelId);
+      voiceCall.endCall();
+      setMyVoice(null);
+      setVoiceJoinedAt(null);
+      setVoiceParticipants((prev) => ({
+        ...prev,
+        [channelId]: (prev[channelId] || []).filter((p2) => p2.id !== currentUserId)
+      }));
+    },
+    [voiceCall]
+  );
+  return {
+    socket,
+    joinServerRoom,
+    voiceCall,
+    myVoice,
+    voiceJoinedAt,
+    voiceElapsed,
+    voiceParticipants,
+    setVoiceParticipants,
+    handleJoinVoice,
+    handleLeaveVoice
+  };
+}
 function HubScreen({ onOpenStudio, onOpenBoard }) {
   const [activeApp, setActiveApp] = reactExports.useState("hub");
   const [nobleCoreToken, setNobleCoreTokenState] = reactExports.useState(null);
@@ -95935,6 +96026,7 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
   const [creditBalance, setCreditBalance] = reactExports.useState(null);
   const [hasPendingCreditRequest, setHasPendingCreditRequest] = reactExports.useState(false);
   const [creditRequestBusy, setCreditRequestBusy] = reactExports.useState(false);
+  const connection = useNobleCoreConnection(nobleCoreToken);
   reactExports.useEffect(() => {
     let cancelled = false;
     fetch(`${BASE_URL}/content/hub`, { cache: "no-store" }).then((res) => res.ok ? res.json() : {}).then((data) => {
@@ -96137,7 +96229,16 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
           onTokenRefresh: (newToken) => {
             window.api.setNobleCoreToken(newToken);
             setNobleCoreTokenState(newToken);
-          }
+          },
+          socket: connection.socket,
+          joinServerRoom: connection.joinServerRoom,
+          voiceCall: connection.voiceCall,
+          myVoice: connection.myVoice,
+          voiceJoinedAt: connection.voiceJoinedAt,
+          voiceElapsed: connection.voiceElapsed,
+          voiceParticipants: connection.voiceParticipants,
+          onJoinVoice: connection.handleJoinVoice,
+          onLeaveVoice: connection.handleLeaveVoice
         }
       ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-topbar", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-tabs", children: [
@@ -96296,6 +96397,16 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
         token: nobleCoreToken,
         username: nobleCoreUser?.username,
         onServerReady: handleServerReady
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      VoiceStatusBar,
+      {
+        myVoice: connection.myVoice,
+        voiceCall: connection.voiceCall,
+        raised: !!activeServer,
+        onLeaveVoice: (channelId) => connection.handleLeaveVoice(channelId, nobleCoreUser.id),
+        onOpenServer: (serverId) => setActiveServerId(serverId)
       }
     )
   ] });
@@ -97074,6 +97185,7 @@ export {
   NobleCoreAuthModal as N,
   React$2 as R,
   StudioApp as S,
+  VoiceStatusBar as V,
   mergeHubContent as a,
   APPS as b,
   client as c,
@@ -97086,5 +97198,6 @@ export {
   me as m,
   noblecoreLogo as n,
   preloadHubImages as p,
-  reactExports as r
+  reactExports as r,
+  useNobleCoreConnection as u
 };
