@@ -95659,7 +95659,60 @@ function NobleCoreView({
           onLogout();
         }
       }
-    ),
+    )
+  ] });
+}
+function ScreenShareIcon() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "2", y: "3", width: "15", height: "15", rx: "3" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M13 8h6v6" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M19 8 11 16" })
+  ] });
+}
+function VoiceStatusBar({ myVoice, voiceCall, onLeaveVoice, onOpenServer, raised, hideBanner }) {
+  if (!myVoice) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    !hideBanner && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `noblecore-voice-status-bar${raised ? " noblecore-voice-status-bar-raised" : ""}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: "noblecore-voice-banner-header",
+          onClick: onOpenServer ? () => onOpenServer(myVoice.serverId) : void 0,
+          style: onOpenServer ? { cursor: "pointer" } : void 0,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-icon", children: "📶" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-text", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-title", children: "Ses Bağlantısı Kuruldu" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-subtitle", children: [
+                myVoice.channelName,
+                " / ",
+                myVoice.serverName
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-wave", children: "📊" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: "noblecore-voice-banner-hangup",
+                title: "Sesten Ayrıl",
+                onClick: (e2) => {
+                  e2.stopPropagation();
+                  onLeaveVoice(myVoice.channelId);
+                },
+                children: "📞"
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-actions", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "📹" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Ekran paylaşımı — yakında", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScreenShareIcon, {}) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "🎭" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "✋" })
+      ] }),
+      voiceCall.micError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-mic-error", children: voiceCall.micError })
+    ] }) }),
     Object.entries(voiceCall.remoteStreams).map(([userId, stream]) => /* @__PURE__ */ jsxRuntimeExports.jsx(
       "audio",
       {
@@ -95671,57 +95724,6 @@ function NobleCoreView({
       userId
     ))
   ] });
-}
-function ScreenShareIcon() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "2", y: "3", width: "15", height: "15", rx: "3" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M13 8h6v6" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M19 8 11 16" })
-  ] });
-}
-function VoiceStatusBar({ myVoice, voiceCall, onLeaveVoice, onOpenServer, raised }) {
-  if (!myVoice) return null;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `noblecore-voice-status-bar${raised ? " noblecore-voice-status-bar-raised" : ""}`, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: "noblecore-voice-banner-header",
-        onClick: onOpenServer ? () => onOpenServer(myVoice.serverId) : void 0,
-        style: onOpenServer ? { cursor: "pointer" } : void 0,
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-icon", children: "📶" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-text", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-title", children: "Ses Bağlantısı Kuruldu" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-subtitle", children: [
-              myVoice.channelName,
-              " / ",
-              myVoice.serverName
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-wave", children: "📊" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "noblecore-voice-banner-hangup",
-              title: "Sesten Ayrıl",
-              onClick: (e2) => {
-                e2.stopPropagation();
-                onLeaveVoice(myVoice.channelId);
-              },
-              children: "📞"
-            }
-          )
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-actions", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "📹" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Ekran paylaşımı — yakında", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScreenShareIcon, {}) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "🎭" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "✋" })
-    ] }),
-    voiceCall.micError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-mic-error", children: voiceCall.micError })
-  ] }) });
 }
 const FALLBACK_ICE_SERVERS = [{ urls: "stun:stun.l.google.com:19302" }];
 function useVoiceCall() {
@@ -96399,12 +96401,13 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
         onServerReady: handleServerReady
       }
     ),
-    activeServer && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
       VoiceStatusBar,
       {
         myVoice: connection.myVoice,
         voiceCall: connection.voiceCall,
         raised: true,
+        hideBanner: !activeServer,
         onLeaveVoice: (channelId) => connection.handleLeaveVoice(channelId, nobleCoreUser.id),
         onOpenServer: (serverId) => setActiveServerId(serverId)
       }
