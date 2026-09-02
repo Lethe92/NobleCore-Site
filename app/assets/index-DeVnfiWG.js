@@ -6966,7 +6966,126 @@ var m = reactDomExports;
   client.createRoot = m.createRoot;
   client.hydrateRoot = m.hydrateRoot;
 }
+const heroBanner = "" + new URL("hero-banner-DYO_tRlU.jpg", import.meta.url).href;
 const noblecoreLogo = "" + new URL("noblecore-logo-CiHpxV6o.png", import.meta.url).href;
+const noblerefLogo = "" + new URL("nobleref-logo-DhVdKcmn.png", import.meta.url).href;
+const nobleaiLogo = "" + new URL("nobleai-logo-C2ofSSTW.png", import.meta.url).href;
+const nobletaskLogo = "" + new URL("nobletask-logo-C0CjXE80.png", import.meta.url).href;
+const verticalBanner = "" + new URL("vertical-banner-DjlbOEQM.jpg", import.meta.url).href;
+const featureGorselUretimThumb = "" + new URL("feature-gorsel-uretim-IoOhwZ6k.jpg", import.meta.url).href;
+const featureMultiViewThumb = "" + new URL("feature-multiview-DdYEFGdn.jpg", import.meta.url).href;
+const featureImageTo3DThumb = "" + new URL("feature-image-to-3d-DhdsJbmM.jpg", import.meta.url).href;
+const featureTextureTrimSheetThumb = "" + new URL("feature-texture-trim-sheet-BOmiUv2C.jpg", import.meta.url).href;
+const featureAcBlackflagKitThumb = "" + new URL("feature-ac-blackflag-kit-AketoEJp.jpg", import.meta.url).href;
+const featureBlackflagMaterialsTechThumb = "" + new URL("feature-blackflag-materials-tech-D1gNT1ow.jpg", import.meta.url).href;
+const APPS = {
+  hub: {
+    icon: { img: noblecoreLogo },
+    banner: verticalBanner,
+    title: "Asil AI Studio",
+    desc: "Topluluk haberleri ve öne çıkan içerikler",
+    features: [
+      {
+        thumb: featureGorselUretimThumb,
+        tag: "YENİ",
+        tagColor: "#6fcf97",
+        title: "This Is How 3D Artists Will Work in 2027 — Pro AI Character Workflow",
+        url: "https://www.youtube.com/watch?v=0TGkhdMI3tc"
+      },
+      {
+        thumb: featureMultiViewThumb,
+        tag: "ÖZELLİK",
+        tagColor: "#4f7cff",
+        title: "Unreal Engine 5.8 Mesh Terrain — Full Deep Dive",
+        url: "https://www.youtube.com/watch?v=JzQrUAVPmr4"
+      },
+      {
+        thumb: featureImageTo3DThumb,
+        tag: "ÖZELLİK",
+        tagColor: "#d99a3c",
+        title: "The Best Local 3D AI Workflow for Game-Ready Characters (6GB VRAM)",
+        url: "https://www.youtube.com/watch?v=Ff_tdMsndzQ"
+      },
+      {
+        thumb: featureTextureTrimSheetThumb,
+        tag: "ÖZELLİK",
+        tagColor: "#e8735f",
+        title: "How AAA Studios Texture Huge Worlds | The Last of Us & Valorant Trim Sheet Workflows",
+        url: "https://www.youtube.com/watch?v=Jn9Zl5SO4EU"
+      },
+      {
+        thumb: featureAcBlackflagKitThumb,
+        tag: "ÖZELLİK",
+        tagColor: "#4f7cff",
+        title: "AC Black Flag Resynced: 1 Kit = 100 Buildings",
+        url: "https://www.youtube.com/watch?v=AR4V-MVv4rw"
+      },
+      {
+        thumb: featureBlackflagMaterialsTechThumb,
+        tag: "ÖZELLİK",
+        tagColor: "#6fcf97",
+        title: "Tricks Behind Black Flag Resynced's Materials and Tech",
+        url: "https://www.youtube.com/watch?v=MF_wkqanBFI"
+      },
+      { icon: "🎬", tag: "YAKINDA", tagColor: "#9aa1b3", title: "İçerik eklenmedi", url: null },
+      { icon: "🎬", tag: "YAKINDA", tagColor: "#9aa1b3", title: "İçerik eklenmedi", url: null },
+      { icon: "🎬", tag: "YAKINDA", tagColor: "#9aa1b3", title: "İçerik eklenmedi", url: null }
+    ]
+  },
+  studio: {
+    icon: { img: nobleaiLogo },
+    title: "NobleAi",
+    desc: "Node tabanlı karakter/görsel ve 3D üretim stüdyosu",
+    features: [
+      { icon: "🎬", tag: "YAKINDA", tagColor: "#9aa1b3", title: "İçerik eklenmedi", url: null },
+      { icon: "🎬", tag: "YAKINDA", tagColor: "#9aa1b3", title: "İçerik eklenmedi", url: null },
+      { icon: "🎬", tag: "YAKINDA", tagColor: "#9aa1b3", title: "İçerik eklenmedi", url: null }
+    ]
+  },
+  board: {
+    icon: { img: nobletaskLogo },
+    title: "Kanban",
+    desc: "Sonsuz tuval üzerinde serbest çalışma alanı",
+    features: [
+      { icon: "🖱️", tag: "ÖZELLİK", tagColor: "#4f7cff", title: "Pan & Zoom", url: null },
+      { icon: "🗂️", tag: "ÖZELLİK", tagColor: "#6fcf97", title: "Projeler", url: null },
+      { icon: "🚧", tag: "YAKINDA", tagColor: "#d99a3c", title: "Daha Fazlası Geliyor", url: null }
+    ]
+  },
+  ref: {
+    icon: { img: noblerefLogo },
+    title: "NobleRef",
+    desc: "PureRef benzeri, sonsuz tuvalli referans görsel panosu",
+    features: [
+      { icon: "🖼️", tag: "YAKINDA", tagColor: "#9aa1b3", title: "Referans panosu geliyor", url: null },
+      { icon: "📌", tag: "YAKINDA", tagColor: "#9aa1b3", title: "Her zaman üstte kalma modu", url: null },
+      { icon: "🗂️", tag: "YAKINDA", tagColor: "#9aa1b3", title: "Pano projelerini kaydet", url: null }
+    ]
+  }
+};
+function preloadHubImages(data) {
+  if (!data) return;
+  for (const app of Object.values(data)) {
+    for (const url2 of [app.sideBanner, app.heroBanner]) {
+      if (url2) new Image().src = url2;
+    }
+  }
+}
+function mergeHubContent(localApp, remote) {
+  if (!remote) return localApp;
+  return {
+    ...localApp,
+    banner: remote.sideBanner || localApp.banner,
+    heroBannerOverride: remote.heroBanner || null,
+    features: remote.features && remote.features.length > 0 ? remote.features : localApp.features
+  };
+}
+function AppIcon({ icon, className }) {
+  if (icon && typeof icon === "object" && icon.img) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className, src: icon.img, alt: "" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className, children: icon });
+}
 const PACKET_TYPES = /* @__PURE__ */ Object.create(null);
 PACKET_TYPES["open"] = "0";
 PACKET_TYPES["close"] = "1";
@@ -30520,6 +30639,7 @@ function NobleCoreView({
   ] });
 }
 export {
+  APPS as A,
   BASE_URL as B,
   NobleCoreView as N,
   React as R,
@@ -30527,12 +30647,16 @@ export {
   reactDomExports as a,
   listMembers as b,
   connectSocket as c,
-  NobleCoreAuthModal as d,
-  client as e,
+  mergeHubContent as d,
+  AppIcon as e,
+  NobleCoreAuthModal as f,
   getDefaultExportFromCjs as g,
+  heroBanner as h,
+  client as i,
   jsxRuntimeExports as j,
   listServers as l,
   me as m,
   noblecoreLogo as n,
+  preloadHubImages as p,
   reactExports as r
 };
