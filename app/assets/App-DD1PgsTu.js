@@ -94705,6 +94705,7 @@ function NobleCoreView({
   const [resizing, setResizing] = reactExports.useState(false);
   const resizeRef = reactExports.useRef(null);
   const [activeChannelId, setActiveChannelId] = reactExports.useState(null);
+  const [mobileSection, setMobileSection] = reactExports.useState("chat");
   const [messages, setMessages] = reactExports.useState([]);
   const [draft, setDraft] = reactExports.useState("");
   const [addingChannel, setAddingChannel] = reactExports.useState(false);
@@ -95188,367 +95189,392 @@ function NobleCoreView({
   const activeChannel = channels.find((c2) => c2.id === activeChannelId);
   const textChannels = channels.filter((c2) => c2.type !== "voice");
   const voiceChannels = channels.filter((c2) => c2.type === "voice");
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-view${activeChannelId ? " noblecore-view-channel-open" : ""}`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-sidebar", style: { width: sidebarWidth }, children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-view-wrap", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-view mobile-section-${mobileSection}`, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-sidebar", style: { width: sidebarWidth }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: `noblecore-sidebar-resize-handle${resizing ? " noblecore-sidebar-resize-handle-active" : ""}`,
+            onMouseDown: handleResizeStart
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-header", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onBack, children: "← Hub" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-server-name", children: server.name }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-settings-btn", onClick: () => setSettingsOpen(true), title: "Sunucu Ayarları", children: "⚙️" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-list-header", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "METİN KANALLARI" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "noblecore-add-channel-btn",
+              onClick: () => {
+                setNewChannelType("text");
+                setAddingChannel((v2) => v2 && newChannelType === "text" ? false : true);
+              },
+              title: "Metin kanalı ekle",
+              children: "+"
+            }
+          )
+        ] }),
+        addingChannel && newChannelType === "text" && /* @__PURE__ */ jsxRuntimeExports.jsx("form", { className: "noblecore-add-channel-form", onSubmit: handleAddChannel, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            className: "key-input",
+            placeholder: "kanal-adi",
+            value: newChannelName,
+            onChange: (e2) => setNewChannelName(e2.target.value),
+            autoFocus: true
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-channel-list", children: textChannels.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: `noblecore-channel-item${c2.id === activeChannelId ? " noblecore-channel-item-active" : ""}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  className: "noblecore-channel-item-name",
+                  onClick: () => {
+                    setActiveChannelId(c2.id);
+                    setMobileSection("chat");
+                  },
+                  children: [
+                    "# ",
+                    c2.name
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-item-actions", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    className: "noblecore-channel-item-action-btn",
+                    title: "Arkadaş davet et",
+                    onClick: (e2) => {
+                      e2.stopPropagation();
+                      navigator.clipboard.writeText(server.invite_code);
+                      setInviteCopied(true);
+                      setTimeout(() => setInviteCopied(false), 2e3);
+                    },
+                    children: inviteCopied ? "✓" : /* @__PURE__ */ jsxRuntimeExports.jsx(InviteIcon, {})
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    className: "noblecore-channel-item-action-btn",
+                    title: "Kanal Ayarları",
+                    onClick: (e2) => {
+                      e2.stopPropagation();
+                      setSettingsChannelId(c2.id);
+                      setChannelSettingsOpen(true);
+                    },
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {})
+                  }
+                )
+              ] })
+            ]
+          },
+          c2.id
+        )) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-list-header", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "SES KANALLARI" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "noblecore-add-channel-btn",
+              onClick: () => {
+                setNewChannelType("voice");
+                setAddingChannel((v2) => v2 && newChannelType === "voice" ? false : true);
+              },
+              title: "Ses kanalı ekle",
+              children: "+"
+            }
+          )
+        ] }),
+        addingChannel && newChannelType === "voice" && /* @__PURE__ */ jsxRuntimeExports.jsx("form", { className: "noblecore-add-channel-form", onSubmit: handleAddChannel, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            className: "key-input",
+            placeholder: "kanal-adi",
+            value: newChannelName,
+            onChange: (e2) => setNewChannelName(e2.target.value),
+            autoFocus: true
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-channel-list", children: voiceChannels.map((c2) => {
+          const participants = voiceParticipants[c2.id] || [];
+          const iAmHere = myVoiceChannelId === c2.id;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-channel-group", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-channel-item${iAmHere ? " noblecore-channel-item-active" : ""}`, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  className: "noblecore-channel-item-name",
+                  onClick: () => {
+                    if (myVoiceChannelId !== c2.id) handleJoinVoice(c2.id);
+                  },
+                  children: [
+                    "🔊 ",
+                    c2.name
+                  ]
+                }
+              ),
+              iAmHere && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-elapsed", children: formatElapsed(voiceElapsed) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-item-actions", children: [
+                iAmHere && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    className: "noblecore-channel-item-action-btn",
+                    title: "Sesten ayrıl",
+                    onClick: (e2) => {
+                      e2.stopPropagation();
+                      handleLeaveVoice(c2.id);
+                    },
+                    children: "📞"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    className: "noblecore-channel-item-action-btn",
+                    title: "Kanal Ayarları",
+                    onClick: (e2) => {
+                      e2.stopPropagation();
+                      setSettingsChannelId(c2.id);
+                      setChannelSettingsOpen(true);
+                    },
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {})
+                  }
+                )
+              ] })
+            ] }),
+            participants.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-participant-row", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-participant-avatar", children: p2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: p2.avatar_url, alt: "" }) : p2.username[0].toUpperCase() }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-participant-name", children: p2.username })
+            ] }, p2.id))
+          ] }, c2.id);
+        }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-bottom-panel", style: { width: RAIL_WIDTH + sidebarWidth - 16 + 13, left: 9 }, children: [
+          myVoiceChannelId && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-header", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-icon", children: "📶" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-text", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-title", children: "Ses Bağlantısı Kuruldu" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-subtitle", children: [
+                  channels.find((c2) => c2.id === myVoiceChannelId)?.name || "",
+                  " / ",
+                  server.name
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-wave", children: "📊" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  className: "noblecore-voice-banner-hangup",
+                  title: "Sesten Ayrıl",
+                  onClick: () => handleLeaveVoice(myVoiceChannelId),
+                  children: "📞"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-actions", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "📹" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Ekran paylaşımı — yakında", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScreenShareIcon, {}) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "🎭" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "✋" })
+            ] }),
+            voiceCall.micError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-mic-error", children: voiceCall.micError })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-panel-info", onClick: () => setProfilePopoverOpen((v2) => !v2), children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-avatar", children: [
+                user.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: user.avatar_url, alt: "" }) : user.username?.[0]?.toUpperCase() || "?",
+                /* @__PURE__ */ jsxRuntimeExports.jsx(StatusDot, { status: userStatus, size: 13, ring: true, className: "noblecore-user-status-dot" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-text", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-name", children: user.username }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-status", children: STATUS_LABELS[userStatus] })
+              ] })
+            ] }),
+            profilePopoverOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
+              UserProfilePopover,
+              {
+                user,
+                status: userStatus,
+                onChangeStatus: handleChangeStatus,
+                onClose: () => setProfilePopoverOpen(false),
+                onSwitchAccount: onLogout
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel-actions", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "button",
+                {
+                  className: "noblecore-user-action-btn",
+                  disabled: !myVoiceChannelId,
+                  title: !myVoiceChannelId ? "Önce bir ses kanalına katıl" : voiceCall.muted ? "Mikrofonu Aç" : "Mikrofonu Kapat",
+                  onClick: () => voiceCall.toggleMute(),
+                  children: [
+                    voiceCall.muted ? "🔇" : "🎤",
+                    " ",
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-action-btn", disabled: true, title: "Yakında", children: [
+                "🎧 ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-user-action-btn", onClick: () => setUserSettingsOpen(true), title: "Kullanıcı Ayarları", children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {}) })
+            ] })
+          ] })
+        ] })
+      ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
         {
-          className: `noblecore-sidebar-resize-handle${resizing ? " noblecore-sidebar-resize-handle-active" : ""}`,
-          onMouseDown: handleResizeStart
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-header", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onBack, children: "← Hub" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-server-name", children: server.name }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-settings-btn", onClick: () => setSettingsOpen(true), title: "Sunucu Ayarları", children: "⚙️" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-list-header", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "METİN KANALLARI" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: "noblecore-add-channel-btn",
-            onClick: () => {
-              setNewChannelType("text");
-              setAddingChannel((v2) => v2 && newChannelType === "text" ? false : true);
-            },
-            title: "Metin kanalı ekle",
-            children: "+"
-          }
-        )
-      ] }),
-      addingChannel && newChannelType === "text" && /* @__PURE__ */ jsxRuntimeExports.jsx("form", { className: "noblecore-add-channel-form", onSubmit: handleAddChannel, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "input",
-        {
-          className: "key-input",
-          placeholder: "kanal-adi",
-          value: newChannelName,
-          onChange: (e2) => setNewChannelName(e2.target.value),
-          autoFocus: true
-        }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-channel-list", children: textChannels.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "div",
-        {
-          className: `noblecore-channel-item${c2.id === activeChannelId ? " noblecore-channel-item-active" : ""}`,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-channel-item-name", onClick: () => setActiveChannelId(c2.id), children: [
-              "# ",
-              c2.name
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-item-actions", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "noblecore-channel-item-action-btn",
-                  title: "Arkadaş davet et",
-                  onClick: (e2) => {
-                    e2.stopPropagation();
-                    navigator.clipboard.writeText(server.invite_code);
-                    setInviteCopied(true);
-                    setTimeout(() => setInviteCopied(false), 2e3);
-                  },
-                  children: inviteCopied ? "✓" : /* @__PURE__ */ jsxRuntimeExports.jsx(InviteIcon, {})
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "noblecore-channel-item-action-btn",
-                  title: "Kanal Ayarları",
-                  onClick: (e2) => {
-                    e2.stopPropagation();
-                    setSettingsChannelId(c2.id);
-                    setChannelSettingsOpen(true);
-                  },
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {})
-                }
-              )
-            ] })
-          ]
-        },
-        c2.id
-      )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-list-header", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "SES KANALLARI" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: "noblecore-add-channel-btn",
-            onClick: () => {
-              setNewChannelType("voice");
-              setAddingChannel((v2) => v2 && newChannelType === "voice" ? false : true);
-            },
-            title: "Ses kanalı ekle",
-            children: "+"
-          }
-        )
-      ] }),
-      addingChannel && newChannelType === "voice" && /* @__PURE__ */ jsxRuntimeExports.jsx("form", { className: "noblecore-add-channel-form", onSubmit: handleAddChannel, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "input",
-        {
-          className: "key-input",
-          placeholder: "kanal-adi",
-          value: newChannelName,
-          onChange: (e2) => setNewChannelName(e2.target.value),
-          autoFocus: true
-        }
-      ) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-channel-list", children: voiceChannels.map((c2) => {
-        const participants = voiceParticipants[c2.id] || [];
-        const iAmHere = myVoiceChannelId === c2.id;
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-channel-group", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-channel-item${iAmHere ? " noblecore-channel-item-active" : ""}`, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                className: "noblecore-channel-item-name",
-                onClick: () => {
-                  if (myVoiceChannelId !== c2.id) handleJoinVoice(c2.id);
-                },
-                children: [
-                  "🔊 ",
-                  c2.name
-                ]
-              }
-            ),
-            iAmHere && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-elapsed", children: formatElapsed(voiceElapsed) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-item-actions", children: [
-              iAmHere && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "noblecore-channel-item-action-btn",
-                  title: "Sesten ayrıl",
-                  onClick: (e2) => {
-                    e2.stopPropagation();
-                    handleLeaveVoice(c2.id);
-                  },
-                  children: "📞"
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "noblecore-channel-item-action-btn",
-                  title: "Kanal Ayarları",
-                  onClick: (e2) => {
-                    e2.stopPropagation();
-                    setSettingsChannelId(c2.id);
-                    setChannelSettingsOpen(true);
-                  },
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {})
-                }
-              )
-            ] })
-          ] }),
-          participants.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-participant-row", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-participant-avatar", children: p2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: p2.avatar_url, alt: "" }) : p2.username[0].toUpperCase() }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-participant-name", children: p2.username })
-          ] }, p2.id))
-        ] }, c2.id);
-      }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-bottom-panel", style: { width: RAIL_WIDTH + sidebarWidth - 16 + 13, left: 9 }, children: [
-        myVoiceChannelId && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-header", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-icon", children: "📶" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-text", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-title", children: "Ses Bağlantısı Kuruldu" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-subtitle", children: [
-                channels.find((c2) => c2.id === myVoiceChannelId)?.name || "",
-                " / ",
-                server.name
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-voice-banner-wave", children: "📊" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: "noblecore-voice-banner-hangup",
-                title: "Sesten Ayrıl",
-                onClick: () => handleLeaveVoice(myVoiceChannelId),
-                children: "📞"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-voice-banner-actions", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "📹" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Ekran paylaşımı — yakında", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScreenShareIcon, {}) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "🎭" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-voice-banner-action-btn", disabled: true, title: "Yakında", children: "✋" })
-          ] }),
-          voiceCall.micError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-voice-banner-mic-error", children: voiceCall.micError })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-panel-info", onClick: () => setProfilePopoverOpen((v2) => !v2), children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-avatar", children: [
-              user.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: user.avatar_url, alt: "" }) : user.username?.[0]?.toUpperCase() || "?",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(StatusDot, { status: userStatus, size: 13, ring: true, className: "noblecore-user-status-dot" })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-text", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-name", children: user.username }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-status", children: STATUS_LABELS[userStatus] })
-            ] })
-          ] }),
-          profilePopoverOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
-            UserProfilePopover,
-            {
-              user,
-              status: userStatus,
-              onChangeStatus: handleChangeStatus,
-              onClose: () => setProfilePopoverOpen(false),
-              onSwitchAccount: onLogout
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel-actions", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                className: "noblecore-user-action-btn",
-                disabled: !myVoiceChannelId,
-                title: !myVoiceChannelId ? "Önce bir ses kanalına katıl" : voiceCall.muted ? "Mikrofonu Aç" : "Mikrofonu Kapat",
-                onClick: () => voiceCall.toggleMute(),
-                children: [
-                  voiceCall.muted ? "🔇" : "🎤",
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-action-btn", disabled: true, title: "Yakında", children: [
-              "🎧 ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-user-action-chevron", children: "⌄" })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-user-action-btn", onClick: () => setUserSettingsOpen(true), title: "Kullanıcı Ayarları", children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {}) })
-          ] })
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        className: "noblecore-chat",
-        onDragEnter: handleDragEnter,
-        onDragOver: handleDragOver,
-        onDragLeave: handleDragLeave,
-        onDrop: handleDrop,
-        children: channels.filter((c2) => c2.type !== "voice").length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-no-text-channel", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-no-text-channel-icon", children: "#" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-no-text-channel-title", children: "METİN KANALI YOK" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-no-text-channel-desc", children: "Kendini garip bir yerde buldun. Bu sunucuda hiçbir yazı kanalına erişimin yok veya hiçbir yazı kanalı yok." })
-        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-chat-header", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-chat-back-btn", onClick: () => setActiveChannelId(null), title: "Kanallara dön", children: "←" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-              "# ",
-              activeChannel?.name || ""
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-chat-header-actions", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "noblecore-chat-header-btn",
-                  title: "Arkadaş davet et",
-                  onClick: () => {
-                    navigator.clipboard.writeText(server.invite_code);
-                    setInviteCopied(true);
-                    setTimeout(() => setInviteCopied(false), 2e3);
-                  },
-                  children: inviteCopied ? "✓" : /* @__PURE__ */ jsxRuntimeExports.jsx(InviteIcon, {})
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "noblecore-chat-header-btn",
-                  title: "Kanal Ayarları",
-                  onClick: () => setChannelSettingsOpen(true),
-                  disabled: !activeChannel,
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {})
-                }
-              )
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-            isDraggingFile && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-drop-overlay", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-drop-card", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-drop-icon", children: "🖼️" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-drop-title", children: [
-                "#",
-                activeChannel?.name,
-                " Kanalına yükle"
+          className: "noblecore-chat",
+          onDragEnter: handleDragEnter,
+          onDragOver: handleDragOver,
+          onDragLeave: handleDragLeave,
+          onDrop: handleDrop,
+          children: channels.filter((c2) => c2.type !== "voice").length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-no-text-channel", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-no-text-channel-icon", children: "#" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-no-text-channel-title", children: "METİN KANALI YOK" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-no-text-channel-desc", children: "Kendini garip bir yerde buldun. Bu sunucuda hiçbir yazı kanalına erişimin yok veya hiçbir yazı kanalı yok." })
+          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-chat-header", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-chat-back-btn", onClick: () => setMobileSection("channels"), title: "Kanallara dön", children: "←" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                "# ",
+                activeChannel?.name || ""
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-drop-desc", children: [
-                "Yüklemeden önce yorum ekleyebilirsiniz.",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                "Doğrudan yüklemek için shift basılı tutun."
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-chat-header-actions", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    className: "noblecore-chat-header-btn",
+                    title: "Arkadaş davet et",
+                    onClick: () => {
+                      navigator.clipboard.writeText(server.invite_code);
+                      setInviteCopied(true);
+                      setTimeout(() => setInviteCopied(false), 2e3);
+                    },
+                    children: inviteCopied ? "✓" : /* @__PURE__ */ jsxRuntimeExports.jsx(InviteIcon, {})
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    className: "noblecore-chat-header-btn",
+                    title: "Kanal Ayarları",
+                    onClick: () => setChannelSettingsOpen(true),
+                    disabled: !activeChannel,
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(GearIcon, {})
+                  }
+                )
               ] })
-            ] }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-list", children: [
-              messages.length === 0 && activeChannel && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-welcome", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-welcome-title", children: [
-                  server.name,
-                  " klanına hoş geldin!"
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+              isDraggingFile && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-drop-overlay", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-drop-card", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-drop-icon", children: "🖼️" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-drop-title", children: [
+                  "#",
+                  activeChannel?.name,
+                  " Kanalına yükle"
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-welcome-desc", children: [
-                  "Bu senin yepyeni ve gıcır gıcır sunucun. Kolay bir başlangıç yapmana yardımcı olmak için birkaç adım derledik. Daha fazla yardım için",
-                  " ",
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-welcome-link", disabled: true, title: "Yakında", children: "Başlangıç Rehberimize" }),
-                  " ",
-                  "göz atabilirsin."
-                ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-welcome-checklist", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-welcome-item", onClick: () => setSettingsOpen(true), children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "📨" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "Arkadaşlarını davet et" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
-                  ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                    "button",
-                    {
-                      className: "noblecore-welcome-item",
-                      onClick: () => !server.icon_url && setSettingsOpen(true),
-                      disabled: !!server.icon_url,
-                      children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "🖼️" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "Sunucunu bir simgeyle kişiselleştir" }),
-                        server.icon_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-check", children: "✓" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
-                      ]
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                    "button",
-                    {
-                      className: "noblecore-welcome-item",
-                      onClick: () => document.querySelector(".noblecore-composer-input")?.focus(),
-                      children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "🚀" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "İlk mesajını gönder" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
-                      ]
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-welcome-item", disabled: true, title: "Yakında", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "🎮" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "İlk uygulamanı ekle" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
-                  ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-welcome-item", disabled: true, title: "Yakında", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "💎" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "Takviyelerle herkes için avantajların kilidini aç" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
-                  ] })
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-drop-desc", children: [
+                  "Yüklemeden önce yorum ekleyebilirsiniz.",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+                  "Doğrudan yüklemek için shift basılı tutun."
                 ] })
-              ] }),
-              messages.filter((m2) => !blockedIds.has(m2.user_id)).map((m2, i2, visibleMessages) => {
-                const isOwn = m2.user_id === user.id;
-                const isDeleted = !!m2.deleted_at;
-                const showDateDivider = i2 === 0 || !isSameLocalDay(new Date(visibleMessages[i2 - 1].created_at), new Date(m2.created_at));
-                const dateDivider = showDateDivider && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-date-divider", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formatDateDivider(m2.created_at) }) });
-                const reactionGroups = /* @__PURE__ */ new Map();
-                for (const r2 of m2.reactions || []) {
-                  if (!reactionGroups.has(r2.emoji)) reactionGroups.set(r2.emoji, []);
-                  reactionGroups.get(r2.emoji).push({ userId: r2.user_id, username: r2.username });
-                }
-                if (isDeleted) {
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-list", children: [
+                messages.length === 0 && activeChannel && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-welcome", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-welcome-title", children: [
+                    server.name,
+                    " klanına hoş geldin!"
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-welcome-desc", children: [
+                    "Bu senin yepyeni ve gıcır gıcır sunucun. Kolay bir başlangıç yapmana yardımcı olmak için birkaç adım derledik. Daha fazla yardım için",
+                    " ",
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-welcome-link", disabled: true, title: "Yakında", children: "Başlangıç Rehberimize" }),
+                    " ",
+                    "göz atabilirsin."
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-welcome-checklist", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-welcome-item", onClick: () => setSettingsOpen(true), children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "📨" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "Arkadaşlarını davet et" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        className: "noblecore-welcome-item",
+                        onClick: () => !server.icon_url && setSettingsOpen(true),
+                        disabled: !!server.icon_url,
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "🖼️" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "Sunucunu bir simgeyle kişiselleştir" }),
+                          server.icon_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-check", children: "✓" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
+                        ]
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "button",
+                      {
+                        className: "noblecore-welcome-item",
+                        onClick: () => document.querySelector(".noblecore-composer-input")?.focus(),
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "🚀" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "İlk mesajını gönder" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
+                        ]
+                      }
+                    ),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-welcome-item", disabled: true, title: "Yakında", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "🎮" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "İlk uygulamanı ekle" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-welcome-item", disabled: true, title: "Yakında", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-icon", children: "💎" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-label", children: "Takviyelerle herkes için avantajların kilidini aç" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-welcome-item-chevron", children: "›" })
+                    ] })
+                  ] })
+                ] }),
+                messages.filter((m2) => !blockedIds.has(m2.user_id)).map((m2, i2, visibleMessages) => {
+                  const isOwn = m2.user_id === user.id;
+                  const isDeleted = !!m2.deleted_at;
+                  const showDateDivider = i2 === 0 || !isSameLocalDay(new Date(visibleMessages[i2 - 1].created_at), new Date(m2.created_at));
+                  const dateDivider = showDateDivider && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-date-divider", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formatDateDivider(m2.created_at) }) });
+                  const reactionGroups = /* @__PURE__ */ new Map();
+                  for (const r2 of m2.reactions || []) {
+                    if (!reactionGroups.has(r2.emoji)) reactionGroups.set(r2.emoji, []);
+                    reactionGroups.get(r2.emoji).push({ userId: r2.user_id, username: r2.username });
+                  }
+                  if (isDeleted) {
+                    return /* @__PURE__ */ jsxRuntimeExports.jsxs(reactExports.Fragment, { children: [
+                      dateDivider,
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-message${isOwn ? " noblecore-message-own" : ""}`, children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-message-avatar", children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username?.[0]?.toUpperCase() || "?" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-body", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-meta", children: [
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-username", children: m2.username }),
+                            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-time", children: formatTime(m2.created_at) })
+                          ] }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-message-content noblecore-message-content-deleted", children: "Bu mesaj silindi." })
+                        ] })
+                      ] })
+                    ] }, m2.id);
+                  }
                   return /* @__PURE__ */ jsxRuntimeExports.jsxs(reactExports.Fragment, { children: [
                     dateDivider,
                     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-message${isOwn ? " noblecore-message-own" : ""}`, children: [
@@ -95556,244 +95582,257 @@ function NobleCoreView({
                       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-body", children: [
                         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-meta", children: [
                           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-username", children: m2.username }),
-                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-time", children: formatTime(m2.created_at) })
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-time", children: formatTime(m2.created_at) }),
+                          m2.edited_at && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-edited", children: "(düzenlendi)" })
                         ] }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-message-content noblecore-message-content-deleted", children: "Bu mesaj silindi." })
+                        editingMessageId === m2.id ? /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "noblecore-message-edit-form", onSubmit: submitEditMessage, children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "input",
+                            {
+                              className: "noblecore-message-edit-input",
+                              value: editDraft,
+                              onChange: (e2) => setEditDraft(e2.target.value),
+                              autoFocus: true,
+                              onKeyDown: (e2) => e2.key === "Escape" && cancelEditMessage()
+                            }
+                          ),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "submit", className: "btn btn-primary", children: "Kaydet" }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "btn", onClick: cancelEditMessage, children: "İptal" })
+                        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                          m2.content && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "div",
+                            {
+                              className: `noblecore-message-content${isEmojiOnlyContent(m2.content) ? " noblecore-message-content-emoji-only" : ""}`,
+                              children: renderMessageContent(m2.content, members, user.id)
+                            }
+                          ),
+                          extractUrls(m2.content || "").slice(0, 3).map((url2) => /* @__PURE__ */ jsxRuntimeExports.jsx(LinkPreviewCard, { url: url2, token }, url2)),
+                          m2.attachment_url && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "img",
+                            {
+                              className: "noblecore-message-attachment",
+                              src: resolveAttachmentUrl(m2.attachment_url),
+                              alt: "ek",
+                              onClick: () => setViewerImage({
+                                url: resolveAttachmentUrl(m2.attachment_url),
+                                fileName: m2.attachment_url.split("/").pop()
+                              })
+                            }
+                          )
+                        ] }),
+                        reactionGroups.size > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-message-reactions", children: Array.from(reactionGroups.entries()).map(([emoji, reactors]) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "button",
+                          {
+                            className: `noblecore-reaction-pill${reactors.some((r2) => r2.userId === user.id) ? " noblecore-reaction-pill-mine" : ""}`,
+                            onClick: () => toggleReaction(m2.id, emoji),
+                            title: reactors.map((r2) => r2.username).join(", "),
+                            children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "twemoji", src: twemojiUrl(emoji), alt: emoji, draggable: false }),
+                              " ",
+                              reactors.length
+                            ]
+                          },
+                          emoji
+                        )) })
+                      ] }),
+                      editingMessageId !== m2.id && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-actions", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            className: "noblecore-message-action-btn",
+                            onClick: () => setReactionPickerFor(reactionPickerFor === m2.id ? null : m2.id),
+                            title: "Tepki ekle",
+                            children: "😊"
+                          }
+                        ),
+                        isOwn && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-message-action-btn", onClick: () => startEditMessage(m2), title: "Düzenle", children: "✏️" }),
+                        !isOwn && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            className: "noblecore-message-action-btn",
+                            onClick: () => handleReport("message", m2.id),
+                            title: "Şikayet et",
+                            children: "🚩"
+                          }
+                        ),
+                        !isOwn && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            className: "noblecore-message-action-btn",
+                            onClick: () => handleBlockUser(m2.user_id, m2.username),
+                            title: "Kullanıcıyı engelle",
+                            children: "🚫"
+                          }
+                        ),
+                        (isOwn || server.owner_id === user.id) && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          "button",
+                          {
+                            type: "button",
+                            className: "noblecore-message-action-btn",
+                            onClick: () => handleDeleteMessage(m2.id),
+                            title: "Sil",
+                            children: "🗑️"
+                          }
+                        ),
+                        reactionPickerFor === m2.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-reaction-picker", children: REACTION_CHOICES.map((emoji) => /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => toggleReaction(m2.id, emoji), children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "twemoji", src: twemojiUrl(emoji), alt: emoji, draggable: false }) }, emoji)) })
                       ] })
                     ] })
                   ] }, m2.id);
-                }
-                return /* @__PURE__ */ jsxRuntimeExports.jsxs(reactExports.Fragment, { children: [
-                  dateDivider,
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `noblecore-message${isOwn ? " noblecore-message-own" : ""}`, children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-message-avatar", children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username?.[0]?.toUpperCase() || "?" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-body", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-meta", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-username", children: m2.username }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-time", children: formatTime(m2.created_at) }),
-                        m2.edited_at && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-message-edited", children: "(düzenlendi)" })
-                      ] }),
-                      editingMessageId === m2.id ? /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "noblecore-message-edit-form", onSubmit: submitEditMessage, children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "input",
-                          {
-                            className: "noblecore-message-edit-input",
-                            value: editDraft,
-                            onChange: (e2) => setEditDraft(e2.target.value),
-                            autoFocus: true,
-                            onKeyDown: (e2) => e2.key === "Escape" && cancelEditMessage()
-                          }
-                        ),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "submit", className: "btn btn-primary", children: "Kaydet" }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "btn", onClick: cancelEditMessage, children: "İptal" })
-                      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-                        m2.content && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "div",
-                          {
-                            className: `noblecore-message-content${isEmojiOnlyContent(m2.content) ? " noblecore-message-content-emoji-only" : ""}`,
-                            children: renderMessageContent(m2.content, members, user.id)
-                          }
-                        ),
-                        extractUrls(m2.content || "").slice(0, 3).map((url2) => /* @__PURE__ */ jsxRuntimeExports.jsx(LinkPreviewCard, { url: url2, token }, url2)),
-                        m2.attachment_url && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                          "img",
-                          {
-                            className: "noblecore-message-attachment",
-                            src: resolveAttachmentUrl(m2.attachment_url),
-                            alt: "ek",
-                            onClick: () => setViewerImage({
-                              url: resolveAttachmentUrl(m2.attachment_url),
-                              fileName: m2.attachment_url.split("/").pop()
-                            })
-                          }
-                        )
-                      ] }),
-                      reactionGroups.size > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-message-reactions", children: Array.from(reactionGroups.entries()).map(([emoji, reactors]) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                        "button",
-                        {
-                          className: `noblecore-reaction-pill${reactors.some((r2) => r2.userId === user.id) ? " noblecore-reaction-pill-mine" : ""}`,
-                          onClick: () => toggleReaction(m2.id, emoji),
-                          title: reactors.map((r2) => r2.username).join(", "),
-                          children: [
-                            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "twemoji", src: twemojiUrl(emoji), alt: emoji, draggable: false }),
-                            " ",
-                            reactors.length
-                          ]
-                        },
-                        emoji
-                      )) })
-                    ] }),
-                    editingMessageId !== m2.id && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-message-actions", children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "button",
-                        {
-                          type: "button",
-                          className: "noblecore-message-action-btn",
-                          onClick: () => setReactionPickerFor(reactionPickerFor === m2.id ? null : m2.id),
-                          title: "Tepki ekle",
-                          children: "😊"
-                        }
-                      ),
-                      isOwn && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-message-action-btn", onClick: () => startEditMessage(m2), title: "Düzenle", children: "✏️" }),
-                      !isOwn && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "button",
-                        {
-                          type: "button",
-                          className: "noblecore-message-action-btn",
-                          onClick: () => handleReport("message", m2.id),
-                          title: "Şikayet et",
-                          children: "🚩"
-                        }
-                      ),
-                      !isOwn && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "button",
-                        {
-                          type: "button",
-                          className: "noblecore-message-action-btn",
-                          onClick: () => handleBlockUser(m2.user_id, m2.username),
-                          title: "Kullanıcıyı engelle",
-                          children: "🚫"
-                        }
-                      ),
-                      (isOwn || server.owner_id === user.id) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "button",
-                        {
-                          type: "button",
-                          className: "noblecore-message-action-btn",
-                          onClick: () => handleDeleteMessage(m2.id),
-                          title: "Sil",
-                          children: "🗑️"
-                        }
-                      ),
-                      reactionPickerFor === m2.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-reaction-picker", children: REACTION_CHOICES.map((emoji) => /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => toggleReaction(m2.id, emoji), children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "twemoji", src: twemojiUrl(emoji), alt: emoji, draggable: false }) }, emoji)) })
-                    ] })
-                  ] })
-                ] }, m2.id);
-              }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: messagesEndRef })
-            ] }),
-            error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
-            pendingAttachment && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-pending-attachment", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: pendingAttachment, alt: "" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  type: "button",
-                  className: "noblecore-pending-attachment-remove",
-                  onClick: () => setPendingAttachment(null),
-                  title: "Kaldır",
-                  children: "✕"
-                }
-              )
-            ] }),
-            typingUsers.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-typing-indicator", children: formatTypingLabel(typingUsers) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "noblecore-composer", onSubmit: handleSend, children: [
-              mentionQuery !== null && mentionSuggestions.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-mention-dropdown", children: mentionSuggestions.map((m2, i2) => {
-                const isSpecial = m2.id.startsWith("__");
-                return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: messagesEndRef })
+              ] }),
+              error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+              pendingAttachment && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-pending-attachment", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: pendingAttachment, alt: "" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "button",
                   {
                     type: "button",
-                    className: `noblecore-mention-option${i2 === mentionIndex ? " noblecore-mention-option-active" : ""}`,
-                    onMouseDown: (e2) => {
-                      e2.preventDefault();
-                      insertMention(m2);
-                    },
-                    onMouseEnter: () => setMentionIndex(i2),
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-mention-option-avatar", children: isSpecial ? "📢" : m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username[0].toUpperCase() }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-                        "@",
-                        m2.username,
-                        isSpecial && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "noblecore-mention-option-desc", children: [
-                          " — ",
-                          m2.desc
+                    className: "noblecore-pending-attachment-remove",
+                    onClick: () => setPendingAttachment(null),
+                    title: "Kaldır",
+                    children: "✕"
+                  }
+                )
+              ] }),
+              typingUsers.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-typing-indicator", children: formatTypingLabel(typingUsers) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "noblecore-composer", onSubmit: handleSend, children: [
+                mentionQuery !== null && mentionSuggestions.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-mention-dropdown", children: mentionSuggestions.map((m2, i2) => {
+                  const isSpecial = m2.id.startsWith("__");
+                  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "button",
+                    {
+                      type: "button",
+                      className: `noblecore-mention-option${i2 === mentionIndex ? " noblecore-mention-option-active" : ""}`,
+                      onMouseDown: (e2) => {
+                        e2.preventDefault();
+                        insertMention(m2);
+                      },
+                      onMouseEnter: () => setMentionIndex(i2),
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-mention-option-avatar", children: isSpecial ? "📢" : m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username[0].toUpperCase() }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                          "@",
+                          m2.username,
+                          isSpecial && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "noblecore-mention-option-desc", children: [
+                            " — ",
+                            m2.desc
+                          ] })
                         ] })
-                      ] })
-                    ]
-                  },
-                  m2.id
-                );
-              }) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  ref: composerInputRef,
-                  className: "noblecore-composer-input",
-                  placeholder: activeChannel ? `#${activeChannel.name} kanalına mesaj yaz…` : "Mesaj yaz…",
-                  value: draft,
-                  onChange: (e2) => handleComposerChange(e2.target.value, e2.target.selectionStart),
-                  onSelect: (e2) => updateMentionFromCursor(e2.target.value, e2.target.selectionStart),
-                  onKeyDown: handleComposerKeyDown,
-                  onPaste: handlePaste,
-                  disabled: !activeChannelId
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  type: "button",
-                  className: "noblecore-composer-emoji-btn",
-                  title: "Emoji ekle",
-                  disabled: !activeChannelId,
-                  onClick: () => setEmojiPickerOpen((v2) => !v2),
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "twemoji", src: twemojiUrl("😊"), alt: "😊", draggable: false })
-                }
-              ),
-              emojiPickerOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                EmojiPicker,
-                {
-                  onSelect: insertEmojiAtCursor,
-                  onClose: () => setEmojiPickerOpen(false)
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", type: "submit", disabled: !draft.trim() && !pendingAttachment || !activeChannelId, children: "Gönder" })
+                      ]
+                    },
+                    m2.id
+                  );
+                }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    ref: composerInputRef,
+                    className: "noblecore-composer-input",
+                    placeholder: activeChannel ? `#${activeChannel.name} kanalına mesaj yaz…` : "Mesaj yaz…",
+                    value: draft,
+                    onChange: (e2) => handleComposerChange(e2.target.value, e2.target.selectionStart),
+                    onSelect: (e2) => updateMentionFromCursor(e2.target.value, e2.target.selectionStart),
+                    onKeyDown: handleComposerKeyDown,
+                    onPaste: handlePaste,
+                    disabled: !activeChannelId
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    className: "noblecore-composer-emoji-btn",
+                    title: "Emoji ekle",
+                    disabled: !activeChannelId,
+                    onClick: () => setEmojiPickerOpen((v2) => !v2),
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "twemoji", src: twemojiUrl("😊"), alt: "😊", draggable: false })
+                  }
+                ),
+                emojiPickerOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  EmojiPicker,
+                  {
+                    onSelect: insertEmojiAtCursor,
+                    onClose: () => setEmojiPickerOpen(false)
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", type: "submit", disabled: !draft.trim() && !pendingAttachment || !activeChannelId, children: "Gönder" })
+              ] })
             ] })
           ] })
-        ] })
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-sidebar", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-sidebar-header", children: [
-        "ÜYELER — ",
-        members.length
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-list", children: members.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-avatar", children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username[0].toUpperCase() }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-name", children: m2.username }),
-        m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", children: "Sahip" }),
-        m2.id !== user.id && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row-actions", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              className: "noblecore-member-row-action-btn",
-              title: "Şikayet et",
-              onClick: () => handleReport("user", m2.id),
-              children: "🚩"
-            }
-          ),
-          blockedIds.has(m2.id) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              className: "noblecore-member-row-action-btn",
-              title: "Engeli kaldır",
-              onClick: () => handleUnblockUser(m2.id),
-              children: "✅"
-            }
-          ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              className: "noblecore-member-row-action-btn",
-              title: "Engelle",
-              onClick: () => handleBlockUser(m2.id, m2.username),
-              children: "🚫"
-            }
-          )
-        ] })
-      ] }, m2.id)) })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-sidebar", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-sidebar-header", children: [
+          "ÜYELER — ",
+          members.length
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-list", children: members.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-avatar", children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username[0].toUpperCase() }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-name", children: m2.username }),
+          m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", children: "Sahip" }),
+          m2.id !== user.id && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row-actions", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                className: "noblecore-member-row-action-btn",
+                title: "Şikayet et",
+                onClick: () => handleReport("user", m2.id),
+                children: "🚩"
+              }
+            ),
+            blockedIds.has(m2.id) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                className: "noblecore-member-row-action-btn",
+                title: "Engeli kaldır",
+                onClick: () => handleUnblockUser(m2.id),
+                children: "✅"
+              }
+            ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                className: "noblecore-member-row-action-btn",
+                title: "Engelle",
+                onClick: () => handleBlockUser(m2.id, m2.username),
+                children: "🚫"
+              }
+            )
+          ] })
+        ] }, m2.id)) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-mobile-tabbar", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: `noblecore-mobile-tab${mobileSection === "channels" ? " noblecore-mobile-tab-active" : ""}`,
+          onClick: () => setMobileSection("channels"),
+          children: "🔊 Sesli Sohbet"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: `noblecore-mobile-tab${mobileSection === "chat" ? " noblecore-mobile-tab-active" : ""}`,
+          onClick: () => setMobileSection("chat"),
+          children: "💬 Chat"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: `noblecore-mobile-tab${mobileSection === "members" ? " noblecore-mobile-tab-active" : ""}`,
+          onClick: () => setMobileSection("members"),
+          children: "👥 Arkadaşlar"
+        }
+      )
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       ServerSettingsModal,

@@ -2002,6 +2002,16 @@ body {
 
 /* ---- NobleCore tarzi kanal/sohbet gorunumu ---- */
 
+/* .noblecore-view-wrap, .noblecore-view'in eskiden dogrudan .launcher-main-column'a
+   verdigi flex:1/min-height:0 davranisini simdi bir katman disaridan sagliyor,
+   boylece altina (sadece mobilde gorunen) .noblecore-mobile-tabbar sigabiliyor. */
+.noblecore-view-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .noblecore-view {
   flex: 1;
   min-height: 0;
@@ -6134,14 +6144,41 @@ button.launcher-featured-card:hover {
   max-width: 340px;
 }
 
+/* Sadece mobil genislikte gorunur (asagidaki @media icinde display:flex
+   yapiliyor) — masaustunde uc panel zaten yan yana oldugu icin gereksiz.
+   Bu kural media query'DEN ONCE tanimlanmis olmali: ayni ozgullukte
+   (tek sinif) iki kural catisirsa CSS, media query icinde olup olmadigina
+   bakmadan dosyadaki SIRAYA gore kazanani secer — sonra gelen kazanir. */
+.noblecore-mobile-tabbar {
+  display: none;
+  background: #14161c;
+  border-top: 1px solid #23262f;
+}
+
+.noblecore-mobile-tab {
+  flex: 1;
+  padding: 10px 4px;
+  background: transparent;
+  border: none;
+  color: #9aa1b3;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.noblecore-mobile-tab-active {
+  color: #4f7cff;
+}
+
 /* ---- Mobil sohbet gorunumu (Discord mobil web'i gibi tek panelli gezinme) ----
    Masaustunde .noblecore-view uc panel yan yana (kanal listesi + sohbet +
    uye listesi, toplam sabit genislikleri 375-414px'lik bir telefon ekranina
-   hic sigmiyordu). Mobilde sadece TEK panel gorunur: hicbir kanal secili
-   degilse kanal listesi tam genislikte, bir kanal seciliyse ("noblecore-view
-   -channel-open" sinifi, bkz. NobleCoreView.jsx) sohbet tam genislikte ve
-   geri donmek icin bir "←" butonu (.noblecore-chat-back-btn) cikar. Uye
-   listesi mobilde hic gosterilmiyor (v1 basitlestirmesi). */
+   hic sigmiyordu). Mobilde sadece TEK panel gorunur, hangisinin gorundugunu
+   NobleCoreView.jsx'teki "mobileSection" state'i (channels/chat/members)
+   belirliyor — .noblecore-view'e "mobile-section-<deger>" sinifi olarak
+   yansiyor. Alt sekme cubugu (.noblecore-mobile-tabbar) bu ucu arasinda
+   gezinmeyi sagliyor, sohbet icindeyken de "←" butonu (.noblecore-chat-back-btn)
+   kanal listesine donduruyor. */
 @media (max-width: 768px) {
   .launcher-server-rail {
     width: 56px;
@@ -6173,11 +6210,19 @@ button.launcher-featured-card:hover {
     display: none;
   }
 
-  .noblecore-view-channel-open .noblecore-channel-sidebar {
+  .noblecore-member-sidebar {
+    width: 100% !important;
+  }
+
+  .noblecore-view:not(.mobile-section-channels) .noblecore-channel-sidebar {
     display: none;
   }
 
-  .noblecore-view:not(.noblecore-view-channel-open) .noblecore-chat {
+  .noblecore-view:not(.mobile-section-chat) .noblecore-chat {
+    display: none;
+  }
+
+  .noblecore-view:not(.mobile-section-members) .noblecore-member-sidebar {
     display: none;
   }
 
@@ -6187,7 +6232,8 @@ button.launcher-featured-card:hover {
     justify-content: center;
   }
 
-  .noblecore-member-sidebar {
-    display: none;
+  .noblecore-mobile-tabbar {
+    display: flex;
+    flex-shrink: 0;
   }
 }
