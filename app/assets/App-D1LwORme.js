@@ -78288,7 +78288,7 @@ function UserStatusMenu({ anchorRef, status, onSelect, onClose, onMouseEnter, on
     }
   );
 }
-function UserProfilePopover({ user, status, onChangeStatus, onClose, onSwitchAccount }) {
+function UserProfilePopover({ user, status, onChangeStatus, onClose, onSwitchAccount, onEditProfile }) {
   const [boostCardDismissed, setBoostCardDismissed] = reactExports.useState(false);
   const [statusMenuOpen, setStatusMenuOpen] = reactExports.useState(false);
   const ref = reactExports.useRef(null);
@@ -78350,10 +78350,9 @@ function UserProfilePopover({ user, status, onChangeStatus, onClose, onSwitchAcc
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "user-profile-popover-boost-btn", disabled: true, title: "Yakında", children: "🎁 Mağaza" })
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "user-profile-popover-row", disabled: true, title: "Yakında", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "user-profile-popover-row", onClick: onEditProfile, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "user-profile-popover-row-icon", children: "✏️" }),
-        "Profili Düzenle",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "user-profile-popover-row-badge", children: "YENİ" })
+        "Profili Düzenle"
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
@@ -79628,7 +79627,11 @@ function NobleCoreView({
               status: userStatus,
               onChangeStatus: handleChangeStatus,
               onClose: () => setProfilePopoverOpen(false),
-              onSwitchAccount: onLogout
+              onSwitchAccount: onLogout,
+              onEditProfile: () => {
+                setProfilePopoverOpen(false);
+                setUserSettingsOpen(true);
+              }
             }
           ),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel-actions", children: [

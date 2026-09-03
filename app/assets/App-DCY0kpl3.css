@@ -6425,15 +6425,6 @@ button.launcher-featured-card:hover {
   font-size: 14px;
 }
 
-.user-profile-popover-row-badge {
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: #f2545b;
-  color: white;
-  font-size: 9px;
-  font-weight: 700;
-}
-
 .user-profile-popover-row-chevron {
   margin-left: auto;
   color: #6b7080;
