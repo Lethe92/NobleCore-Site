@@ -5332,6 +5332,22 @@ button.launcher-featured-card:hover {
   border-color: #5a2a30;
 }
 
+.btn-danger-solid {
+  background: #da373c;
+  border-color: #da373c;
+  color: white;
+}
+
+.btn-danger-solid:hover:not(:disabled) {
+  background: #a12828;
+  border-color: #a12828;
+}
+
+.noblecore-leave-modal {
+  position: relative;
+  padding-top: 32px;
+}
+
 .roles-back-btn {
   background: transparent;
   border: none;

@@ -78945,6 +78945,8 @@ function NobleCoreView({
   const [emojiPickerOpen, setEmojiPickerOpen] = reactExports.useState(false);
   const [blockedIds, setBlockedIds] = reactExports.useState(() => /* @__PURE__ */ new Set());
   const [messageTooLongLength, setMessageTooLongLength] = reactExports.useState(null);
+  const [leaveConfirmOpen, setLeaveConfirmOpen] = reactExports.useState(false);
+  const [leavingServer, setLeavingServer] = reactExports.useState(false);
   const composerInputRef = reactExports.useRef(null);
   const socketRef = reactExports.useRef(socket);
   reactExports.useEffect(() => {
@@ -79465,15 +79467,9 @@ function NobleCoreView({
                   {
                     type: "button",
                     className: "noblecore-server-dropdown-item noblecore-server-dropdown-item-danger",
-                    onClick: async () => {
+                    onClick: () => {
                       setServerMenuOpen(false);
-                      if (!confirm(`"${server.name}" sunucusundan ayrılmak istediğine emin misin?`)) return;
-                      try {
-                        await leaveServer(token, server.id);
-                        onServerLeftOrDeleted(server.id);
-                      } catch (err2) {
-                        setError(err2.message);
-                      }
+                      setLeaveConfirmOpen(true);
                     },
                     children: "Sunucudan Ayrıl"
                   }
@@ -80193,6 +80189,51 @@ function NobleCoreView({
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Mesajını kısaltıp tekrar göndermeyi dene." }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: () => setMessageTooLongLength(null), children: "Tamam" }) })
+    ] }) }),
+    leaveConfirmOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: () => !leavingServer && setLeaveConfirmOpen(false), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal noblecore-leave-modal", onClick: (e2) => e2.stopPropagation(), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          type: "button",
+          className: "invite-modal-close",
+          onClick: () => setLeaveConfirmOpen(false),
+          title: "Kapat",
+          disabled: leavingServer,
+          children: "✕"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { children: [
+        "'",
+        server.name,
+        "' Sunucusundan Ayrıl"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: server.name }),
+        " sunucusundan ayrılmak istediğine emin misin? Tekrar davet edilmediğin sürece bu sunucuya tekrar katılamayacaksın."
+      ] }),
+      error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => setLeaveConfirmOpen(false), disabled: leavingServer, children: "İptal" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            className: "btn btn-danger-solid",
+            disabled: leavingServer,
+            onClick: async () => {
+              setLeavingServer(true);
+              setError(null);
+              try {
+                await leaveServer(token, server.id);
+                onServerLeftOrDeleted(server.id);
+              } catch (err2) {
+                setError(err2.message);
+                setLeavingServer(false);
+              }
+            },
+            children: leavingServer ? "Ayrılıyor…" : "Sunucudan Ayrıl"
+          }
+        )
+      ] })
     ] }) })
   ] });
 }
