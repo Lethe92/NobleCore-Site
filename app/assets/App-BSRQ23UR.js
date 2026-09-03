@@ -79422,7 +79422,7 @@ function NobleCoreView({
                   children: "Sunucuya Davet Et"
                 }
               ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
+              isServerOwnerView && /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "button",
                 {
                   type: "button",
@@ -79434,7 +79434,7 @@ function NobleCoreView({
                   children: "Sunucu Ayarları"
                 }
               ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
+              isServerOwnerView && /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "button",
                 {
                   type: "button",
@@ -79447,8 +79447,8 @@ function NobleCoreView({
                   children: "Kanal Oluştur"
                 }
               ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Kategori Oluştur" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Etkinlik Oluştur" }),
+              isServerOwnerView && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Kategori Oluştur" }),
+              isServerOwnerView && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Etkinlik Oluştur" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Uygulama Dizini" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-server-dropdown-divider" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Bildirim Ayarları" }),
@@ -79457,6 +79457,27 @@ function NobleCoreView({
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-dropdown-item noblecore-server-dropdown-item-checkbox", title: "Yakında", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Sistem Kanallarını Gizle" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", disabled: true })
+              ] }),
+              !isServerOwnerView && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-server-dropdown-divider" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    className: "noblecore-server-dropdown-item noblecore-server-dropdown-item-danger",
+                    onClick: async () => {
+                      setServerMenuOpen(false);
+                      if (!confirm(`"${server.name}" sunucusundan ayrılmak istediğine emin misin?`)) return;
+                      try {
+                        await leaveServer(token, server.id);
+                        onServerLeftOrDeleted(server.id);
+                      } catch (err2) {
+                        setError(err2.message);
+                      }
+                    },
+                    children: "Sunucudan Ayrıl"
+                  }
+                )
               ] })
             ] })
           ] }),

@@ -2395,6 +2395,14 @@ body {
   cursor: default;
 }
 
+.noblecore-server-dropdown-item-danger {
+  color: #f2545b;
+}
+
+.noblecore-server-dropdown-item-danger:hover {
+  background: rgba(242, 84, 91, 0.1);
+}
+
 .noblecore-settings-btn {
   flex-shrink: 0;
   width: 26px;
