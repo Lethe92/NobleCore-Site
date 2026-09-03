@@ -1559,7 +1559,7 @@ body {
 }
 
 .noblecore-limit-modal-sub {
-  color: #dbdee1 !important;
+  color: #e6e8ee !important;
   font-weight: 600;
 }
 
@@ -2047,8 +2047,8 @@ body {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  background: #2b2d31;
-  border-right: 1px solid #26282c;
+  background: #14161c;
+  border-right: 1px solid #23262f;
   user-select: none;
 }
 
@@ -2072,7 +2072,7 @@ body {
   align-items: center;
   gap: 10px;
   padding: 12px;
-  border-bottom: 1px solid #26282c;
+  border-bottom: 1px solid #23262f;
 }
 
 .noblecore-server-name {
@@ -2100,7 +2100,7 @@ body {
 }
 
 .noblecore-settings-btn:hover {
-  background: #26282c;
+  background: #23262f;
 }
 
 .noblecore-channel-list-header {
@@ -2111,7 +2111,7 @@ body {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #949ba4;
+  color: #6b7180;
 }
 
 .noblecore-add-channel-btn {
@@ -2122,15 +2122,15 @@ body {
   justify-content: center;
   background: transparent;
   border: none;
-  color: #949ba4;
+  color: #6b7180;
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
 }
 
 .noblecore-add-channel-btn:hover {
-  background: #26282c;
-  color: #dbdee1;
+  background: #23262f;
+  color: #e6e8ee;
 }
 
 .noblecore-add-channel-form {
@@ -2163,7 +2163,7 @@ body {
   bottom: 8px;
   display: flex;
   flex-direction: column;
-  background: #313338;
+  background: #1c1f28;
   border-radius: 12px;
   z-index: 50;
   overflow: hidden;
@@ -2194,7 +2194,7 @@ body {
   /* Eskiden .noblecore-bottom-panel'in (arkaplan/kose saglayan ortak
      kapsayici) icindeydi, artik VoiceStatusBar.jsx'te tek basina kullanildigi
      icin kendi arkaplanini/kosesini tasiyor. */
-  background: #313338;
+  background: #1c1f28;
   border-radius: 12px;
 }
 
@@ -2205,7 +2205,7 @@ body {
 }
 
 .noblecore-voice-banner-icon {
-  color: #57f287;
+  color: #6fcf97;
   font-size: 16px;
   flex-shrink: 0;
 }
@@ -2216,13 +2216,13 @@ body {
 }
 
 .noblecore-voice-banner-title {
-  color: #57f287;
+  color: #6fcf97;
   font-size: 13px;
   font-weight: 700;
 }
 
 .noblecore-voice-banner-subtitle {
-  color: #b5bac1;
+  color: #9aa1b3;
   font-size: 11px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2230,7 +2230,7 @@ body {
 }
 
 .noblecore-voice-banner-wave {
-  color: #949ba4;
+  color: #6b7080;
   font-size: 14px;
   flex-shrink: 0;
 }
@@ -2252,7 +2252,7 @@ body {
 }
 
 .noblecore-voice-banner-hangup:hover {
-  background: #ed4245;
+  background: #d65e49;
 }
 
 .noblecore-voice-banner-actions {
@@ -2267,16 +2267,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #2b2d31;
+  background: #14161c;
   border: none;
   border-radius: 8px;
-  color: #b5bac1;
+  color: #9aa1b3;
   font-size: 14px;
   cursor: pointer;
 }
 
 .noblecore-voice-banner-action-btn:hover:not(:disabled) {
-  background: #26282c;
+  background: #23262f;
 }
 
 .noblecore-voice-banner-action-btn:disabled {
@@ -2316,7 +2316,7 @@ body {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #5865f2;
+  background: #4f7cff;
   color: white;
   font-size: 18px;
   font-weight: 700;
@@ -2347,7 +2347,7 @@ body {
 .noblecore-user-name {
   font-size: 16px;
   font-weight: 600;
-  color: #dbdee1;
+  color: #e6e8ee;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2355,7 +2355,7 @@ body {
 
 .noblecore-user-status {
   font-size: 13px;
-  color: #b5bac1;
+  color: #8b909c;
 }
 
 .noblecore-user-panel-actions {
@@ -2398,17 +2398,17 @@ body {
   gap: 2px;
   padding: 0 4px 0 0;
   border-radius: 6px;
-  color: #b5bac1;
+  color: #9aa1b3;
 }
 
 .noblecore-channel-item:hover {
-  background: #313338;
-  color: #dbdee1;
+  background: #1c1f28;
+  color: #e6e8ee;
 }
 
 .noblecore-channel-item-active {
-  background: #26282c;
-  color: #dbdee1;
+  background: #23262f;
+  color: #e6e8ee;
 }
 
 .noblecore-channel-item-name {
@@ -2441,7 +2441,7 @@ body {
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: #b5bac1;
+  color: #9aa1b3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2449,8 +2449,8 @@ body {
 }
 
 .noblecore-channel-item-action-btn:hover {
-  background: #3f4147;
-  color: #dbdee1;
+  background: #2a2e3a;
+  color: #e6e8ee;
 }
 
 .noblecore-chat {
@@ -2459,7 +2459,7 @@ body {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  background: #313338;
+  background: #1c1f28;
 }
 
 .noblecore-drop-overlay {
@@ -2520,7 +2520,7 @@ body {
   margin: 0 16px;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid #26282c;
+  border: 1px solid #23262f;
 }
 
 .noblecore-pending-attachment img {
@@ -2551,7 +2551,7 @@ body {
   padding: 12px 16px;
   font-weight: 700;
   font-size: 14px;
-  border-bottom: 1px solid #26282c;
+  border-bottom: 1px solid #23262f;
   flex-shrink: 0;
   user-select: none;
   display: flex;
@@ -2600,7 +2600,7 @@ body {
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: #dbdee1;
+  color: #e6e8ee;
   font-size: 18px;
   cursor: pointer;
   flex-shrink: 0;
@@ -2630,8 +2630,8 @@ body {
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background: #313338;
-  color: #3f4147;
+  background: #1c1f28;
+  color: #3a3d47;
   font-size: 48px;
   font-weight: 800;
   display: flex;
@@ -2644,13 +2644,13 @@ body {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #b5bac1;
+  color: #9aa1b3;
   margin-bottom: 8px;
 }
 
 .noblecore-no-text-channel-desc {
   font-size: 14px;
-  color: #949ba4;
+  color: #6b7080;
   max-width: 360px;
   line-height: 1.5;
 }
@@ -2667,14 +2667,14 @@ body {
 .noblecore-channel-welcome-title {
   font-size: 28px;
   font-weight: 700;
-  color: #dbdee1;
+  color: #e6e8ee;
   line-height: 1.25;
   margin-bottom: 10px;
 }
 
 .noblecore-channel-welcome-desc {
   font-size: 13px;
-  color: #b5bac1;
+  color: #9aa1b3;
   line-height: 1.6;
   margin-bottom: 20px;
 }
@@ -2683,7 +2683,7 @@ body {
   background: none;
   border: none;
   padding: 0;
-  color: #5865f2;
+  color: #4f7cff;
   font-size: 13px;
   cursor: pointer;
 }
@@ -2705,14 +2705,14 @@ body {
   gap: 12px;
   width: 100%;
   padding: 10px 14px;
-  background: #313338;
-  border: 1px solid #3f4147;
+  background: #1c1f28;
+  border: 1px solid #2a2e3a;
   border-radius: 8px;
   cursor: pointer;
 }
 
 .noblecore-welcome-item:hover:not(:disabled) {
-  background: #26282c;
+  background: #23262f;
 }
 
 .noblecore-welcome-item:disabled {
@@ -2729,11 +2729,11 @@ body {
   flex: 1;
   font-size: 13px;
   font-weight: 600;
-  color: #dbdee1;
+  color: #d6d9e0;
 }
 
 .noblecore-welcome-item-chevron {
-  color: #949ba4;
+  color: #6b7180;
   font-size: 18px;
 }
 
@@ -2743,7 +2743,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #57f287;
+  background: #6fcf97;
   border-radius: 50%;
   color: #0d0f14;
   font-size: 12px;
@@ -2755,7 +2755,7 @@ body {
   align-items: center;
   gap: 12px;
   margin: 10px 0 4px;
-  color: #949ba4;
+  color: #6b7180;
   font-size: 12px;
   font-weight: 600;
 }
@@ -2765,7 +2765,7 @@ body {
   content: '';
   flex: 1;
   height: 1px;
-  background: #383a40;
+  background: #2e323d;
 }
 
 .noblecore-message {
@@ -2791,7 +2791,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #5865f2;
+  background: #4f7cff;
   border-radius: 50%;
   font-weight: 700;
   font-size: 14px;
@@ -2800,7 +2800,7 @@ body {
 }
 
 .noblecore-message-own .noblecore-message-avatar {
-  background: #57f287;
+  background: #6fcf97;
 }
 
 .noblecore-message-avatar img {
@@ -2822,17 +2822,17 @@ body {
 .noblecore-message-username {
   font-weight: 700;
   font-size: 13px;
-  color: #dbdee1;
+  color: #e6e8ee;
 }
 
 .noblecore-message-time {
   font-size: 11px;
-  color: #949ba4;
+  color: #6b7180;
 }
 
 .noblecore-message-content {
   font-size: 13px;
-  color: #dbdee1;
+  color: #d6d9e0;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -2856,18 +2856,18 @@ body {
 
 .noblecore-message-content-deleted {
   font-style: italic;
-  color: #949ba4;
+  color: #6b7180;
 }
 
 .noblecore-message-link {
-  color: #5865f2;
+  color: #6fa8ff;
   text-decoration: underline;
   cursor: pointer;
   word-break: break-all;
 }
 
 .noblecore-message-link:hover {
-  color: #7983f5;
+  color: #8fbcff;
 }
 
 .noblecore-link-preview-image {
@@ -2887,20 +2887,20 @@ body {
   margin-top: 6px;
   padding: 10px 12px;
   background: #1b1e26;
-  border: 1px solid #383a40;
-  border-left: 3px solid #5865f2;
+  border: 1px solid #2e323d;
+  border-left: 3px solid #4f7cff;
   border-radius: 6px;
 }
 
 .noblecore-link-preview-site {
   font-size: 12px;
-  color: #b5bac1;
+  color: #9aa1b3;
 }
 
 .noblecore-link-preview-title {
   font-size: 15px;
   font-weight: 700;
-  color: #5865f2;
+  color: #6fa8ff;
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2915,7 +2915,7 @@ body {
 
 .noblecore-link-preview-desc {
   font-size: 12px;
-  color: #b5bac1;
+  color: #9aa1b3;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -2953,12 +2953,12 @@ body {
 
 .noblecore-message-edited {
   font-size: 10px;
-  color: #949ba4;
+  color: #6b7180;
 }
 
 .noblecore-mention {
   background: rgba(79, 124, 255, 0.18);
-  color: #7983f5;
+  color: #8fabff;
   border-radius: 4px;
   padding: 0 2px;
   font-weight: 600;
@@ -2966,7 +2966,7 @@ body {
 
 .noblecore-mention-self {
   background: rgba(255, 178, 74, 0.22);
-  color: #fda220;
+  color: #ffb24a;
 }
 
 .noblecore-message-edit-form {
@@ -2977,10 +2977,10 @@ body {
 
 .noblecore-message-edit-input {
   flex: 1;
-  background: #1e1f22;
-  border: 1px solid #383a40;
+  background: #16181f;
+  border: 1px solid #2e323d;
   border-radius: 6px;
-  color: #dbdee1;
+  color: #e6e8ee;
   font-size: 13px;
   padding: 4px 8px;
 }
@@ -2990,8 +2990,8 @@ body {
   position: absolute;
   top: -14px;
   right: 8px;
-  background: #26282c;
-  border: 1px solid #383a40;
+  background: #23262f;
+  border: 1px solid #2e323d;
   border-radius: 8px;
   padding: 2px;
   gap: 2px;
@@ -3007,7 +3007,7 @@ body {
 }
 
 .noblecore-message-action-btn:hover {
-  background: #383a40;
+  background: #2e323d;
 }
 
 .noblecore-reaction-picker {
@@ -3015,8 +3015,8 @@ body {
   top: 100%;
   right: 0;
   margin-top: 4px;
-  background: #26282c;
-  border: 1px solid #383a40;
+  background: #23262f;
+  border: 1px solid #2e323d;
   border-radius: 8px;
   padding: 4px;
   display: flex;
@@ -3034,7 +3034,7 @@ body {
 }
 
 .noblecore-reaction-picker button:hover {
-  background: #383a40;
+  background: #2e323d;
 }
 
 .noblecore-message-reactions {
@@ -3045,23 +3045,23 @@ body {
 }
 
 .noblecore-reaction-pill {
-  background: #26282c;
-  border: 1px solid #383a40;
+  background: #23262f;
+  border: 1px solid #2e323d;
   border-radius: 100px;
   padding: 1px 8px;
   font-size: 12px;
-  color: #dbdee1;
+  color: #d6d9e0;
   cursor: pointer;
 }
 
 .noblecore-reaction-pill:hover {
-  border-color: #5865f2;
+  border-color: #4f7cff;
 }
 
 .noblecore-reaction-pill-mine {
   background: rgba(79, 124, 255, 0.18);
-  border-color: #5865f2;
-  color: #7983f5;
+  border-color: #4f7cff;
+  color: #8fabff;
 }
 
 .noblecore-mention-dropdown {
@@ -3070,8 +3070,8 @@ body {
   left: 0;
   right: 0;
   margin-bottom: 6px;
-  background: #26282c;
-  border: 1px solid #383a40;
+  background: #23262f;
+  border: 1px solid #2e323d;
   border-radius: 8px;
   padding: 4px;
   max-height: 220px;
@@ -3091,13 +3091,13 @@ body {
   padding: 6px 8px;
   border-radius: 6px;
   font-size: 13px;
-  color: #dbdee1;
+  color: #d6d9e0;
   cursor: pointer;
 }
 
 .noblecore-mention-option-active,
 .noblecore-mention-option:hover {
-  background: #383a40;
+  background: #2e323d;
   color: #fff;
 }
 
@@ -3105,7 +3105,7 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #5865f2;
+  background: #4f7cff;
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -3118,7 +3118,7 @@ body {
 
 .noblecore-mention-option-desc {
   font-size: 11px;
-  color: #b5bac1;
+  color: #8b909c;
 }
 
 .noblecore-mention-option-avatar img {
@@ -3221,7 +3221,7 @@ body {
 
 .noblecore-typing-indicator {
   font-size: 12px;
-  color: #b5bac1;
+  color: #8b909c;
   padding: 2px 16px;
   font-style: italic;
 }
@@ -3230,7 +3230,7 @@ body {
   display: flex;
   gap: 8px;
   padding: 12px 16px;
-  border-top: 1px solid #26282c;
+  border-top: 1px solid #23262f;
   flex-shrink: 0;
   position: relative;
 }
@@ -3244,10 +3244,10 @@ body {
 .noblecore-composer-input {
   flex: 1;
   padding: 10px 12px;
-  background: #2b2d31;
-  border: 1px solid #26282c;
+  background: #14161c;
+  border: 1px solid #23262f;
   border-radius: 8px;
-  color: #dbdee1;
+  color: #e6e8ee;
   font-size: 13px;
   font-family: inherit;
   line-height: 1.4;
@@ -3258,7 +3258,7 @@ body {
 }
 
 .noblecore-composer-input:focus {
-  border-color: #5865f2;
+  border-color: #4f7cff;
 }
 
 .noblecore-composer-counter {
@@ -3273,15 +3273,15 @@ body {
 }
 
 .noblecore-composer-counter-over {
-  color: #ed4245;
+  color: #ef4444;
   font-weight: 700;
 }
 
 .noblecore-member-sidebar {
   width: 200px;
   flex-shrink: 0;
-  background: #2b2d31;
-  border-left: 1px solid #26282c;
+  background: #14161c;
+  border-left: 1px solid #23262f;
   padding: 14px 10px;
   overflow-y: auto;
   user-select: none;
@@ -3291,7 +3291,7 @@ body {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #949ba4;
+  color: #6b7180;
   padding: 0 6px 10px;
 }
 
@@ -3310,7 +3310,7 @@ body {
 }
 
 .noblecore-member-row:hover {
-  background: #313338;
+  background: #1c1f28;
 }
 
 .noblecore-member-row-actions {
@@ -3333,7 +3333,7 @@ body {
 }
 
 .noblecore-member-row-action-btn:hover {
-  background: #383a40;
+  background: #2e323d;
 }
 
 .noblecore-member-avatar {
@@ -3343,7 +3343,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #5865f2;
+  background: #4f7cff;
   border-radius: 50%;
   font-size: 11px;
   font-weight: 700;
@@ -3361,7 +3361,7 @@ body {
   flex: 1;
   min-width: 0;
   font-size: 13px;
-  color: #dbdee1;
+  color: #d6d9e0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -6102,7 +6102,7 @@ button.launcher-featured-card:hover {
 .noblecore-voice-elapsed {
   flex-shrink: 0;
   font-size: 11px;
-  color: #23a55a;
+  color: #3ba55c;
   font-variant-numeric: tabular-nums;
   margin-right: 4px;
 }
@@ -6119,7 +6119,7 @@ button.launcher-featured-card:hover {
   height: 20px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #5865f2;
+  background: #4f7cff;
   color: white;
   font-size: 10px;
   font-weight: 700;
@@ -6137,7 +6137,7 @@ button.launcher-featured-card:hover {
 
 .noblecore-voice-participant-name {
   font-size: 12px;
-  color: #b5bac1;
+  color: #9aa1b3;
 }
 
 .user-status-duration-menu-row:hover {
@@ -6152,7 +6152,7 @@ button.launcher-featured-card:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 30% 20%, #26314f 0%, #2b2d31 70%);
+  background: radial-gradient(circle at 30% 20%, #26314f 0%, #14161c 70%);
 }
 
 .web-landing-card {
@@ -6224,8 +6224,8 @@ button.launcher-featured-card:hover {
    bakmadan dosyadaki SIRAYA gore kazanani secer — sonra gelen kazanir. */
 .noblecore-mobile-tabbar {
   display: none;
-  background: #2b2d31;
-  border-top: 1px solid #26282c;
+  background: #14161c;
+  border-top: 1px solid #23262f;
 }
 
 .noblecore-mobile-tab {
@@ -6233,14 +6233,14 @@ button.launcher-featured-card:hover {
   padding: 10px 4px;
   background: transparent;
   border: none;
-  color: #b5bac1;
+  color: #9aa1b3;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .noblecore-mobile-tab-active {
-  color: #5865f2;
+  color: #4f7cff;
 }
 
 /* ---- Mobil sohbet gorunumu (Discord mobil web'i gibi tek panelli gezinme) ----
@@ -6317,37 +6317,4 @@ button.launcher-featured-card:hover {
   .noblecore-bottom-panel {
     bottom: 45px;
   }
-}
-
-/* Discord tema geçişi — Discord'un kendi fontu ("gg sans") lisansli/ozel,
-   kullanamayoruz; gorsel olarak en yakin ucretsiz alternatif olan Inter'i
-   sadece sohbet ekraninda (.noblecore-view) kullaniyoruz, Hub'a dokunmuyoruz. */
-.noblecore-view {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* .btn/.btn-primary paylaşılan (Hub'da da kullanılan) sınıflar olduğu için
-   global tanımlarına dokunmuyoruz, sadece .noblecore-view içindeki (sohbet
-   ekranı ve ondan açılan tüm modallar) kullanımlarını Discord'un buton
-   renkleriyle eziyoruz. */
-.noblecore-view .btn {
-  background: #4e5058;
-  border-color: #4e5058;
-  color: #dbdee1;
-}
-
-.noblecore-view .btn:hover:not(:disabled) {
-  background: #6d6f78;
-}
-
-/* .btn.btn-primary — hem .btn hem .btn-primary tasiyan elemanlarda (ornegin
-   "Gönder" butonu) yukaridaki .btn kuralinin ezmemesi icin ozgullugu bilerek
-   daha yuksek (.btn.btn-primary). */
-.noblecore-view .btn.btn-primary {
-  background: #5865f2;
-  border-color: #5865f2;
-}
-
-.noblecore-view .btn.btn-primary:hover:not(:disabled) {
-  background: #4752c4;
 }
