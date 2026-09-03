@@ -78335,7 +78335,7 @@ function MemberRoleAssign({ token, serverId, member, onUpdated }) {
     )
   ] });
 }
-function InviteModal({ open, onClose, server }) {
+function InviteModal({ open, onClose, server, channelName }) {
   const [copied, setCopied] = reactExports.useState(false);
   if (!open || !server) return null;
   function handleCopy() {
@@ -78343,18 +78343,30 @@ function InviteModal({ open, onClose, server }) {
     setCopied(true);
     setTimeout(() => setCopied(false), 2e3);
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: onClose, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal", onClick: (e2) => e2.stopPropagation(), children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: onClose, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal modal-wide invite-modal", onClick: (e2) => e2.stopPropagation(), children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "invite-modal-close", onClick: onClose, title: "Kapat", children: "✕" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { children: [
       "Arkadaşlarını ",
       server.name,
       " sunucusuna davet et"
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Bu davet kodunu paylaşarak istediğin kişileri sunucuna ekleyebilirsin." }),
+    channelName && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "invite-modal-subtitle", children: [
+      "Alıcılar #",
+      channelName,
+      " konumuna gelecek"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "key-input invite-modal-search", placeholder: "Arkadaşlarını ara", disabled: true }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "invite-modal-friends-placeholder", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "invite-modal-friends-placeholder-icon", children: "👥" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Arkadaş listesi yakında geliyor." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Şimdilik aşağıdaki davet koduyla istediğin kişileri ekleyebilirsin." })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "invite-modal-divider" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "invite-modal-link-label", children: "Veya bir davet kodu paylaş" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "key-input", readOnly: true, value: server.invite_code, style: { marginBottom: 0 } }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleCopy, children: copied ? "✓ Kopyalandı" : "Kopyala" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions modal-actions-close", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onClose, children: "Kapat" }) })
+    ] })
   ] }) });
 }
 const MINUTE = 60 * 1e3;
@@ -79037,6 +79049,7 @@ function NobleCoreView({
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `noblecore-server-name-chevron${serverMenuOpen ? " noblecore-server-name-chevron-up" : ""}`, children: "⌄" })
             ] }),
             serverMenuOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-dropdown", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Sunucu Takviyesi" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "button",
                 {
@@ -79060,7 +79073,31 @@ function NobleCoreView({
                   },
                   children: "Sunucu Ayarları"
                 }
-              )
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  className: "noblecore-server-dropdown-item",
+                  onClick: () => {
+                    setNewChannelType("text");
+                    setAddingChannel(true);
+                    setServerMenuOpen(false);
+                  },
+                  children: "Kanal Oluştur"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Kategori Oluştur" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Etkinlik Oluştur" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Uygulama Dizini" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-server-dropdown-divider" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Bildirim Ayarları" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Gizlilik Ayarları" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "noblecore-server-dropdown-item", disabled: true, title: "Yakında", children: "Sunucu Başına Profilini Düzenle" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-dropdown-item noblecore-server-dropdown-item-checkbox", title: "Yakında", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Sistem Kanallarını Gizle" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", disabled: true })
+              ] })
             ] })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-settings-btn", onClick: () => setInviteOpen(true), title: "Sunucuya Davet Et", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PersonAddIcon, {}) })
@@ -79703,7 +79740,7 @@ function NobleCoreView({
         }
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(InviteModal, { open: inviteOpen, onClose: () => setInviteOpen(false), server }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(InviteModal, { open: inviteOpen, onClose: () => setInviteOpen(false), server, channelName: activeChannel?.name }),
     viewerImage && /* @__PURE__ */ jsxRuntimeExports.jsx(
       NobleCoreImageViewer,
       {
