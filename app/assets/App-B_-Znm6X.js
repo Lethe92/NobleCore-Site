@@ -75031,6 +75031,13 @@ const listRoles = (token, serverId) => request(`/servers/${serverId}/roles`, { t
 const createRole = (token, serverId, name, color2) => request(`/servers/${serverId}/roles`, { method: "POST", token, body: { name, color: color2 } });
 const updateRole = (token, roleId, { name, color: color2, permissions } = {}) => request(`/roles/${roleId}`, { method: "PATCH", token, body: { name, color: color2, permissions } });
 const deleteRole = (token, roleId) => request(`/roles/${roleId}`, { method: "DELETE", token });
+const listChannelOverwrites = (token, channelId) => request(`/channels/${channelId}/overwrites`, { token });
+const setChannelOverwrite = (token, channelId, targetType, targetId, allow, deny) => request(`/channels/${channelId}/overwrites/${targetType}/${targetId}`, {
+  method: "PUT",
+  token,
+  body: { allow, deny }
+});
+const deleteChannelOverwrite = (token, channelId, targetType, targetId) => request(`/channels/${channelId}/overwrites/${targetType}/${targetId}`, { method: "DELETE", token });
 function connectSocket(token) {
   return lookup(BASE_URL, { auth: { token }, autoConnect: true });
 }
@@ -75847,7 +75854,7 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions modal-actions-close", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onClose, children: "Kapat" }) })
   ] }) });
 }
-function PermissionToggle({ state, onChange }) {
+function PermissionToggle({ state, onChange, disabled }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "perm-toggle", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "button",
@@ -75855,6 +75862,7 @@ function PermissionToggle({ state, onChange }) {
         type: "button",
         className: `perm-toggle-btn perm-toggle-deny${state === "deny" ? " perm-toggle-btn-active" : ""}`,
         onClick: () => onChange("deny"),
+        disabled,
         title: "Reddet",
         children: "✕"
       }
@@ -75865,6 +75873,7 @@ function PermissionToggle({ state, onChange }) {
         type: "button",
         className: `perm-toggle-btn perm-toggle-neutral${state === "neutral" ? " perm-toggle-btn-active" : ""}`,
         onClick: () => onChange("neutral"),
+        disabled,
         title: "Belirtilmemiş",
         children: "/"
       }
@@ -75875,28 +75884,84 @@ function PermissionToggle({ state, onChange }) {
         type: "button",
         className: `perm-toggle-btn perm-toggle-allow${state === "allow" ? " perm-toggle-btn-active" : ""}`,
         onClick: () => onChange("allow"),
+        disabled,
         title: "İzin Ver",
         children: "✓"
       }
     )
   ] });
 }
-function ChannelPermissionsTab({ channelName, isOwner }) {
+function ChannelPermissionsTab({ token, serverId, channelId, isOwner }) {
   const [expanded, setExpanded] = reactExports.useState(true);
-  const [isPrivate, setIsPrivate] = reactExports.useState(false);
-  const [selectedRole, setSelectedRole] = reactExports.useState("@everyone");
-  const [states, setStates] = reactExports.useState({});
-  function setPermState(name, value2) {
-    setStates((prev) => ({ ...prev, [name]: value2 }));
+  const [roles, setRoles] = reactExports.useState([]);
+  const [overwrites, setOverwrites] = reactExports.useState([]);
+  const [selectedRoleId, setSelectedRoleId] = reactExports.useState(null);
+  const [loading2, setLoading] = reactExports.useState(true);
+  const [error2, setError] = reactExports.useState(null);
+  const [busy, setBusy] = reactExports.useState(false);
+  function loadAll() {
+    setLoading(true);
+    Promise.all([listRoles(token, serverId), listChannelOverwrites(token, channelId)]).then(([rolesRes, overwritesRes]) => {
+      setRoles(rolesRes.roles);
+      setOverwrites(overwritesRes.overwrites);
+      setSelectedRoleId((prev) => prev || rolesRes.roles.find((r2) => r2.is_default)?.id || rolesRes.roles[0]?.id || null);
+      setLoading(false);
+    }).catch((err2) => {
+      setError(err2.message);
+      setLoading(false);
+    });
   }
+  reactExports.useEffect(() => {
+    loadAll();
+  }, [serverId, channelId]);
+  const defaultRole = roles.find((r2) => r2.is_default);
+  const currentOverwrite = overwrites.find((o2) => o2.target_type === "role" && o2.target_id === selectedRoleId);
+  const currentAllow = Number(currentOverwrite?.allow) || 0;
+  const currentDeny = Number(currentOverwrite?.deny) || 0;
+  function stateFor(bit) {
+    if (hasPerm(currentDeny, bit)) return "deny";
+    if (hasPerm(currentAllow, bit)) return "allow";
+    return "neutral";
+  }
+  async function persistOverwrite(roleId, nextAllow, nextDeny) {
+    setBusy(true);
+    setError(null);
+    try {
+      if (nextAllow === 0 && nextDeny === 0) {
+        await deleteChannelOverwrite(token, channelId, "role", roleId);
+      } else {
+        await setChannelOverwrite(token, channelId, "role", roleId, nextAllow, nextDeny);
+      }
+      const { overwrites: fresh } = await listChannelOverwrites(token, channelId);
+      setOverwrites(fresh);
+    } catch (err2) {
+      setError(err2.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  function setPermState(bit, value2) {
+    if (!isOwner || !selectedRoleId) return;
+    let nextAllow = currentAllow & ~bit;
+    let nextDeny = currentDeny & ~bit;
+    if (value2 === "allow") nextAllow |= bit;
+    else if (value2 === "deny") nextDeny |= bit;
+    persistOverwrite(selectedRoleId, nextAllow, nextDeny);
+  }
+  const everyoneOverwrite = overwrites.find((o2) => o2.target_type === "role" && o2.target_id === defaultRole?.id);
+  const isPrivate = hasPerm(Number(everyoneOverwrite?.deny) || 0, PERM.VIEW_CHANNEL);
+  function togglePrivate() {
+    if (!isOwner || !defaultRole) return;
+    const allow = Number(everyoneOverwrite?.allow) || 0;
+    let deny = Number(everyoneOverwrite?.deny) || 0;
+    deny = isPrivate ? deny & -2 : deny | PERM.VIEW_CHANNEL;
+    persistOverwrite(defaultRole.id, allow & -2, deny);
+  }
+  if (loading2) return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-content", children: "Yükleniyor…" });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content channel-permissions-content", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Kanal İzinleri" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "channel-permissions-subtitle", children: "Bu kanalda kimin ne yapabileceğini özelleştirmek için izinleri kullan." }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-sync-banner", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "channel-permissions-sync-icon", children: "🔄" }),
-      "İzinler şu kategoriyle senkronize edildi: ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "Metin Kanalları" })
-    ] }),
+    error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-private-card", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-private-row", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "channel-permissions-lock-icon", children: "🔒" }),
@@ -75906,13 +75971,13 @@ function ChannelPermissionsTab({ channelName, isOwner }) {
           {
             type: "button",
             className: `channel-permissions-switch${isPrivate ? " channel-permissions-switch-on" : ""}`,
-            onClick: () => isOwner && setIsPrivate((v2) => !v2),
-            disabled: !isOwner,
+            onClick: togglePrivate,
+            disabled: !isOwner || busy,
             children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "channel-permissions-switch-knob" })
           }
         )
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-permissions-private-desc", children: "Bir kanalı özel yapmak, sadece seçilen üyelerin ve rollerin bu kanalı görüntüleyebilmesini sağlar." })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-permissions-private-desc", children: "Bir kanalı özel yapmak, sadece seçilen rollerin bu kanalı görüntüleyebilmesini sağlar." })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-nav-divider" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "channel-permissions-advanced-toggle", onClick: () => setExpanded((v2) => !v2), children: [
@@ -75921,25 +75986,18 @@ function ChannelPermissionsTab({ channelName, isOwner }) {
     ] }),
     expanded && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-advanced", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-roles-col", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-label", children: "Roller/Üyeler" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-label", children: "Roller" }),
+        roles.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
             type: "button",
-            className: `channel-permissions-role-chip${selectedRole === "@everyone" ? " channel-permissions-role-chip-active" : ""}`,
-            onClick: () => setSelectedRole("@everyone"),
-            children: "@everyone"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "a",
-          {
-            className: "channel-permissions-help-link",
-            onClick: (e2) => e2.preventDefault(),
-            href: "#",
-            children: "İzinler ile ilgili yardıma mı ihtiyacın var?"
-          }
-        )
+            className: `channel-permissions-role-chip${selectedRoleId === r2.id ? " channel-permissions-role-chip-active" : ""}`,
+            style: r2.color ? { borderColor: r2.color, color: r2.color } : void 0,
+            onClick: () => setSelectedRoleId(r2.id),
+            children: r2.name
+          },
+          r2.id
+        ))
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-permissions-list-col", children: PERMISSION_GROUPS.map((group) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-group", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: group.title }),
@@ -75951,11 +76009,12 @@ function ChannelPermissionsTab({ channelName, isOwner }) {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             PermissionToggle,
             {
-              state: states[item.name] || "neutral",
-              onChange: (v2) => isOwner && setPermState(item.name, v2)
+              state: stateFor(PERM[item.key]),
+              onChange: (v2) => setPermState(PERM[item.key], v2),
+              disabled: !isOwner || busy
             }
           )
-        ] }, item.name))
+        ] }, item.key))
       ] }, group.title)) })
     ] })
   ] });
@@ -75987,7 +76046,7 @@ const TABS = [
   { id: "invites", label: "Davetler" },
   { id: "integrations", label: "Entegrasyonlar" }
 ];
-function ChannelSettingsModal({ open, onClose, token, channel, isOwner, onUpdated, onDeleted }) {
+function ChannelSettingsModal({ open, onClose, token, serverId, channel, isOwner, onUpdated, onDeleted }) {
   const [tab, setTab] = reactExports.useState("overview");
   const [name, setName] = reactExports.useState("");
   const [topic, setTopic] = reactExports.useState("");
@@ -76161,7 +76220,7 @@ function ChannelSettingsModal({ open, onClose, token, channel, isOwner, onUpdate
               /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "50", y: "50", width: "16", height: "3", rx: "1.5", fill: "#1c1f28" })
             ] }) })
           ] }),
-          tab === "permissions" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChannelPermissionsTab, { channelName: channel.name, isOwner }),
+          tab === "permissions" && /* @__PURE__ */ jsxRuntimeExports.jsx(ChannelPermissionsTab, { token, serverId, channelId: channel.id, channelName: channel.name, isOwner }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "channel-settings-close", onClick: requestClose, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "channel-settings-close-x", children: "✕" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "channel-settings-close-label", children: "ESC" })
@@ -79505,6 +79564,7 @@ function NobleCoreView({
         open: channelSettingsOpen,
         onClose: () => setChannelSettingsOpen(false),
         token,
+        serverId: server.id,
         channel: channels.find((c2) => c2.id === settingsChannelId),
         isOwner: server.owner_id === user.id,
         onUpdated: (updated) => {
