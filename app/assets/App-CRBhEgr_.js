@@ -75753,7 +75753,6 @@ const TABS$1 = [
 function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRenamed, onLeftOrDeleted }) {
   const [tab, setTab] = reactExports.useState("overview");
   const [name, setName] = reactExports.useState(server?.name || "");
-  const [copied, setCopied] = reactExports.useState(false);
   const [confirming, setConfirming] = reactExports.useState(false);
   const [error2, setError] = reactExports.useState(null);
   const [busy, setBusy] = reactExports.useState(false);
@@ -75763,7 +75762,6 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
       setName(server?.name || "");
       setConfirming(false);
       setError(null);
-      setCopied(false);
     }
   }, [open, server]);
   if (!open || !server) return null;
@@ -75781,11 +75779,6 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
     } finally {
       setBusy(false);
     }
-  }
-  function handleCopyInvite() {
-    navigator.clipboard.writeText(server.invite_code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2e3);
   }
   async function handleLeaveOrDelete() {
     setBusy(true);
@@ -75812,12 +75805,7 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
       t2.id
     )) }),
     tab === "overview" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Davet Kodu" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "key-input", readOnly: true, value: server.invite_code, style: { marginBottom: 0 } }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: handleCopyInvite, children: copied ? "✓ Kopyalandı" : "Kopyala" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "modal-section-title", children: "Sunucu Adı" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "modal-section-title", style: { marginTop: 0 }, children: "Sunucu Adı" }),
       isOwner ? /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleRename, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "key-input", value: name, onChange: (e2) => setName(e2.target.value) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -78347,6 +78335,28 @@ function MemberRoleAssign({ token, serverId, member, onUpdated }) {
     )
   ] });
 }
+function InviteModal({ open, onClose, server }) {
+  const [copied, setCopied] = reactExports.useState(false);
+  if (!open || !server) return null;
+  function handleCopy() {
+    navigator.clipboard.writeText(server.invite_code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2e3);
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: onClose, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal", onClick: (e2) => e2.stopPropagation(), children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { children: [
+      "Arkadaşlarını ",
+      server.name,
+      " sunucusuna davet et"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Bu davet kodunu paylaşarak istediğin kişileri sunucuna ekleyebilirsin." }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "key-input", readOnly: true, value: server.invite_code, style: { marginBottom: 0 } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleCopy, children: copied ? "✓ Kopyalandı" : "Kopyala" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions modal-actions-close", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onClose, children: "Kapat" }) })
+  ] }) });
+}
 const MINUTE = 60 * 1e3;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
@@ -78363,6 +78373,14 @@ const SIDEBAR_MAX = 380;
 const SIDEBAR_DEFAULT = 280;
 const RAIL_WIDTH = 72;
 const MESSAGE_MAX_LENGTH = 1200;
+function PersonAddIcon() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "9", cy: "7", r: "4" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "19", y1: "8", x2: "19", y2: "14" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("line", { x1: "22", y1: "11", x2: "16", y2: "11" })
+  ] });
+}
 function formatTime(ts) {
   return new Date(ts).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 }
@@ -78522,6 +78540,7 @@ function NobleCoreView({
   const [sidebarWidth, setSidebarWidth] = reactExports.useState(SIDEBAR_DEFAULT);
   const [resizing, setResizing] = reactExports.useState(false);
   const resizeRef = reactExports.useRef(null);
+  const serverMenuRef = reactExports.useRef(null);
   const [activeChannelId, setActiveChannelId] = reactExports.useState(null);
   const [mobileSection, setMobileSection] = reactExports.useState("channels");
   const [messages, setMessages] = reactExports.useState([]);
@@ -78531,6 +78550,8 @@ function NobleCoreView({
   const [newChannelType, setNewChannelType] = reactExports.useState("text");
   const [members, setMembers] = reactExports.useState([]);
   const [settingsOpen, setSettingsOpen] = reactExports.useState(false);
+  const [serverMenuOpen, setServerMenuOpen] = reactExports.useState(false);
+  const [inviteOpen, setInviteOpen] = reactExports.useState(false);
   const [channelSettingsOpen, setChannelSettingsOpen] = reactExports.useState(false);
   const [settingsChannelId, setSettingsChannelId] = reactExports.useState(null);
   const [userSettingsOpen, setUserSettingsOpen] = reactExports.useState(false);
@@ -78988,6 +79009,14 @@ function NobleCoreView({
       window.removeEventListener("mouseup", handleUp);
     };
   }, [resizing]);
+  reactExports.useEffect(() => {
+    if (!serverMenuOpen) return;
+    function handleClick(e2) {
+      if (serverMenuRef.current && !serverMenuRef.current.contains(e2.target)) setServerMenuOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [serverMenuOpen]);
   const activeChannel = channels.find((c2) => c2.id === activeChannelId);
   const textChannels = channels.filter((c2) => c2.type !== "voice");
   const voiceChannels = channels.filter((c2) => c2.type === "voice");
@@ -79002,8 +79031,39 @@ function NobleCoreView({
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-header", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-server-name", children: server.name }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-settings-btn", onClick: () => setSettingsOpen(true), title: "Sunucu Ayarları", children: "⚙️" })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-name-menu", ref: serverMenuRef, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-server-name", onClick: () => setServerMenuOpen((v2) => !v2), children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-server-name-text", children: server.name }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `noblecore-server-name-chevron${serverMenuOpen ? " noblecore-server-name-chevron-up" : ""}`, children: "⌄" })
+            ] }),
+            serverMenuOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-dropdown", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  className: "noblecore-server-dropdown-item",
+                  onClick: () => {
+                    setInviteOpen(true);
+                    setServerMenuOpen(false);
+                  },
+                  children: "Sunucuya Davet Et"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  className: "noblecore-server-dropdown-item",
+                  onClick: () => {
+                    setSettingsOpen(true);
+                    setServerMenuOpen(false);
+                  },
+                  children: "Sunucu Ayarları"
+                }
+              )
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-settings-btn", onClick: () => setInviteOpen(true), title: "Sunucuya Davet Et", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PersonAddIcon, {}) })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-channel-list-header", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "METİN KANALLARI" }),
@@ -79643,6 +79703,7 @@ function NobleCoreView({
         }
       }
     ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(InviteModal, { open: inviteOpen, onClose: () => setInviteOpen(false), server }),
     viewerImage && /* @__PURE__ */ jsxRuntimeExports.jsx(
       NobleCoreImageViewer,
       {

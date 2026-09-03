@@ -2109,14 +2109,79 @@ body {
   border-bottom: 1px solid #23262f;
 }
 
-.noblecore-server-name {
+.noblecore-server-name-menu {
+  position: relative;
   flex: 1;
   min-width: 0;
+}
+
+.noblecore-server-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #e6e8ee;
   font-weight: 700;
   font-size: 14px;
+  padding: 4px 2px;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 6px;
+}
+
+.noblecore-server-name:hover {
+  background: #23262f;
+}
+
+.noblecore-server-name-text {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.noblecore-server-name-chevron {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #9aa1b3;
+  transition: transform 0.15s;
+}
+
+.noblecore-server-name-chevron-up {
+  transform: rotate(180deg);
+}
+
+.noblecore-server-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 8px;
+  right: 8px;
+  background: #1c1f28;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  padding: 6px;
+  z-index: 30;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.noblecore-server-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #e6e8ee;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.noblecore-server-dropdown-item:hover {
+  background: #23262f;
 }
 
 .noblecore-settings-btn {
