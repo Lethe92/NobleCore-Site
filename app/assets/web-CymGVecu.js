@@ -1,4 +1,4 @@
-import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, a as mergeHubContent, b as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, c as client, R as React } from "./App-D_UsHiCG.js";
+import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, b as mergeHubContent, c as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, R as ReactDOM, a as React } from "./App-F0ykuHmT.js";
 const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);
@@ -446,6 +446,6 @@ window.api = {
   }
 };
 window.addEventListener("contextmenu", (e) => e.preventDefault());
-client.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(React.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(WebApp, {}) })
 );

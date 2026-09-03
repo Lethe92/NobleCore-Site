@@ -1504,6 +1504,40 @@ body {
   width: 420px;
 }
 
+.modal-wide {
+  width: 760px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.server-settings-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid #2a2e3a;
+  margin-bottom: 16px;
+}
+
+.server-settings-tab {
+  background: none;
+  border: none;
+  color: #9aa1b3;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.server-settings-tab:hover {
+  color: #e6e8ee;
+}
+
+.server-settings-tab-active {
+  color: #e6e8ee;
+  border-bottom-color: #4f7cff;
+}
+
 .modal h2 {
   margin-top: 0;
   font-size: 16px;
