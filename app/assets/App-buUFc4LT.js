@@ -75031,6 +75031,7 @@ const listRoles = (token, serverId) => request(`/servers/${serverId}/roles`, { t
 const createRole = (token, serverId, name, color2) => request(`/servers/${serverId}/roles`, { method: "POST", token, body: { name, color: color2 } });
 const updateRole = (token, roleId, { name, color: color2, permissions } = {}) => request(`/roles/${roleId}`, { method: "PATCH", token, body: { name, color: color2, permissions } });
 const deleteRole = (token, roleId) => request(`/roles/${roleId}`, { method: "DELETE", token });
+const setMemberRoles = (token, serverId, userId, roleIds) => request(`/servers/${serverId}/members/${userId}/roles`, { method: "PUT", token, body: { roleIds } });
 const listChannelOverwrites = (token, channelId) => request(`/channels/${channelId}/overwrites`, { token });
 const setChannelOverwrite = (token, channelId, targetType, targetId, allow, deny) => request(`/channels/${channelId}/overwrites/${targetType}/${targetId}`, {
   method: "PUT",
@@ -78266,6 +78267,86 @@ function EmojiPicker({ onSelect, onClose }) {
     )) })
   ] });
 }
+function MemberRoleAssign({ token, serverId, member, onUpdated }) {
+  const [open, setOpen] = reactExports.useState(false);
+  const [allRoles, setAllRoles] = reactExports.useState(null);
+  const [busy, setBusy] = reactExports.useState(false);
+  const [error2, setError] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    if (!open || allRoles) return;
+    listRoles(token, serverId).then(({ roles }) => setAllRoles(roles.filter((r2) => !r2.is_default))).catch((err2) => setError(err2.message));
+  }, [open, allRoles, token, serverId]);
+  const memberRoleIds = new Set((member.roles || []).map((r2) => r2.id));
+  async function toggleRole(roleId) {
+    const next = new Set(memberRoleIds);
+    if (next.has(roleId)) next.delete(roleId);
+    else next.add(roleId);
+    setBusy(true);
+    setError(null);
+    try {
+      await setMemberRoles(token, serverId, member.id, [...next]);
+      onUpdated();
+    } catch (err2) {
+      setError(err2.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "relative" }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        type: "button",
+        className: "noblecore-member-row-action-btn",
+        title: "Rolleri düzenle",
+        onClick: () => setOpen((v2) => !v2),
+        children: "🎭"
+      }
+    ),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          right: 0,
+          top: "100%",
+          zIndex: 20,
+          background: "#1c1f28",
+          border: "1px solid #2a2e3a",
+          borderRadius: 8,
+          padding: 10,
+          width: 200,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.4)"
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#9aa1b3", marginBottom: 6, fontWeight: 600 }, children: "ROLLER" }),
+          error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+          !allRoles && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Yükleniyor…" }),
+          allRoles?.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Henüz özel rol yok." }),
+          allRoles?.map((role) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "label",
+            {
+              style: { display: "flex", alignItems: "center", gap: 6, padding: "4px 0", cursor: "pointer" },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: memberRoleIds.has(role.id),
+                    disabled: busy,
+                    onChange: () => toggleRole(role.id)
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: role.color ? { color: role.color } : void 0, children: role.name })
+              ]
+            },
+            role.id
+          ))
+        ]
+      }
+    )
+  ] });
+}
 const MINUTE = 60 * 1e3;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
@@ -78523,6 +78604,12 @@ function NobleCoreView({
       cancelled = true;
     };
   }, [token, server.id]);
+  function reloadMembers() {
+    listMembers(token, server.id).then(({ members: list }) => setMembers(list));
+  }
+  const isServerOwnerView = server.owner_id === user.id;
+  const myMemberEntry = members.find((m2) => m2.id === user.id);
+  const canManageRoles = isServerOwnerView || (myMemberEntry?.roles || []).some((r2) => hasPerm(r2.permissions, PERM.MANAGE_ROLES));
   reactExports.useEffect(() => {
     if (!socket) return;
     const onMessageNew = (msg) => {
@@ -79468,42 +79555,49 @@ function NobleCoreView({
           "ÜYELER — ",
           members.length
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-list", children: members.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-avatar", children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username[0].toUpperCase() }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-name", children: m2.username }),
-          m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", children: "Sahip" }),
-          m2.id !== user.id && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row-actions", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                className: "noblecore-member-row-action-btn",
-                title: "Şikayet et",
-                onClick: () => handleReport("user", m2.id),
-                children: "🚩"
-              }
-            ),
-            blockedIds.has(m2.id) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                className: "noblecore-member-row-action-btn",
-                title: "Engeli kaldır",
-                onClick: () => handleUnblockUser(m2.id),
-                children: "✅"
-              }
-            ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                className: "noblecore-member-row-action-btn",
-                title: "Engelle",
-                onClick: () => handleBlockUser(m2.id, m2.username),
-                children: "🚫"
-              }
-            )
-          ] })
-        ] }, m2.id)) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-list", children: members.map((m2) => {
+          const topRole = (m2.roles || [])[0];
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-avatar", children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : m2.username[0].toUpperCase() }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-name", style: topRole?.color ? { color: topRole.color } : void 0, children: m2.username }),
+            m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", children: "Sahip" }),
+            m2.role !== "owner" && topRole && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", style: topRole.color ? { color: topRole.color } : void 0, children: topRole.name }),
+            (m2.id !== user.id || canManageRoles) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-member-row-actions", children: [
+              canManageRoles && /* @__PURE__ */ jsxRuntimeExports.jsx(MemberRoleAssign, { token, serverId: server.id, member: m2, onUpdated: reloadMembers }),
+              m2.id !== user.id && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    className: "noblecore-member-row-action-btn",
+                    title: "Şikayet et",
+                    onClick: () => handleReport("user", m2.id),
+                    children: "🚩"
+                  }
+                ),
+                blockedIds.has(m2.id) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    className: "noblecore-member-row-action-btn",
+                    title: "Engeli kaldır",
+                    onClick: () => handleUnblockUser(m2.id),
+                    children: "✅"
+                  }
+                ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    type: "button",
+                    className: "noblecore-member-row-action-btn",
+                    title: "Engelle",
+                    onClick: () => handleBlockUser(m2.id, m2.username),
+                    children: "🚫"
+                  }
+                )
+              ] })
+            ] })
+          ] }, m2.id);
+        }) })
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-mobile-tabbar", children: [
