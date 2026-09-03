@@ -75033,6 +75033,7 @@ const listRoles = (token, serverId) => request(`/servers/${serverId}/roles`, { t
 const createRole = (token, serverId, name, color2) => request(`/servers/${serverId}/roles`, { method: "POST", token, body: { name, color: color2 } });
 const updateRole = (token, roleId, { name, color: color2, permissions } = {}) => request(`/roles/${roleId}`, { method: "PATCH", token, body: { name, color: color2, permissions } });
 const deleteRole = (token, roleId) => request(`/roles/${roleId}`, { method: "DELETE", token });
+const reorderRoles = (token, serverId, roleIds) => request(`/servers/${serverId}/roles/reorder`, { method: "POST", token, body: { roleIds } });
 const setMemberRoles = (token, serverId, userId, roleIds) => request(`/servers/${serverId}/members/${userId}/roles`, { method: "PUT", token, body: { roleIds } });
 const listChannelOverwrites = (token, channelId) => request(`/channels/${channelId}/overwrites`, { token });
 const setChannelOverwrite = (token, channelId, targetType, targetId, allow, deny) => request(`/channels/${channelId}/overwrites/${targetType}/${targetId}`, {
@@ -75649,38 +75650,41 @@ function hasPerm(permsValue, bit) {
   const n3 = Number(permsValue) || 0;
   return (n3 & bit) === bit;
 }
-function RolesTab({ token, serverId, isOwner }) {
-  const [roles, setRoles] = reactExports.useState([]);
-  const [loading2, setLoading] = reactExports.useState(true);
-  const [error2, setError] = reactExports.useState(null);
-  const [selectedId, setSelectedId] = reactExports.useState(null);
+function RoleIcon({ color: color2 }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "roles-list-icon", style: color2 ? { background: color2 } : void 0, children: !color2 && /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.3 0-9.8 1.6-9.8 4.9v2.4h19.6v-2.4c0-3.3-6.5-4.9-9.8-4.9z" }) }) });
+}
+function RolesTab({ token, serverId, isOwner, roles, onRolesChanged }) {
+  const [search, setSearch] = reactExports.useState("");
+  const [editingId, setEditingId] = reactExports.useState(null);
   const [draft, setDraft] = reactExports.useState(null);
   const [busy, setBusy] = reactExports.useState(false);
-  function loadRoles() {
-    setLoading(true);
-    listRoles(token, serverId).then(({ roles: list }) => {
-      setRoles(list);
-      setLoading(false);
-    }).catch((err2) => {
-      setError(err2.message);
-      setLoading(false);
-    });
+  const [error2, setError] = reactExports.useState(null);
+  const [dragId, setDragId] = reactExports.useState(null);
+  const [dragOverId, setDragOverId] = reactExports.useState(null);
+  const defaultRole = roles.find((r2) => r2.is_default);
+  const customRoles = roles.filter((r2) => !r2.is_default);
+  const visibleRoles = reactExports.useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return customRoles;
+    return customRoles.filter((r2) => r2.name.toLowerCase().includes(q));
+  }, [customRoles, search]);
+  function openEditor(role) {
+    setError(null);
+    setDraft({ name: role.name, color: role.color || "", permissions: Number(role.permissions) || 0 });
+    setEditingId(role.is_default ? "__default__" : role.id);
   }
-  reactExports.useEffect(() => {
-    loadRoles();
-  }, [serverId]);
-  reactExports.useEffect(() => {
-    const role = roles.find((r2) => r2.id === selectedId);
-    if (role) setDraft({ name: role.name, color: role.color || "", permissions: Number(role.permissions) || 0 });
-    else setDraft(null);
-  }, [selectedId, roles]);
+  function closeEditor() {
+    setEditingId(null);
+    setDraft(null);
+    setError(null);
+  }
   async function handleCreate() {
     setBusy(true);
     setError(null);
     try {
-      const { role } = await createRole(token, serverId, "yeni-rol", null);
-      loadRoles();
-      setSelectedId(role.id);
+      const { role } = await createRole(token, serverId, "yeni rol", null);
+      await onRolesChanged();
+      openEditor(role);
     } catch (err2) {
       setError(err2.message);
     } finally {
@@ -75688,16 +75692,18 @@ function RolesTab({ token, serverId, isOwner }) {
     }
   }
   async function handleSave() {
-    if (!draft || !selectedId) return;
+    const targetId = editingId === "__default__" ? defaultRole?.id : editingId;
+    if (!draft || !targetId) return;
     setBusy(true);
     setError(null);
     try {
-      await updateRole(token, selectedId, {
+      await updateRole(token, targetId, {
         name: draft.name.trim(),
         color: draft.color || null,
         permissions: String(draft.permissions)
       });
-      loadRoles();
+      await onRolesChanged();
+      closeEditor();
     } catch (err2) {
       setError(err2.message);
     } finally {
@@ -75710,8 +75716,8 @@ function RolesTab({ token, serverId, isOwner }) {
     setError(null);
     try {
       await deleteRole(token, roleId);
-      if (selectedId === roleId) setSelectedId(null);
-      loadRoles();
+      await onRolesChanged();
+      if (editingId === roleId) closeEditor();
     } catch (err2) {
       setError(err2.message);
     } finally {
@@ -75721,50 +75727,44 @@ function RolesTab({ token, serverId, isOwner }) {
   function togglePerm(bit) {
     setDraft((prev) => ({ ...prev, permissions: prev.permissions ^ bit }));
   }
-  if (loading2) return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-content", children: "Yükleniyor…" });
-  const selectedRole = roles.find((r2) => r2.id === selectedId);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content channel-permissions-content", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Roller" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "channel-permissions-subtitle", children: "Rolleri kullanarak üyelere sunucu genelinde izinler ver. Bir rolü düzenlemek için listeden seç." }),
-    error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-advanced", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-roles-col", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-label", children: "Roller" }),
-        roles.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              className: `channel-permissions-role-chip${selectedId === r2.id ? " channel-permissions-role-chip-active" : ""}`,
-              style: r2.color ? { borderColor: r2.color, color: r2.color } : void 0,
-              onClick: () => setSelectedId(r2.id),
-              children: r2.name
-            }
-          ),
-          !r2.is_default && isOwner && /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              className: "noblecore-message-action-btn",
-              title: "Rolü sil",
-              onClick: () => handleDelete(r2.id),
-              disabled: busy,
-              children: "🗑"
-            }
-          )
-        ] }, r2.id)),
-        isOwner && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "btn", onClick: handleCreate, disabled: busy, style: { marginTop: 8 }, children: "+ Yeni Rol" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-list-col", children: [
-        !draft && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Düzenlemek için soldan bir rol seç." }),
-        draft && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+  async function handleDrop(targetId) {
+    setDragOverId(null);
+    if (!dragId || dragId === targetId) {
+      setDragId(null);
+      return;
+    }
+    const ids = customRoles.map((r2) => r2.id);
+    const from = ids.indexOf(dragId);
+    const to = ids.indexOf(targetId);
+    setDragId(null);
+    if (from === -1 || to === -1) return;
+    const next = [...ids];
+    next.splice(from, 1);
+    next.splice(to, 0, dragId);
+    try {
+      await reorderRoles(token, serverId, next);
+      await onRolesChanged();
+    } catch (err2) {
+      setError(err2.message);
+    }
+  }
+  if (editingId) {
+    const isDefaultEdit = editingId === "__default__";
+    const targetRole = isDefaultEdit ? defaultRole : customRoles.find((r2) => r2.id === editingId);
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content channel-permissions-content", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "roles-back-btn", onClick: closeEditor, children: "‹ Rollere Dön" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: isDefaultEdit ? "Varsayılan İzinler" : targetRole?.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "channel-permissions-subtitle", children: isDefaultEdit ? "@everyone — bu izinler sunucudaki tüm üyeler için geçerlidir." : "Bu role sahip üyelerin sunucu genelindeki izinlerini belirle." }),
+      error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+      draft && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        !isDefaultEdit && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "channel-settings-label", children: "Rol Adı" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "input",
             {
               className: "channel-settings-input",
               value: draft.name,
-              disabled: !isOwner || selectedRole?.is_default,
+              disabled: !isOwner,
               onChange: (e2) => setDraft((prev) => ({ ...prev, name: e2.target.value }))
             }
           ),
@@ -75778,28 +75778,105 @@ function RolesTab({ token, serverId, isOwner }) {
               onChange: (e2) => setDraft((prev) => ({ ...prev, color: e2.target.value })),
               style: { width: 60, height: 32, padding: 0, border: "none", background: "none" }
             }
+          )
+        ] }),
+        PERMISSION_GROUPS.map((group) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-group", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: group.title }),
+          group.items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-row-text", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-permissions-row-title", children: item.name }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-permissions-row-desc", children: item.desc })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "checkbox",
+                checked: hasPerm(draft.permissions, PERM[item.key]),
+                disabled: !isOwner,
+                onChange: () => togglePerm(PERM[item.key])
+              }
+            )
+          ] }, item.key))
+        ] }, group.title)),
+        isOwner && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", style: { marginTop: 12 }, children: [
+          !isDefaultEdit && /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "btn btn-danger",
+              onClick: () => handleDelete(targetRole.id),
+              disabled: busy,
+              children: "Rolü Sil"
+            }
           ),
-          PERMISSION_GROUPS.map((group) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-group", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: group.title }),
-            group.items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-row", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-row-text", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-permissions-row-title", children: item.name }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-permissions-row-desc", children: item.desc })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "input",
-                {
-                  type: "checkbox",
-                  checked: hasPerm(draft.permissions, PERM[item.key]),
-                  disabled: !isOwner,
-                  onChange: () => togglePerm(PERM[item.key])
-                }
-              )
-            ] }, item.key))
-          ] }, group.title)),
-          isOwner && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", style: { marginTop: 12 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleSave, disabled: busy || !draft.name.trim(), children: "Kaydet" }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleSave, disabled: busy || !draft.name.trim(), children: "Kaydet" })
         ] })
       ] })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content channel-permissions-content", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Roller" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "channel-permissions-subtitle", children: "Sunucu üyelerini gruplandırmak ve izinlerini atamak için rolleri kullanabilirsin." }),
+    error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+    defaultRole && /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { type: "button", className: "roles-default-card", onClick: () => openEditor(defaultRole), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(RoleIcon, { color: null }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "roles-default-card-text", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "roles-default-card-title", children: "Varsayılan İzinler" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "roles-default-card-desc", children: "@everyone • tüm sunucu üyeleri için geçerlidir" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "roles-default-card-chevron", children: "›" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "roles-toolbar", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          className: "channel-settings-input roles-search",
+          placeholder: "Rolleri Ara",
+          value: search,
+          onChange: (e2) => setSearch(e2.target.value)
+        }
+      ),
+      isOwner && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "btn btn-primary", onClick: handleCreate, disabled: busy, children: "Rol Oluştur" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "roles-hint", children: "Üyeler bu listede sahip oldukları en yüksek rolün rengini kullanır. Rolleri yeniden düzenlemek için sürükle." }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "roles-list-card", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "roles-list-header", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          "ROLLER — ",
+          customRoles.length
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ÜYELER" })
+      ] }),
+      visibleRoles.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "roles-list-empty", children: search ? "Eşleşen rol bulunamadı." : "Henüz özel rol yok." }),
+      visibleRoles.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: `roles-list-row${dragOverId === r2.id ? " roles-list-row-dragover" : ""}`,
+          draggable: isOwner,
+          onDragStart: () => setDragId(r2.id),
+          onDragOver: (e2) => {
+            e2.preventDefault();
+            if (dragOverId !== r2.id) setDragOverId(r2.id);
+          },
+          onDragLeave: () => setDragOverId((prev) => prev === r2.id ? null : prev),
+          onDrop: () => handleDrop(r2.id),
+          onDragEnd: () => {
+            setDragId(null);
+            setDragOverId(null);
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "roles-list-drag", title: isOwner ? "Sürükleyerek sırala" : void 0, children: "⠿" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RoleIcon, { color: r2.color }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "roles-list-name", style: r2.color ? { color: r2.color } : void 0, children: r2.name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "roles-list-members", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.3 0-9.8 1.6-9.8 4.9v2.4h19.6v-2.4c0-3.3-6.5-4.9-9.8-4.9z" }) }),
+              r2.member_count ?? 0
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "roles-list-edit-btn", title: "Rolü düzenle", onClick: () => openEditor(r2), children: "✎" })
+          ]
+        },
+        r2.id
+      ))
     ] })
   ] });
 }
@@ -76038,6 +76115,7 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
   const [memberSearch, setMemberSearch] = reactExports.useState("");
   const [memberSort, setMemberSort] = reactExports.useState("joined");
   const [inviteCopied, setInviteCopied] = reactExports.useState(false);
+  const [roles, setRoles] = reactExports.useState(null);
   const fileInputRef = reactExports.useRef(null);
   reactExports.useEffect(() => {
     if (open) {
@@ -76047,15 +76125,22 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
       setError(null);
       setIconError("");
       setMembers(null);
+      setRoles(null);
       setInviteCopied(false);
     }
   }, [open, server]);
   function reloadMembers() {
     listMembers(token, server.id).then(({ members: list }) => setMembers(list)).catch((err2) => setError(err2.message));
   }
+  function reloadRoles() {
+    return listRoles(token, server.id).then(({ roles: list }) => setRoles(list)).catch((err2) => setError(err2.message));
+  }
   reactExports.useEffect(() => {
     if (section === "members" && !members && server) reloadMembers();
   }, [section, members, server, token]);
+  reactExports.useEffect(() => {
+    if (section === "roles" && !roles && server) reloadRoles();
+  }, [section, roles, server, token]);
   const visibleMembers = reactExports.useMemo(() => {
     if (!members) return [];
     const q = memberSearch.trim().toLowerCase();
@@ -76258,7 +76343,18 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime$1(m2.user_created_at) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: m2.role === "owner" ? "Sunucuyu Oluşturdu" : "Davet Kodu" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: (m2.roles || []).length === 0 ? "—" : m2.roles.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", style: r2.color ? { color: r2.color } : void 0, children: r2.name }, r2.id)) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: canManageRoles && /* @__PURE__ */ jsxRuntimeExports.jsx(MemberRoleAssign, { token, serverId: server.id, member: m2, onUpdated: reloadMembers }) })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: canManageRoles && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    MemberRoleAssign,
+                    {
+                      token,
+                      serverId: server.id,
+                      member: m2,
+                      onUpdated: () => {
+                        reloadMembers();
+                        setRoles(null);
+                      }
+                    }
+                  ) })
                 ] }, m2.id)) })
               ] }),
               members && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-members-table-footer", children: [
@@ -76267,7 +76363,7 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
               ] })
             ] })
           ] }),
-          section === "roles" && /* @__PURE__ */ jsxRuntimeExports.jsx(RolesTab, { token, serverId: server.id, isOwner }),
+          section === "roles" && (roles ? /* @__PURE__ */ jsxRuntimeExports.jsx(RolesTab, { token, serverId: server.id, isOwner, roles, onRolesChanged: reloadRoles }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-content", children: "Yükleniyor…" })),
           section === "invites" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Davetler" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Bu davet kodunu paylaşarak sunucuna yeni kişiler ekleyebilirsin." }),
