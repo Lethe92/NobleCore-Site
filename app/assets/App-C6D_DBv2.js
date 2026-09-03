@@ -71411,7 +71411,7 @@ function NodeSearchMenu({ x: x2, y: y3, catalog, onSelect, onClose }) {
     ] })
   ] });
 }
-function formatRelativeTime$1(timestamp) {
+function formatRelativeTime$2(timestamp) {
   const diffMs = Date.now() - timestamp;
   const minute = 60 * 1e3;
   const hour = 60 * minute;
@@ -71537,7 +71537,7 @@ function ProjectsScreen({ onOpenProject, onBackToHub }) {
           ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-card-name", children: project.name }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card-date", children: [
             "düzenlendi: ",
-            formatRelativeTime$1(project.updatedAt)
+            formatRelativeTime$2(project.updatedAt)
           ] })
         ] })
       ] }, project.id);
@@ -75803,6 +75803,86 @@ function RolesTab({ token, serverId, isOwner }) {
     ] })
   ] });
 }
+function MemberRoleAssign({ token, serverId, member, onUpdated }) {
+  const [open, setOpen] = reactExports.useState(false);
+  const [allRoles, setAllRoles] = reactExports.useState(null);
+  const [busy, setBusy] = reactExports.useState(false);
+  const [error2, setError] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    if (!open || allRoles) return;
+    listRoles(token, serverId).then(({ roles }) => setAllRoles(roles.filter((r2) => !r2.is_default))).catch((err2) => setError(err2.message));
+  }, [open, allRoles, token, serverId]);
+  const memberRoleIds = new Set((member.roles || []).map((r2) => r2.id));
+  async function toggleRole(roleId) {
+    const next = new Set(memberRoleIds);
+    if (next.has(roleId)) next.delete(roleId);
+    else next.add(roleId);
+    setBusy(true);
+    setError(null);
+    try {
+      await setMemberRoles(token, serverId, member.id, [...next]);
+      onUpdated();
+    } catch (err2) {
+      setError(err2.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "relative" }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        type: "button",
+        className: "noblecore-member-row-action-btn",
+        title: "Rolleri düzenle",
+        onClick: () => setOpen((v2) => !v2),
+        children: "🎭"
+      }
+    ),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          right: 0,
+          top: "100%",
+          zIndex: 20,
+          background: "#1c1f28",
+          border: "1px solid #2a2e3a",
+          borderRadius: 8,
+          padding: 10,
+          width: 200,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.4)"
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#9aa1b3", marginBottom: 6, fontWeight: 600 }, children: "ROLLER" }),
+          error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+          !allRoles && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Yükleniyor…" }),
+          allRoles?.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Henüz özel rol yok." }),
+          allRoles?.map((role) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "label",
+            {
+              style: { display: "flex", alignItems: "center", gap: 6, padding: "4px 0", cursor: "pointer" },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: memberRoleIds.has(role.id),
+                    disabled: busy,
+                    onChange: () => toggleRole(role.id)
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: role.color ? { color: role.color } : void 0, children: role.name })
+              ]
+            },
+            role.id
+          ))
+        ]
+      }
+    )
+  ] });
+}
 const VIEWPORT = 220;
 const OUTPUT = 512;
 function AvatarCropModal({ imageSrc, onCancel, onConfirm }) {
@@ -75923,6 +76003,23 @@ function useModalClose(open, onClose) {
   }
   return { visible, closing, requestClose };
 }
+function formatRelativeTime$1(timestamp) {
+  if (!timestamp) return "Bilinmeyen";
+  const diffMs = Date.now() - timestamp;
+  const minute = 60 * 1e3;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const week = 7 * day;
+  const month = 30 * day;
+  const year = 365 * day;
+  if (diffMs < minute) return "az önce";
+  if (diffMs < hour) return `${Math.floor(diffMs / minute)} dakika önce`;
+  if (diffMs < day) return `${Math.floor(diffMs / hour)} saat önce`;
+  if (diffMs < week) return `${Math.floor(diffMs / day)} gün önce`;
+  if (diffMs < month) return `${Math.floor(diffMs / week)} hafta önce`;
+  if (diffMs < year) return `${Math.floor(diffMs / month)} ay önce`;
+  return `${Math.floor(diffMs / year)} yıl önce`;
+}
 function formatMonthYear(ts) {
   if (!ts) return null;
   return new Date(ts).toLocaleDateString("tr-TR", { month: "short", year: "numeric" });
@@ -75938,6 +76035,8 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
   const [iconError, setIconError] = reactExports.useState("");
   const [cropSrc, setCropSrc] = reactExports.useState(null);
   const [members, setMembers] = reactExports.useState(null);
+  const [memberSearch, setMemberSearch] = reactExports.useState("");
+  const [memberSort, setMemberSort] = reactExports.useState("joined");
   const [inviteCopied, setInviteCopied] = reactExports.useState(false);
   const fileInputRef = reactExports.useRef(null);
   reactExports.useEffect(() => {
@@ -75951,11 +76050,21 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
       setInviteCopied(false);
     }
   }, [open, server]);
+  function reloadMembers() {
+    listMembers(token, server.id).then(({ members: list }) => setMembers(list)).catch((err2) => setError(err2.message));
+  }
   reactExports.useEffect(() => {
-    if (section === "members" && !members && server) {
-      listMembers(token, server.id).then(({ members: list }) => setMembers(list)).catch((err2) => setError(err2.message));
-    }
+    if (section === "members" && !members && server) reloadMembers();
   }, [section, members, server, token]);
+  const visibleMembers = reactExports.useMemo(() => {
+    if (!members) return [];
+    const q = memberSearch.trim().toLowerCase();
+    const filtered = q ? members.filter((m2) => m2.username.toLowerCase().includes(q)) : members;
+    const sorted = [...filtered];
+    if (memberSort === "name") sorted.sort((a2, b2) => a2.username.localeCompare(b2.username));
+    else sorted.sort((a2, b2) => a2.joined_at - b2.joined_at);
+    return sorted;
+  }, [members, memberSearch, memberSort]);
   reactExports.useEffect(() => {
     function handleKey(e2) {
       if (e2.key === "Escape") requestClose();
@@ -75965,6 +76074,8 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
   }, [open]);
   if (!visible || !server) return null;
   const isOwner = server.owner_id === currentUserId;
+  const myMemberEntry = members?.find((m2) => m2.id === currentUserId);
+  const canManageRoles = isOwner || (myMemberEntry?.roles || []).some((r2) => hasPerm(r2.permissions, PERM.MANAGE_ROLES));
   async function handleRename(e2) {
     e2.preventDefault();
     if (!name.trim() || name.trim() === server.name) return;
@@ -76089,17 +76200,72 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
               ] })
             ] }) })
           ] }),
-          section === "members" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Üyeler" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Bu sunucudaki tüm üyeler." }),
-            !members && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Yükleniyor…" }),
-            members?.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-row", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 10 }, children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "user-settings-avatar-preview", style: { width: 32, height: 32 }, children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: m2.username[0]?.toUpperCase() }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: m2.username })
+          section === "members" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-members-panel", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Sunucu Üyeleri" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-members-toggle-row", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "server-members-toggle-title", children: "Kanal Listesinde Üyeleri Göster" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Bu özelliği etkinleştirmek, kanal listesinde üyeler sayfasını göstererek sunucuna yakın zamanda kimlerin katıldığını hızlı bir şekilde görmene olanak tanır." })
               ] }),
-              m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", children: "Sahip" })
-            ] }, m2.id))
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "toggle-switch toggle-switch-disabled", disabled: true, title: "Yakında" })
+            ] }),
+            error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-members-table-card", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-members-table-toolbar", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "server-members-table-title", children: "Üyeler" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    className: "key-input server-members-search",
+                    placeholder: "Kullanıcı adına göre ara",
+                    value: memberSearch,
+                    onChange: (e2) => setMemberSearch(e2.target.value)
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    className: "btn",
+                    onClick: () => setMemberSort((s2) => s2 === "joined" ? "name" : "joined"),
+                    children: [
+                      "↕ Sırala: ",
+                      memberSort === "joined" ? "Katılma Tarihi" : "İsim"
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "btn", disabled: true, title: "Yakında", children: "Çıkar" })
+              ] }),
+              !members && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", style: { padding: "0 16px 16px" }, children: "Yükleniyor…" }),
+              members && /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "server-members-table", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "İsim" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Şu Tarihten Beri Üye" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "NobleCore'a Katıldı" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Katılma Yöntemi" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Roller" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("th", {})
+                ] }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: visibleMembers.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 10 }, children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "user-settings-avatar-preview", style: { width: 32, height: 32, fontSize: 13 }, children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: m2.username[0]?.toUpperCase() }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontWeight: 600 }, children: m2.username }),
+                      m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-role", children: "Sahip" })
+                    ] })
+                  ] }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime$1(m2.joined_at) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime$1(m2.user_created_at) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: m2.role === "owner" ? "Sunucuyu Oluşturdu" : "Davet Kodu" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: (m2.roles || []).length === 0 ? "—" : m2.roles.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", style: r2.color ? { color: r2.color } : void 0, children: r2.name }, r2.id)) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: canManageRoles && /* @__PURE__ */ jsxRuntimeExports.jsx(MemberRoleAssign, { token, serverId: server.id, member: m2, onUpdated: reloadMembers }) })
+                ] }, m2.id)) })
+              ] }),
+              members && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-members-table-footer", children: [
+                visibleMembers.length,
+                " üye gösteriliyor"
+              ] })
+            ] })
           ] }),
           section === "roles" && /* @__PURE__ */ jsxRuntimeExports.jsx(RolesTab, { token, serverId: server.id, isOwner }),
           section === "invites" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content", children: [
@@ -78424,86 +78590,6 @@ function EmojiPicker({ onSelect, onClose }) {
       },
       group.slug
     )) })
-  ] });
-}
-function MemberRoleAssign({ token, serverId, member, onUpdated }) {
-  const [open, setOpen] = reactExports.useState(false);
-  const [allRoles, setAllRoles] = reactExports.useState(null);
-  const [busy, setBusy] = reactExports.useState(false);
-  const [error2, setError] = reactExports.useState(null);
-  reactExports.useEffect(() => {
-    if (!open || allRoles) return;
-    listRoles(token, serverId).then(({ roles }) => setAllRoles(roles.filter((r2) => !r2.is_default))).catch((err2) => setError(err2.message));
-  }, [open, allRoles, token, serverId]);
-  const memberRoleIds = new Set((member.roles || []).map((r2) => r2.id));
-  async function toggleRole(roleId) {
-    const next = new Set(memberRoleIds);
-    if (next.has(roleId)) next.delete(roleId);
-    else next.add(roleId);
-    setBusy(true);
-    setError(null);
-    try {
-      await setMemberRoles(token, serverId, member.id, [...next]);
-      onUpdated();
-    } catch (err2) {
-      setError(err2.message);
-    } finally {
-      setBusy(false);
-    }
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "relative" }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        type: "button",
-        className: "noblecore-member-row-action-btn",
-        title: "Rolleri düzenle",
-        onClick: () => setOpen((v2) => !v2),
-        children: "🎭"
-      }
-    ),
-    open && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          right: 0,
-          top: "100%",
-          zIndex: 20,
-          background: "#1c1f28",
-          border: "1px solid #2a2e3a",
-          borderRadius: 8,
-          padding: 10,
-          width: 200,
-          boxShadow: "0 4px 16px rgba(0,0,0,0.4)"
-        },
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 11, color: "#9aa1b3", marginBottom: 6, fontWeight: 600 }, children: "ROLLER" }),
-          error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
-          !allRoles && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Yükleniyor…" }),
-          allRoles?.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Henüz özel rol yok." }),
-          allRoles?.map((role) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "label",
-            {
-              style: { display: "flex", alignItems: "center", gap: 6, padding: "4px 0", cursor: "pointer" },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "input",
-                  {
-                    type: "checkbox",
-                    checked: memberRoleIds.has(role.id),
-                    disabled: busy,
-                    onChange: () => toggleRole(role.id)
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: role.color ? { color: role.color } : void 0, children: role.name })
-              ]
-            },
-            role.id
-          ))
-        ]
-      }
-    )
   ] });
 }
 function InviteModal({ open, onClose, server, channelName }) {
