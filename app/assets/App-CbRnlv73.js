@@ -79002,7 +79002,6 @@ function NobleCoreView({
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-server-header", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onBack, children: "← Hub" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-server-name", children: server.name }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "noblecore-settings-btn", onClick: () => setSettingsOpen(true), title: "Sunucu Ayarları", children: "⚙️" })
         ] }),
