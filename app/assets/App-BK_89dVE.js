@@ -78288,12 +78288,18 @@ function UserStatusMenu({ anchorRef, status, onSelect, onClose, onMouseEnter, on
     }
   );
 }
-function UserProfilePopover({ user, status, onChangeStatus, onClose, onSwitchAccount, onEditProfile }) {
+function UserProfilePopover({ anchorRef, user, status, onChangeStatus, onClose, onSwitchAccount, onEditProfile }) {
   const [boostCardDismissed, setBoostCardDismissed] = reactExports.useState(false);
   const [statusMenuOpen, setStatusMenuOpen] = reactExports.useState(false);
+  const [pos, setPos] = reactExports.useState(null);
   const ref = reactExports.useRef(null);
   const statusRowRef = reactExports.useRef(null);
   const closeTimerRef = reactExports.useRef(null);
+  reactExports.useLayoutEffect(() => {
+    const rect = anchorRef?.current?.getBoundingClientRect();
+    if (!rect) return;
+    setPos({ left: rect.left, bottom: window.innerHeight - rect.top + 8 });
+  }, [anchorRef]);
   function cancelStatusMenuClose() {
     if (closeTimerRef.current) {
       clearTimeout(closeTimerRef.current);
@@ -78320,7 +78326,8 @@ function UserProfilePopover({ user, status, onChangeStatus, onClose, onSwitchAcc
       window.removeEventListener("keydown", handleKey);
     };
   }, [onClose]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "user-profile-popover", ref, children: [
+  if (!pos) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "user-profile-popover", ref, style: { left: pos.left, bottom: pos.bottom }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "user-profile-popover-banner", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "user-profile-popover-avatar-wrap", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "user-profile-popover-avatar", children: user.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: user.avatar_url, alt: "" }) : user.username?.[0]?.toUpperCase() || "?" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(StatusDot, { status, size: 18, ring: true, className: "user-profile-popover-status-dot" })
@@ -78905,6 +78912,7 @@ function NobleCoreView({
   const [resizing, setResizing] = reactExports.useState(false);
   const resizeRef = reactExports.useRef(null);
   const serverMenuRef = reactExports.useRef(null);
+  const profileButtonRef = reactExports.useRef(null);
   const [activeChannelId, setActiveChannelId] = reactExports.useState(null);
   const [mobileSection, setMobileSection] = reactExports.useState("channels");
   const [messages, setMessages] = reactExports.useState([]);
@@ -79610,19 +79618,28 @@ function NobleCoreView({
           ] }, c2.id);
         }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-bottom-panel", style: { width: RAIL_WIDTH + sidebarWidth - 16 + 13, left: 9 }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-panel", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "noblecore-user-panel-info", onClick: () => setProfilePopoverOpen((v2) => !v2), children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-avatar", children: [
-              user.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: user.avatar_url, alt: "" }) : user.username?.[0]?.toUpperCase() || "?",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(StatusDot, { status: userStatus, size: 13, ring: true, className: "noblecore-user-status-dot" })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-text", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-name", children: user.username }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-status", children: STATUS_LABELS[userStatus] })
-            ] })
-          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              className: "noblecore-user-panel-info",
+              ref: profileButtonRef,
+              onClick: () => setProfilePopoverOpen((v2) => !v2),
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-avatar", children: [
+                  user.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: user.avatar_url, alt: "" }) : user.username?.[0]?.toUpperCase() || "?",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(StatusDot, { status: userStatus, size: 13, ring: true, className: "noblecore-user-status-dot" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "noblecore-user-text", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-name", children: user.username }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-user-status", children: STATUS_LABELS[userStatus] })
+                ] })
+              ]
+            }
+          ),
           profilePopoverOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
             UserProfilePopover,
             {
+              anchorRef: profileButtonRef,
               user,
               status: userStatus,
               onChangeStatus: handleChangeStatus,

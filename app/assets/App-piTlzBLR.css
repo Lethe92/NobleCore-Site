@@ -6253,9 +6253,7 @@ button.launcher-featured-card:hover {
 /* ---- Kullanici profil kartciği (popover) ---- */
 
 .user-profile-popover {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 0;
+  position: fixed;
   width: 300px;
   background: #1c1f28;
   border-radius: 10px;
