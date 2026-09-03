@@ -75004,6 +75004,8 @@ const createServer = (token, name, iconDataUrl) => request("/servers", { method:
 const joinServer = (token, inviteCode) => request("/servers/join", { method: "POST", token, body: { inviteCode } });
 const listMembers = (token, serverId) => request(`/servers/${serverId}/members`, { token });
 const renameServer = (token, serverId, name) => request(`/servers/${serverId}`, { method: "PATCH", token, body: { name } });
+const updateServerIcon = (token, serverId, iconDataUrl) => request(`/servers/${serverId}`, { method: "PATCH", token, body: { iconDataUrl } });
+const removeServerIcon = (token, serverId) => request(`/servers/${serverId}`, { method: "PATCH", token, body: { removeIcon: true } });
 const deleteServer = (token, serverId) => request(`/servers/${serverId}`, { method: "DELETE", token });
 const leaveServer = (token, serverId) => request(`/servers/${serverId}/leave`, { method: "POST", token });
 const listChannels = (token, serverId) => request(`/servers/${serverId}/channels`, { token });
@@ -75485,6 +75487,61 @@ function ServerModal({ open, onClose, token, username, onServerReady }) {
     ] })
   ] }) });
 }
+const SERVER_SETTINGS_GROUPS = [
+  {
+    title: null,
+    items: [
+      { id: "profile", label: "Sunucu Profili", real: true },
+      { id: "tag", label: "Sunucu Etiketi" },
+      { id: "onboarding", label: "Katılım" },
+      { id: "boost-perks", label: "Takviye Avantajları" }
+    ]
+  },
+  {
+    title: "İfade",
+    items: [
+      { id: "emoji", label: "Emoji" },
+      { id: "stickers", label: "Çıkartmalar" },
+      { id: "soundboard", label: "Ses Paneli" }
+    ]
+  },
+  {
+    title: "Kişiler",
+    items: [
+      { id: "members", label: "Üyeler", real: true },
+      { id: "roles", label: "Roller", real: true },
+      { id: "invites", label: "Davetler", real: true },
+      { id: "access", label: "Erişim" }
+    ]
+  },
+  {
+    title: "Uygulamalar",
+    items: [
+      { id: "integrations", label: "Entegrasyonlar" },
+      { id: "app-directory", label: "Uygulama Dizini" }
+    ]
+  },
+  {
+    title: "Moderasyon",
+    items: [
+      { id: "safety", label: "Güvenlik Kurulumu" },
+      { id: "audit-log", label: "Denetim Kaydı" },
+      { id: "bans", label: "Yasaklar" },
+      { id: "automod", label: "AutoMod" }
+    ]
+  },
+  {
+    title: null,
+    items: [{ id: "community", label: "Topluluğu Etkinleştir" }]
+  },
+  {
+    title: null,
+    items: [
+      { id: "template", label: "Sunucu Şablonu" },
+      { id: "delete", label: "Sunucuyu Sil", real: true, danger: true }
+    ]
+  }
+];
 const PERMISSION_GROUPS = [
   {
     title: "Genel Kanal İzinleri",
@@ -75746,25 +75803,167 @@ function RolesTab({ token, serverId, isOwner }) {
     ] })
   ] });
 }
-const TABS$1 = [
-  { id: "overview", label: "Genel Bakış" },
-  { id: "roles", label: "Roller" }
-];
+const VIEWPORT = 220;
+const OUTPUT = 512;
+function AvatarCropModal({ imageSrc, onCancel, onConfirm }) {
+  const imgRef = reactExports.useRef(null);
+  const [imgSize, setImgSize] = reactExports.useState(null);
+  const [zoom2, setZoom] = reactExports.useState(1);
+  const [pos, setPos] = reactExports.useState({ x: 0, y: 0 });
+  const dragRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    const img = new Image();
+    img.onload = () => setImgSize({ w: img.naturalWidth, h: img.naturalHeight });
+    img.src = imageSrc;
+  }, [imageSrc]);
+  const baseScale = imgSize ? Math.max(VIEWPORT / imgSize.w, VIEWPORT / imgSize.h) : 0;
+  const scale = baseScale * zoom2;
+  const dispW = imgSize ? imgSize.w * scale : 0;
+  const dispH = imgSize ? imgSize.h * scale : 0;
+  function clamp2(p2, dw, dh) {
+    const minX = VIEWPORT - dw;
+    const minY = VIEWPORT - dh;
+    return { x: Math.min(0, Math.max(minX, p2.x)), y: Math.min(0, Math.max(minY, p2.y)) };
+  }
+  reactExports.useEffect(() => {
+    if (!imgSize) return;
+    setPos(clamp2({ x: (VIEWPORT - dispW) / 2, y: (VIEWPORT - dispH) / 2 }, dispW, dispH));
+  }, [zoom2, imgSize]);
+  if (!imgSize) return null;
+  function handlePointerDown(e2) {
+    dragRef.current = { startX: e2.clientX, startY: e2.clientY, origX: pos.x, origY: pos.y };
+  }
+  function handlePointerMove(e2) {
+    if (!dragRef.current) return;
+    const dx = e2.clientX - dragRef.current.startX;
+    const dy = e2.clientY - dragRef.current.startY;
+    setPos(clamp2({ x: dragRef.current.origX + dx, y: dragRef.current.origY + dy }, dispW, dispH));
+  }
+  function handlePointerUp() {
+    dragRef.current = null;
+  }
+  function handleConfirm() {
+    const canvas = document.createElement("canvas");
+    canvas.width = OUTPUT;
+    canvas.height = OUTPUT;
+    const ctx = canvas.getContext("2d");
+    const factor = OUTPUT / VIEWPORT;
+    ctx.drawImage(imgRef.current, pos.x * factor, pos.y * factor, dispW * factor, dispH * factor);
+    onConfirm(canvas.toDataURL("image/png"));
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "avatar-crop-overlay", onMouseDown: (e2) => e2.target === e2.currentTarget && onCancel(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "avatar-crop-panel", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Profil Fotoğrafını Kırp" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "avatar-crop-viewport",
+        onMouseDown: handlePointerDown,
+        onMouseMove: handlePointerMove,
+        onMouseUp: handlePointerUp,
+        onMouseLeave: handlePointerUp,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "img",
+            {
+              ref: imgRef,
+              src: imageSrc,
+              alt: "",
+              draggable: false,
+              style: {
+                position: "absolute",
+                left: pos.x,
+                top: pos.y,
+                width: dispW,
+                height: dispH,
+                userSelect: "none",
+                pointerEvents: "none"
+              }
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "avatar-crop-mask" })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        type: "range",
+        min: "1",
+        max: "3",
+        step: "0.01",
+        value: zoom2,
+        onChange: (e2) => setZoom(Number(e2.target.value)),
+        className: "avatar-crop-zoom"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "avatar-crop-actions", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onCancel, children: "İptal" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleConfirm, children: "Kaydet" })
+    ] })
+  ] }) });
+}
+const CLOSE_DURATION = 140;
+function useModalClose(open, onClose) {
+  const [visible, setVisible] = reactExports.useState(open);
+  const [closing, setClosing] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    if (open) {
+      setVisible(true);
+      setClosing(false);
+    }
+  }, [open]);
+  function requestClose() {
+    if (closing) return;
+    setClosing(true);
+    setTimeout(() => {
+      setVisible(false);
+      setClosing(false);
+      onClose();
+    }, CLOSE_DURATION);
+  }
+  return { visible, closing, requestClose };
+}
+function formatMonthYear(ts) {
+  if (!ts) return null;
+  return new Date(ts).toLocaleDateString("tr-TR", { month: "short", year: "numeric" });
+}
 function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRenamed, onLeftOrDeleted }) {
-  const [tab, setTab] = reactExports.useState("overview");
+  const { visible, closing, requestClose } = useModalClose(open, onClose);
+  const [section, setSection] = reactExports.useState("profile");
   const [name, setName] = reactExports.useState(server?.name || "");
   const [confirming, setConfirming] = reactExports.useState(false);
   const [error2, setError] = reactExports.useState(null);
   const [busy, setBusy] = reactExports.useState(false);
+  const [iconBusy, setIconBusy] = reactExports.useState(false);
+  const [iconError, setIconError] = reactExports.useState("");
+  const [cropSrc, setCropSrc] = reactExports.useState(null);
+  const [members, setMembers] = reactExports.useState(null);
+  const [inviteCopied, setInviteCopied] = reactExports.useState(false);
+  const fileInputRef = reactExports.useRef(null);
   reactExports.useEffect(() => {
     if (open) {
-      setTab("overview");
+      setSection("profile");
       setName(server?.name || "");
       setConfirming(false);
       setError(null);
+      setIconError("");
+      setMembers(null);
+      setInviteCopied(false);
     }
   }, [open, server]);
-  if (!open || !server) return null;
+  reactExports.useEffect(() => {
+    if (section === "members" && !members && server) {
+      listMembers(token, server.id).then(({ members: list }) => setMembers(list)).catch((err2) => setError(err2.message));
+    }
+  }, [section, members, server, token]);
+  reactExports.useEffect(() => {
+    function handleKey(e2) {
+      if (e2.key === "Escape") requestClose();
+    }
+    if (open) window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [open]);
+  if (!visible || !server) return null;
   const isOwner = server.owner_id === currentUserId;
   async function handleRename(e2) {
     e2.preventDefault();
@@ -75780,6 +75979,45 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
       setBusy(false);
     }
   }
+  function handleIconFile(e2) {
+    const file = e2.target.files?.[0];
+    e2.target.value = "";
+    if (!file) return;
+    setIconError("");
+    const reader = new FileReader();
+    reader.onload = () => setCropSrc(reader.result);
+    reader.onerror = () => setIconError("Görsel okunamadı.");
+    reader.readAsDataURL(file);
+  }
+  async function handleIconCropConfirm(croppedDataUrl) {
+    setCropSrc(null);
+    setIconBusy(true);
+    try {
+      const { server: updated } = await updateServerIcon(token, server.id, croppedDataUrl);
+      onRenamed(updated);
+    } catch (err2) {
+      setIconError(err2.message || "Sunucu simgesi yüklenemedi.");
+    } finally {
+      setIconBusy(false);
+    }
+  }
+  async function handleRemoveIcon() {
+    setIconError("");
+    setIconBusy(true);
+    try {
+      const { server: updated } = await removeServerIcon(token, server.id);
+      onRenamed(updated);
+    } catch (err2) {
+      setIconError(err2.message || "Sunucu simgesi kaldırılamadı.");
+    } finally {
+      setIconBusy(false);
+    }
+  }
+  function handleCopyInvite() {
+    navigator.clipboard.writeText(server.invite_code);
+    setInviteCopied(true);
+    setTimeout(() => setInviteCopied(false), 2e3);
+  }
   async function handleLeaveOrDelete() {
     setBusy(true);
     setError(null);
@@ -75792,56 +76030,109 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
       setBusy(false);
     }
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: onClose, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `modal${tab === "roles" ? " modal-wide" : ""}`, onClick: (e2) => e2.stopPropagation(), children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Sunucu Ayarları" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "server-settings-tabs", children: TABS$1.map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        type: "button",
-        className: `server-settings-tab${tab === t2.id ? " server-settings-tab-active" : ""}`,
-        onClick: () => setTab(t2.id),
-        children: t2.label
-      },
-      t2.id
-    )) }),
-    tab === "overview" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "modal-section-title", style: { marginTop: 0 }, children: "Sunucu Adı" }),
-      isOwner ? /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleRename, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "key-input", value: name, onChange: (e2) => setName(e2.target.value) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: "btn btn-primary",
-            type: "submit",
-            disabled: busy || !name.trim() || name.trim() === server.name,
-            children: "Kaydet"
-          }
-        ) })
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: server.name }),
-      error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "modal-section-title", children: isOwner ? "Sunucuyu Sil" : "Sunucudan Ayrıl" }),
-      confirming ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "hint", children: [
-        isOwner ? "Bu sunucu ve tüm kanalları/mesajları kalıcı olarak silinecek." : "Bu sunucudan ayrılacaksınız.",
-        " ",
-        "Emin misiniz?"
-      ] }) }) : null,
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
-        confirming && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => setConfirming(false), disabled: busy, children: "Vazgeç" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            className: "btn",
-            style: { color: "#ff8f97", borderColor: "#5a2a30" },
-            onClick: () => confirming ? handleLeaveOrDelete() : setConfirming(true),
-            disabled: busy,
-            children: isOwner ? "Sunucuyu Sil" : "Sunucudan Ayrıl"
-          }
-        )
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      className: `channel-settings-overlay${closing ? " channel-settings-overlay-closing" : ""}`,
+      onMouseDown: (e2) => e2.target === e2.currentTarget && requestClose(),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-panel", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-nav", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-nav-header", children: server.name.toUpperCase() }),
+          SERVER_SETTINGS_GROUPS.map((group, gi) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            group.title && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-nav-header", children: group.title.toUpperCase() }),
+            group.items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: `channel-settings-nav-item${section === item.id ? " channel-settings-nav-item-active" : ""}${item.danger ? " channel-settings-nav-danger" : ""}`,
+                onClick: () => item.real && setSection(item.id),
+                disabled: !item.real,
+                title: item.real ? void 0 : "Yakında",
+                children: item.label
+              },
+              item.id
+            )),
+            gi < SERVER_SETTINGS_GROUPS.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-nav-divider" })
+          ] }, gi))
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-body", children: [
+          section === "profile" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content", style: { display: "flex", gap: 32 }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flex: 1, minWidth: 0 }, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Sunucu Profili" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Sunucunun davet bağlantılarında nasıl görüneceğini özelleştir." }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleRename, children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "channel-settings-label", children: "Ad" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "channel-settings-input", value: name, onChange: (e2) => setName(e2.target.value), disabled: !isOwner }),
+                isOwner && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", style: { marginTop: 8 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", type: "submit", disabled: busy || !name.trim() || name.trim() === server.name, children: "Kaydet" }) })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "channel-settings-nav-divider", style: { margin: "20px 0", maxWidth: "none" } }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "user-settings-row", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "user-settings-row-label", children: "Simge" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "user-settings-avatar-preview", children: server.icon_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: server.icon_url, alt: "" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: server.name[0]?.toUpperCase() }) }),
+                isOwner && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", { ref: fileInputRef, type: "file", accept: "image/*", style: { display: "none" }, onChange: handleIconFile }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginLeft: "auto", display: "flex", gap: 8 }, children: [
+                    server.icon_url && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: handleRemoveIcon, disabled: iconBusy, children: "Simgeyi Kaldır" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => fileInputRef.current?.click(), disabled: iconBusy, children: iconBusy ? "Yükleniyor…" : "Sunucu Simgesini Değiştir" })
+                  ] })
+                ] })
+              ] }),
+              iconError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "user-settings-avatar-error", children: iconError }),
+              cropSrc && /* @__PURE__ */ jsxRuntimeExports.jsx(AvatarCropModal, { imageSrc: cropSrc, onCancel: () => setCropSrc(null), onConfirm: handleIconCropConfirm }),
+              error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 260, flexShrink: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-profile-preview-card", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "server-profile-preview-icon", children: server.icon_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: server.icon_url, alt: "" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: server.name[0]?.toUpperCase() }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "server-profile-preview-name", children: server.name }),
+              formatMonthYear(server.created_at) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "server-profile-preview-meta", children: [
+                "Oluşturulma: ",
+                formatMonthYear(server.created_at)
+              ] })
+            ] }) })
+          ] }),
+          section === "members" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Üyeler" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Bu sunucudaki tüm üyeler." }),
+            !members && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Yükleniyor…" }),
+            members?.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-permissions-row", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 10 }, children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "user-settings-avatar-preview", style: { width: 32, height: 32 }, children: m2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: m2.avatar_url, alt: "" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: m2.username[0]?.toUpperCase() }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: m2.username })
+              ] }),
+              m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", children: "Sahip" })
+            ] }, m2.id))
+          ] }),
+          section === "roles" && /* @__PURE__ */ jsxRuntimeExports.jsx(RolesTab, { token, serverId: server.id, isOwner }),
+          section === "invites" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Davetler" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: "Bu davet kodunu paylaşarak sunucuna yeni kişiler ekleyebilirsin." }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "key-input", readOnly: true, value: server.invite_code, style: { marginBottom: 0 } }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleCopyInvite, children: inviteCopied ? "✓ Kopyalandı" : "Kopyala" })
+            ] })
+          ] }),
+          section === "delete" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "channel-settings-content", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: isOwner ? "Sunucuyu Sil" : "Sunucudan Ayrıl" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "hint", children: [
+              isOwner ? "Bu sunucu ve tüm kanalları/mesajları kalıcı olarak silinecek." : "Bu sunucudan ayrılacaksınız.",
+              " Emin misiniz?"
+            ] }),
+            error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "error-banner", children: error2 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions", children: !confirming ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", style: { color: "#ff8f97", borderColor: "#5a2a30" }, onClick: () => setConfirming(true), children: isOwner ? "Sunucuyu Sil" : "Sunucudan Ayrıl" }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => setConfirming(false), disabled: busy, children: "Vazgeç" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "btn", style: { color: "#ff8f97", borderColor: "#5a2a30" }, onClick: handleLeaveOrDelete, disabled: busy, children: [
+                "Eminim, ",
+                isOwner ? "Sil" : "Ayrıl"
+              ] })
+            ] }) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "channel-settings-close", onClick: requestClose, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "channel-settings-close-x", children: "✕" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "channel-settings-close-label", children: "ESC" })
+          ] })
+        ] })
       ] })
-    ] }),
-    tab === "roles" && /* @__PURE__ */ jsxRuntimeExports.jsx(RolesTab, { token, serverId: server.id, isOwner }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-actions modal-actions-close", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onClose, children: "Kapat" }) })
-  ] }) });
+    }
+  );
 }
 function PermissionToggle({ state, onChange, disabled }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "perm-toggle", children: [
@@ -76007,27 +76298,6 @@ function ChannelPermissionsTab({ token, serverId, channelId, isOwner }) {
       ] }, group.title)) })
     ] })
   ] });
-}
-const CLOSE_DURATION = 140;
-function useModalClose(open, onClose) {
-  const [visible, setVisible] = reactExports.useState(open);
-  const [closing, setClosing] = reactExports.useState(false);
-  reactExports.useEffect(() => {
-    if (open) {
-      setVisible(true);
-      setClosing(false);
-    }
-  }, [open]);
-  function requestClose() {
-    if (closing) return;
-    setClosing(true);
-    setTimeout(() => {
-      setVisible(false);
-      setClosing(false);
-      onClose();
-    }, CLOSE_DURATION);
-  }
-  return { visible, closing, requestClose };
 }
 const TABS = [
   { id: "overview", label: "Genel Görünüm" },
@@ -76285,105 +76555,6 @@ const USER_SETTINGS_GROUPS = [
     items: [{ id: "developer", label: "Geliştirici" }]
   }
 ];
-const VIEWPORT = 220;
-const OUTPUT = 512;
-function AvatarCropModal({ imageSrc, onCancel, onConfirm }) {
-  const imgRef = reactExports.useRef(null);
-  const [imgSize, setImgSize] = reactExports.useState(null);
-  const [zoom2, setZoom] = reactExports.useState(1);
-  const [pos, setPos] = reactExports.useState({ x: 0, y: 0 });
-  const dragRef = reactExports.useRef(null);
-  reactExports.useEffect(() => {
-    const img = new Image();
-    img.onload = () => setImgSize({ w: img.naturalWidth, h: img.naturalHeight });
-    img.src = imageSrc;
-  }, [imageSrc]);
-  const baseScale = imgSize ? Math.max(VIEWPORT / imgSize.w, VIEWPORT / imgSize.h) : 0;
-  const scale = baseScale * zoom2;
-  const dispW = imgSize ? imgSize.w * scale : 0;
-  const dispH = imgSize ? imgSize.h * scale : 0;
-  function clamp2(p2, dw, dh) {
-    const minX = VIEWPORT - dw;
-    const minY = VIEWPORT - dh;
-    return { x: Math.min(0, Math.max(minX, p2.x)), y: Math.min(0, Math.max(minY, p2.y)) };
-  }
-  reactExports.useEffect(() => {
-    if (!imgSize) return;
-    setPos(clamp2({ x: (VIEWPORT - dispW) / 2, y: (VIEWPORT - dispH) / 2 }, dispW, dispH));
-  }, [zoom2, imgSize]);
-  if (!imgSize) return null;
-  function handlePointerDown(e2) {
-    dragRef.current = { startX: e2.clientX, startY: e2.clientY, origX: pos.x, origY: pos.y };
-  }
-  function handlePointerMove(e2) {
-    if (!dragRef.current) return;
-    const dx = e2.clientX - dragRef.current.startX;
-    const dy = e2.clientY - dragRef.current.startY;
-    setPos(clamp2({ x: dragRef.current.origX + dx, y: dragRef.current.origY + dy }, dispW, dispH));
-  }
-  function handlePointerUp() {
-    dragRef.current = null;
-  }
-  function handleConfirm() {
-    const canvas = document.createElement("canvas");
-    canvas.width = OUTPUT;
-    canvas.height = OUTPUT;
-    const ctx = canvas.getContext("2d");
-    const factor = OUTPUT / VIEWPORT;
-    ctx.drawImage(imgRef.current, pos.x * factor, pos.y * factor, dispW * factor, dispH * factor);
-    onConfirm(canvas.toDataURL("image/png"));
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "avatar-crop-overlay", onMouseDown: (e2) => e2.target === e2.currentTarget && onCancel(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "avatar-crop-panel", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Profil Fotoğrafını Kırp" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: "avatar-crop-viewport",
-        onMouseDown: handlePointerDown,
-        onMouseMove: handlePointerMove,
-        onMouseUp: handlePointerUp,
-        onMouseLeave: handlePointerUp,
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "img",
-            {
-              ref: imgRef,
-              src: imageSrc,
-              alt: "",
-              draggable: false,
-              style: {
-                position: "absolute",
-                left: pos.x,
-                top: pos.y,
-                width: dispW,
-                height: dispH,
-                userSelect: "none",
-                pointerEvents: "none"
-              }
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "avatar-crop-mask" })
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "input",
-      {
-        type: "range",
-        min: "1",
-        max: "3",
-        step: "0.01",
-        value: zoom2,
-        onChange: (e2) => setZoom(Number(e2.target.value)),
-        className: "avatar-crop-zoom"
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "avatar-crop-actions", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onCancel, children: "İptal" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleConfirm, children: "Kaydet" })
-    ] })
-  ] }) });
-}
 function useAutoClearError(value2, setValue, delay = 5e3) {
   reactExports.useEffect(() => {
     if (!value2) return;
@@ -80250,7 +80421,9 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
     setActiveServerId(server.id);
   }
   function handleServerRenamed(updatedServer) {
-    setNobleCoreServers((prev) => prev.map((s2) => s2.id === updatedServer.id ? { ...s2, name: updatedServer.name } : s2));
+    setNobleCoreServers(
+      (prev) => prev.map((s2) => s2.id === updatedServer.id ? { ...s2, name: updatedServer.name, icon_url: updatedServer.icon_url } : s2)
+    );
   }
   function handleServerLeftOrDeleted(serverId) {
     setNobleCoreServers((prev) => prev.filter((s2) => s2.id !== serverId));

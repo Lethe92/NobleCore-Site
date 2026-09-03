@@ -1,4 +1,4 @@
-import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, b as mergeHubContent, c as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, R as ReactDOM, a as React } from "./App-CoRQ6oOx.js";
+import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, b as mergeHubContent, c as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, R as ReactDOM, a as React } from "./App-DiXITex0.js";
 const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);
@@ -67,7 +67,7 @@ function WebApp() {
     setActiveServerId(server.id);
   }
   function handleServerRenamed(updated) {
-    setServers((prev) => prev.map((s) => s.id === updated.id ? { ...s, name: updated.name } : s));
+    setServers((prev) => prev.map((s) => s.id === updated.id ? { ...s, name: updated.name, icon_url: updated.icon_url } : s));
   }
   function handleServerLeftOrDeleted(serverId) {
     setServers((prev) => prev.filter((s) => s.id !== serverId));
