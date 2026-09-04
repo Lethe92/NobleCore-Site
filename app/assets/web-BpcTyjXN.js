@@ -1,5 +1,4 @@
-import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, b as mergeHubContent, c as APPS, j as jsxRuntimeExports, S as StudioApp, N as NobleTaskApp, n as noblecoreLogo, d as NobleCoreAuthModal, e as AppIcon, f as NobleCoreView, h as heroBanner, g as ServerModal, V as VoiceStatusBar, R as ReactDOM, a as React } from "./App-D0xKsBEL.js";
-const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
+import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, b as mergeHubContent, c as APPS, j as jsxRuntimeExports, S as StudioApp, d as NobleTaskApp, e as NobleRefProjectsScreen, n as noblecoreLogo, f as NobleCoreAuthModal, g as AppIcon, h as NobleCoreView, i as heroBanner, k as ServerModal, V as VoiceStatusBar, R as ReactDOM, a as React, N as NobleRefWindow } from "./NobleRefWindow-0n2-tFxO.js";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);
   const [user, setUser] = reactExports.useState(null);
@@ -10,12 +9,12 @@ function WebApp() {
   const [authModalOpen, setAuthModalOpen] = reactExports.useState(false);
   const [serverModalOpen, setServerModalOpen] = reactExports.useState(false);
   const [checkingSession, setCheckingSession] = reactExports.useState(true);
-  const [desktopPromptOpen, setDesktopPromptOpen] = reactExports.useState(false);
   const [showStudio, setShowStudio] = reactExports.useState(false);
   const [showTask, setShowTask] = reactExports.useState(false);
+  const [showRef, setShowRef] = reactExports.useState(false);
   const connection = useNobleCoreConnection(token);
   function handlePlayClick() {
-    if (activeApp === "ref") setDesktopPromptOpen(true);
+    if (activeApp === "ref") setShowRef(true);
     else if (activeApp === "board") setShowTask(true);
     else setShowStudio(true);
   }
@@ -96,6 +95,9 @@ function WebApp() {
   }
   if (showTask) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(NobleTaskApp, { onBack: () => setShowTask(false) });
+  }
+  if (showRef) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(NobleRefProjectsScreen, { onBack: () => setShowRef(false) });
   }
   if (!token) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "web-landing", children: [
@@ -202,7 +204,7 @@ function WebApp() {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-fade" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-side-art-footer", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: handlePlayClick, children: activeApp === "hub" ? "AI Studio" : app.title }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: handlePlayClick, children: activeApp === "ref" ? "NobleRef" : activeApp === "board" ? "NobleTask" : "AI Studio" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-version", children: "Sürüm: 1.0.0" })
             ] })
           ] }),
@@ -256,15 +258,7 @@ function WebApp() {
         onLeaveVoice: (channelId) => connection.handleLeaveVoice(channelId, user.id),
         onOpenServer: (serverId) => setActiveServerId(serverId)
       }
-    ),
-    desktopPromptOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: () => setDesktopPromptOpen(false), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal", onClick: (e) => e.stopPropagation(), children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Masaüstü uygulaması gerekiyor" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "NobleRef şu an sadece Windows masaüstü uygulamasında çalışıyor. AI Studio, NobleTask ve sohbet özellikleri bu tarayıcı sürümünde de kullanılabiliyor." }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => setDesktopPromptOpen(false), children: "Kapat" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "btn btn-primary", href: STORE_URL, target: "_blank", rel: "noopener", children: "Masaüstü Uygulamasını İndir" })
-      ] })
-    ] }) })
+    )
   ] });
 }
 const NOBLECORE_BASE_URL = "https://api.noblecore.net";
@@ -307,6 +301,84 @@ function downloadBlob(blob, fileName) {
   a.click();
   a.remove();
   URL.revokeObjectURL(blobUrl);
+}
+const NOBLEREF_META_KEY = "nobleRefProjects";
+const NOBLEREF_SCENE_PREFIX = "nobleRefScene:";
+const NOBLEREF_CAPS = { osWindowControls: false };
+function nrReadMeta() {
+  try {
+    return JSON.parse(localStorage.getItem(NOBLEREF_META_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+function nrWriteMeta(map) {
+  localStorage.setItem(NOBLEREF_META_KEY, JSON.stringify(map));
+}
+function nrReadScene(id) {
+  const raw = localStorage.getItem(NOBLEREF_SCENE_PREFIX + id);
+  return raw ? JSON.parse(raw) : null;
+}
+function nrWriteScene(id, scene) {
+  localStorage.setItem(NOBLEREF_SCENE_PREFIX + id, JSON.stringify(scene));
+}
+function nrEmptyScene(name) {
+  const now = Date.now();
+  return {
+    format: "nobleref",
+    version: 1,
+    name,
+    createdAt: now,
+    updatedAt: now,
+    canvas: { pan: { x: 0, y: 0 }, zoom: 1, grayscale: false, locked: false, preset: "dark", grid: false, gridSize: 32 },
+    window: { alwaysOnTop: false, opacity: 1, titleBar: "always" },
+    items: []
+  };
+}
+function nrId() {
+  return `ref-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function pickFiles({ accept, multiple }) {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = accept || "";
+    input.multiple = !!multiple;
+    input.style.display = "none";
+    input.onchange = () => {
+      resolve([...input.files || []]);
+      input.remove();
+    };
+    document.body.appendChild(input);
+    input.click();
+    window.addEventListener(
+      "focus",
+      () => setTimeout(() => input.isConnected && !input.files.length ? (resolve([]), input.remove()) : null, 400),
+      { once: true }
+    );
+  });
+}
+async function nrImagesFromFileList(files, imageTypes) {
+  const out = [];
+  for (const file of files) {
+    try {
+      out.push({ name: file.name, sourcePath: "", dataUrl: await fileToDataUrl(file) });
+    } catch {
+    }
+  }
+  return out;
+}
+function nrOpenWindow(id) {
+  const url = `${location.origin}${location.pathname}#ref=${encodeURIComponent(id)}`;
+  window.open(url, "_blank", "width=980,height=700,menubar=no,toolbar=no,location=no,status=no,resizable=yes");
 }
 window.api = {
   getNobleCoreToken: async () => getToken(),
@@ -448,9 +520,271 @@ window.api = {
       throw new Error(data.error || "Kredi isteği gönderilemedi.");
     }
     return { ok: true };
+  },
+  // Surukle-birak ile gelen bir File'in gercek dosya yolu — tarayicida
+  // guvenlik geregi hicbir zaman verilmez, bilerek bos donuyoruz
+  // (imageLoad.js zaten `window.api?.getPathForFile` yoksa '' kullaniyor).
+  getPathForFile: () => "",
+  // ---- NobleRef (PureRef klonu) — bkz. yukaridaki NOBLEREF_CAPS notu ----
+  nobleRef: {
+    platform: "web",
+    capabilities: NOBLEREF_CAPS,
+    listProjects: async () => Object.values(nrReadMeta()).sort((a, b) => b.updatedAt - a.updatedAt),
+    createProject: async (name) => {
+      const id = nrId();
+      const cleanName = (name || "").trim() || "İsimsiz Pano";
+      const scene = nrEmptyScene(cleanName);
+      nrWriteScene(id, scene);
+      const meta = { id, name: cleanName, filePath: null, thumbnail: null, itemCount: 0, createdAt: scene.createdAt, updatedAt: scene.updatedAt, alwaysOnTop: false, windowBounds: null };
+      const map = nrReadMeta();
+      map[id] = meta;
+      nrWriteMeta(map);
+      return meta;
+    },
+    // Masaustunde bir .nref dosyasi ACAR; tarayicida bir .nref dosyasi
+    // SEC (dosya sistemi erisimi yok) — icerigi okuyup yeni bir yerel
+    // projeye alir (dosyanin kendisi degismez, "iceri aktarma" gibi).
+    importProjectFile: async () => {
+      const [file] = await pickFiles({ accept: ".nref,application/json" });
+      if (!file) return null;
+      const text = await file.text();
+      let scene;
+      try {
+        scene = JSON.parse(text);
+      } catch {
+        throw new Error("Dosya okunamadı — geçersiz .nref.");
+      }
+      if (scene?.format !== "nobleref") throw new Error("Bu dosya bir NobleRef panosu değil.");
+      const id = nrId();
+      nrWriteScene(id, scene);
+      const meta = {
+        id,
+        name: scene.name || file.name.replace(/\.nref$/i, ""),
+        filePath: null,
+        thumbnail: scene.thumbnail || null,
+        itemCount: scene.items?.length || 0,
+        createdAt: scene.createdAt || Date.now(),
+        updatedAt: Date.now(),
+        alwaysOnTop: false,
+        windowBounds: null
+      };
+      const map = nrReadMeta();
+      map[id] = meta;
+      nrWriteMeta(map);
+      return meta;
+    },
+    renameProject: async (id, name) => {
+      const map = nrReadMeta();
+      const meta = map[id];
+      if (!meta) throw new Error("Proje bulunamadı.");
+      meta.name = (name || "").trim() || meta.name;
+      meta.updatedAt = Date.now();
+      const scene = nrReadScene(id);
+      if (scene) {
+        scene.name = meta.name;
+        nrWriteScene(id, scene);
+      }
+      nrWriteMeta(map);
+      return meta;
+    },
+    // deleteFile parametresi tarayicida anlamsiz (ayri bir "dosya" yok) —
+    // her iki durumda da bu cihazdaki tek kopya silinir.
+    deleteProject: async (id) => {
+      const map = nrReadMeta();
+      delete map[id];
+      nrWriteMeta(map);
+      localStorage.removeItem(NOBLEREF_SCENE_PREFIX + id);
+      return true;
+    },
+    revealProject: async () => false,
+    revealPath: async () => false,
+    openWindow: async (id) => {
+      nrOpenWindow(id);
+    },
+    loadProject: async (id) => {
+      const meta = nrReadMeta()[id];
+      const scene = nrReadScene(id);
+      if (!meta || !scene) throw new Error("Pano bulunamadı.");
+      return { meta, scene };
+    },
+    saveProject: async ({ id, scene, thumbnail }) => {
+      const map = nrReadMeta();
+      const meta = map[id];
+      if (!meta) throw new Error("Proje bulunamadı.");
+      const now = Date.now();
+      const full = { ...scene, format: "nobleref", version: 1, name: meta.name, updatedAt: now, thumbnail: thumbnail || null };
+      nrWriteScene(id, full);
+      meta.updatedAt = now;
+      meta.thumbnail = thumbnail || null;
+      meta.itemCount = scene.items?.length || 0;
+      nrWriteMeta(map);
+      return { updatedAt: now, filePath: null };
+    },
+    // Tarayicida "farkli konuma kaydet" en durust karsiligi: .nref'i
+    // bilgisayara INDIRMEK. Uygulama icindeki proje ayni kalir (yeni bir
+    // yerel kopya olusturulmaz), sadece bir disa aktarim.
+    saveProjectAs: async ({ id, scene, thumbnail }) => {
+      const map = nrReadMeta();
+      const meta = map[id];
+      if (!meta) throw new Error("Proje bulunamadı.");
+      const full = { ...scene, format: "nobleref", version: 1, name: meta.name, updatedAt: Date.now(), thumbnail: thumbnail || null };
+      downloadBlob(new Blob([JSON.stringify(full)], { type: "application/json" }), `${meta.name}.nref`);
+      return { filePath: "İndirilenler klasörü", name: meta.name, updatedAt: Date.now() };
+    },
+    // Gercek Electron main process'i CORS'a tabi degil, tarayici fetch'i
+    // OYLE — bircok gorsel CDN'i CORS'a acik oldugu icin cogunlukla calisir,
+    // ama her URL'de garanti degil (tarayici guvenlik kisitlamasi).
+    fetchImage: async (url) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Görsel indirilemedi (${res.status})`);
+      const blob = await res.blob();
+      if (!blob.type.startsWith("image/")) throw new Error("Bu bağlantı bir görsel değil.");
+      return { dataUrl: await fileToDataUrl(blob) };
+    },
+    readImageFiles: async () => [],
+    openImagesDialog: async () => {
+      const files = await pickFiles({ accept: "image/png,image/jpeg,image/webp,image/gif,image/bmp,image/svg+xml,image/avif", multiple: true });
+      return nrImagesFromFileList(files);
+    },
+    copyImage: async (dataUrl) => {
+      try {
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    readClipboard: async () => {
+      try {
+        const items = await navigator.clipboard.read();
+        for (const item of items) {
+          const imgType = item.types.find((t) => t.startsWith("image/"));
+          if (imgType) {
+            const blob = await item.getType(imgType);
+            return { dataUrl: await fileToDataUrl(blob) };
+          }
+        }
+      } catch {
+      }
+      try {
+        const text = await navigator.clipboard.readText();
+        return { text };
+      } catch {
+        return {};
+      }
+    },
+    // Klasore toplu yazma tarayicida yok — her gorseli ayri ayri indirir.
+    exportImages: async (files) => {
+      let saved = 0;
+      for (const f of files) {
+        try {
+          const a = document.createElement("a");
+          a.href = f.dataUrl;
+          a.download = f.name || `gorsel-${saved + 1}.png`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          saved += 1;
+          await new Promise((r) => setTimeout(r, 250));
+        } catch {
+        }
+      }
+      return { saved };
+    },
+    exportSceneImage: async (dataUrl, suggestedName) => {
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `${(suggestedName || "pano").replace(/[\\/:*?"<>|]/g, "")}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      return { saved: true };
+    },
+    onProjectsChanged: (cb) => {
+      const handler = (e) => {
+        if (e.key === NOBLEREF_META_KEY) cb();
+      };
+      window.addEventListener("storage", handler);
+      return () => window.removeEventListener("storage", handler);
+    },
+    onRenamed: () => () => {
+    },
+    // Pencere kontrolleri: bir tarayici sekmesi/penceresi ISLETIM SISTEMI
+    // seviyesinde "her zaman ustte" ya da "masaustune seffaf" OLAMAZ
+    // (guvenlik nedeniyle hicbir tarayici izin vermez) — NobleRefWindow.jsx
+    // bu ikisini + pencere kilidini `capabilities.osWindowControls` ile
+    // gorup arayuzde acikca devre disi birakiyor. Tasima/boyutlandirma/
+    // kapatma ise script'in actigi bir pencere icin gercekten calisir.
+    window: {
+      getState: async () => ({
+        maximized: false,
+        alwaysOnTop: false,
+        focused: document.hasFocus(),
+        opacity: Number(document.documentElement.style.getPropertyValue("--nr-web-opacity")) || 1,
+        bounds: { x: window.screenX, y: window.screenY, width: window.outerWidth, height: window.outerHeight },
+        locked: false
+      }),
+      setAlwaysOnTop: async () => ({ alwaysOnTop: false }),
+      setTransparentToMouse: async () => false,
+      setLocked: async () => ({ locked: false }),
+      setOpacity: async (value) => {
+        const v = Math.min(1, Math.max(0.15, Number(value) || 1));
+        document.documentElement.style.opacity = String(v);
+        document.documentElement.style.setProperty("--nr-web-opacity", String(v));
+        return v;
+      },
+      minimize: async () => {
+      },
+      // Web'de gercek "buyut/kucult" yok — bir yaklastirma: pencereyi ekranin
+      // kullanilabilir alanina genislet/eski boyutuna don.
+      toggleMaximize: async () => {
+        try {
+          if (!window.__nrPrevBounds) {
+            window.__nrPrevBounds = { x: window.screenX, y: window.screenY, w: window.outerWidth, h: window.outerHeight };
+            window.moveTo(0, 0);
+            window.resizeTo(screen.availWidth, screen.availHeight);
+            return { maximized: true };
+          }
+          const b = window.__nrPrevBounds;
+          window.__nrPrevBounds = null;
+          window.moveTo(b.x, b.y);
+          window.resizeTo(b.w, b.h);
+          return { maximized: false };
+        } catch {
+          return { maximized: false };
+        }
+      },
+      moveBy: async (dx, dy) => {
+        try {
+          window.moveBy(dx, dy);
+        } catch {
+        }
+      },
+      setBounds: async (bounds) => {
+        try {
+          if (bounds.x != null && bounds.y != null) window.moveTo(bounds.x, bounds.y);
+          if (bounds.width != null && bounds.height != null) window.resizeTo(bounds.width, bounds.height);
+        } catch {
+        }
+        return { bounds };
+      },
+      close: async () => window.close(),
+      openDevTools: async () => {
+      },
+      onCloseRequested: () => () => {
+      },
+      onStateChanged: () => () => {
+      },
+      onTransparentToMouse: () => () => {
+      }
+    }
   }
 };
 window.addEventListener("contextmenu", (e) => e.preventDefault());
+const refMatch = /^#ref=(.+)$/.exec(window.location.hash || "");
+if (refMatch) document.documentElement.classList.add("nobleref-window");
 ReactDOM.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ jsxRuntimeExports.jsx(React.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(WebApp, {}) })
+  /* @__PURE__ */ jsxRuntimeExports.jsx(React.StrictMode, { children: refMatch ? /* @__PURE__ */ jsxRuntimeExports.jsx(NobleRefWindow, { projectId: decodeURIComponent(refMatch[1]) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(WebApp, {}) })
 );

@@ -3280,6 +3280,899 @@ svg.react-flow__connectionline {
     grid-template-columns: 1fr;
   }
 }
+/* ============================================================
+   NobleRef — PureRef klonu (ayri, cercevesiz, seffaf olabilen pencere)
+   ============================================================ */
+
+/* Pano penceresi: ana pencerenin baslik cubugu payi ve koyu arka plani YOK.
+   (main.jsx #ref= hash'ini gorunce <html>'e bu sinifi ekliyor.) */
+html.nobleref-window,
+html.nobleref-window body,
+html.nobleref-window #root {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.nr-root {
+  --nr-bg: #1d1f27;
+  --nr-text: #e6e8ee;
+  --nr-accent: #4f7cff;
+  --nr-panel: rgba(28, 31, 40, 0.96);
+  --nr-border: rgba(255, 255, 255, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  color: var(--nr-text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  border-radius: 6px;
+  user-select: none;
+}
+
+.nr-preset-light {
+  --nr-panel: rgba(243, 243, 244, 0.97);
+  --nr-border: rgba(0, 0, 0, 0.12);
+}
+
+.nr-loading {
+  align-items: center;
+  justify-content: center;
+  background: #1d1f27;
+  text-align: center;
+}
+
+.nr-error {
+  color: #ff7a7a;
+  margin-bottom: 12px;
+  max-width: 420px;
+}
+
+.nr-muted {
+  color: rgba(160, 166, 180, 0.9);
+}
+
+/* ---------- Baslik cubugu ---------- */
+
+.nr-titlebar {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  flex-shrink: 0;
+  background: var(--nr-panel);
+  border-bottom: 1px solid var(--nr-border);
+  -webkit-app-region: drag;
+  z-index: 20;
+}
+
+.nr-titlebar-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(-100%);
+  transition: transform 0.15s ease;
+}
+
+.nr-titlebar-hover.nr-titlebar-visible {
+  transform: translateY(0);
+}
+
+.nr-tb-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nr-tb-brand {
+  font-weight: 700;
+  color: #d94fd4;
+}
+
+.nr-tb-sep {
+  opacity: 0.4;
+}
+
+.nr-tb-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nr-tb-dirty {
+  color: #ffb84f;
+  font-size: 10px;
+}
+
+.nr-tb-flag {
+  margin-left: 8px;
+  font-size: 11px;
+  color: #ffb84f;
+}
+
+.nr-tb-btn {
+  -webkit-app-region: no-drag;
+  width: 34px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--nr-text);
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.nr-tb-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 1;
+}
+
+.nr-preset-light .nr-tb-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.nr-tb-btn-active {
+  color: var(--nr-accent);
+  opacity: 1;
+}
+
+/* Tarayicida gercekten calismayan (OS seviyesi) kontroller — tikla-nabilir
+   kalir (aciklama toast'i icin) ama gorsel olarak sonuk gosterilir. */
+.nr-tb-btn-muted {
+  opacity: 0.35;
+}
+
+.nr-tb-btn-muted:hover {
+  opacity: 0.6;
+}
+
+.nr-tb-close:hover {
+  background: #e5493a;
+  color: #fff;
+}
+
+.nr-tb-menu {
+  font-size: 18px;
+}
+
+/* ---------- Tuval ---------- */
+
+.nr-view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--nr-bg);
+  cursor: default;
+  touch-action: none;
+}
+
+.nr-view-locked {
+  cursor: grab;
+}
+
+.nr-view-dragover {
+  box-shadow: inset 0 0 0 2px var(--nr-accent);
+}
+
+.nr-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+}
+
+.nr-preset-light .nr-grid {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+}
+
+.nr-world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.nr-world-gray {
+  filter: grayscale(1);
+}
+
+.nr-item {
+  position: absolute;
+  transform-origin: center center;
+}
+
+.nr-item-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform-origin: center center;
+}
+
+.nr-item-clip img {
+  position: absolute;
+  max-width: none;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.nr-pixelated {
+  image-rendering: pixelated;
+}
+
+.nr-item-gray {
+  filter: grayscale(1);
+}
+
+.nr-item-outline {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--nr-accent);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.nr-item-locked .nr-item-outline {
+  border-style: dashed;
+  border-color: #d99a3c;
+}
+
+.nr-item-lock,
+.nr-item-comment {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 14px;
+  transform-origin: top left;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+}
+
+.nr-item-comment {
+  left: auto;
+  right: 4px;
+  transform-origin: top right;
+  pointer-events: auto;
+}
+
+/* Not */
+.nr-note {
+  position: absolute;
+  inset: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  line-height: 1.35;
+}
+
+.nr-note-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.nr-note-editor {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: 2px solid var(--nr-accent);
+  background: transparent;
+  resize: none;
+  font-family: inherit;
+  line-height: 1.35;
+  padding: 0;
+  user-select: text;
+}
+
+/* Gizmo */
+.nr-gizmo {
+  position: absolute;
+  transform-origin: center center;
+  pointer-events: none;
+}
+
+.nr-gizmo-border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--nr-accent);
+  box-sizing: border-box;
+}
+
+.nr-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 1.5px solid var(--nr-accent);
+  border-radius: 2px;
+  pointer-events: auto;
+  transform-origin: center center;
+}
+
+.nr-handle-nw { left: 0; top: 0; cursor: nwse-resize; }
+.nr-handle-ne { left: 100%; top: 0; cursor: nesw-resize; }
+.nr-handle-sw { left: 0; top: 100%; cursor: nesw-resize; }
+.nr-handle-se { left: 100%; top: 100%; cursor: nwse-resize; }
+
+.nr-handle-rot {
+  left: 50%;
+  border-radius: 50%;
+  cursor: grab;
+}
+
+.nr-gizmo-rot-line {
+  position: absolute;
+  left: 50%;
+  background: var(--nr-accent);
+}
+
+.nr-crop-overlay {
+  position: absolute;
+  transform-origin: center center;
+  pointer-events: none;
+}
+
+.nr-crop-rect {
+  position: absolute;
+  border: 1px dashed #fff;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+.nr-box-select {
+  position: absolute;
+  border: 1px solid var(--nr-accent);
+  background: rgba(79, 124, 255, 0.15);
+  pointer-events: none;
+}
+
+.nr-pick-tip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  border-radius: 4px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 30;
+}
+
+.nr-pick-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.nr-empty-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: rgba(160, 166, 180, 0.75);
+  font-size: 14px;
+  line-height: 1.7;
+  pointer-events: none;
+  padding: 24px;
+}
+
+.nr-empty-hint span {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* ---------- Durum cubugu ---------- */
+
+.nr-statusbar {
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: rgba(160, 166, 180, 0.8);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.nr-status-flag {
+  color: #ffb84f;
+}
+
+/* ---------- Pencere boyutlandirma tutamaclari ---------- */
+
+.nr-resize {
+  position: absolute;
+  z-index: 40;
+  -webkit-app-region: no-drag;
+}
+
+.nr-resize-n { top: 0; left: 8px; right: 8px; height: 5px; cursor: ns-resize; }
+.nr-resize-s { bottom: 0; left: 8px; right: 8px; height: 5px; cursor: ns-resize; }
+.nr-resize-e { right: 0; top: 8px; bottom: 8px; width: 5px; cursor: ew-resize; }
+.nr-resize-w { left: 0; top: 8px; bottom: 8px; width: 5px; cursor: ew-resize; }
+.nr-resize-ne { top: 0; right: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+.nr-resize-nw { top: 0; left: 0; width: 10px; height: 10px; cursor: nwse-resize; }
+.nr-resize-se { bottom: 0; right: 0; width: 10px; height: 10px; cursor: nwse-resize; }
+.nr-resize-sw { bottom: 0; left: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+
+/* ---------- Menu ---------- */
+
+.nr-menu {
+  position: fixed;
+  z-index: 100;
+  min-width: 230px;
+  background: var(--nr-panel);
+  border: 1px solid var(--nr-border);
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  padding: 4px 0;
+  color: var(--nr-text);
+  font-size: 13px;
+}
+
+.nr-menu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.nr-menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.nr-menu-item:hover,
+.nr-menu-item-open {
+  background: rgba(79, 124, 255, 0.25);
+}
+
+.nr-menu-item-disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.nr-menu-item-disabled:hover {
+  background: transparent;
+}
+
+.nr-menu-check {
+  width: 14px;
+  text-align: center;
+  color: var(--nr-accent);
+  font-size: 12px;
+}
+
+.nr-menu-label {
+  flex: 1;
+}
+
+.nr-menu-shortcut {
+  margin-left: 24px;
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+.nr-menu-arrow {
+  opacity: 0.6;
+  margin-left: 8px;
+}
+
+.nr-submenu {
+  position: absolute;
+  left: 100%;
+  top: -5px;
+  min-width: 230px;
+  background: var(--nr-panel);
+  border: 1px solid var(--nr-border);
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  padding: 4px 0;
+}
+
+.nr-menu-sep {
+  height: 1px;
+  background: var(--nr-border);
+  margin: 4px 0;
+}
+
+.nr-menu-header {
+  padding: 4px 12px;
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+/* ---------- Overlay / modal / palet ---------- */
+
+.nr-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 60px;
+}
+
+.nr-modal {
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 90px);
+  overflow: auto;
+  background: var(--nr-panel);
+  border: 1px solid var(--nr-border);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  color: var(--nr-text);
+  padding: 16px 18px;
+}
+
+.nr-modal-wide {
+  width: 860px;
+}
+
+.nr-modal-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.nr-modal-body p {
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.nr-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.nr-btn {
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--nr-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--nr-text);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.nr-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nr-btn-primary {
+  background: #0c66e4;
+  border-color: #0c66e4;
+  color: #fff;
+}
+
+.nr-btn-primary:hover {
+  background: #0055cc;
+}
+
+.nr-btn-danger {
+  background: #b3261e;
+  border-color: #b3261e;
+  color: #fff;
+}
+
+.nr-label {
+  display: block;
+  font-size: 12px;
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+
+.nr-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--nr-border);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--nr-text);
+  font-size: 13px;
+  outline: none;
+  user-select: text;
+}
+
+.nr-preset-light .nr-input {
+  background: #fff;
+}
+
+.nr-input:focus {
+  border-color: var(--nr-accent);
+}
+
+.nr-textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.nr-palette {
+  width: 520px;
+  max-width: calc(100vw - 32px);
+  background: var(--nr-panel);
+  border: 1px solid var(--nr-border);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.nr-palette input {
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 1px solid var(--nr-border);
+  background: transparent;
+  color: var(--nr-text);
+  font-size: 15px;
+  outline: none;
+  user-select: text;
+}
+
+.nr-palette-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.nr-palette-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.nr-palette-item-active {
+  background: rgba(79, 124, 255, 0.25);
+}
+
+.nr-palette-cat {
+  font-size: 11px;
+  opacity: 0.55;
+  min-width: 80px;
+}
+
+.nr-palette-label {
+  flex: 1;
+}
+
+.nr-palette-empty {
+  padding: 14px;
+  opacity: 0.6;
+}
+
+.nr-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px 22px;
+  font-size: 12px;
+}
+
+.nr-shortcuts-col h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.6;
+}
+
+.nr-shortcut-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--nr-border);
+}
+
+.nr-shortcut-row kbd {
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  opacity: 0.8;
+  text-align: right;
+}
+
+/* ---------- Hiyerarsi ---------- */
+
+.nr-hierarchy {
+  position: absolute;
+  top: 34px;
+  right: 8px;
+  bottom: 30px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  background: var(--nr-panel);
+  border: 1px solid var(--nr-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 15;
+  -webkit-app-region: no-drag;
+}
+
+.nr-hierarchy-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px 6px 10px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--nr-border);
+}
+
+.nr-hierarchy-head .nr-tb-btn {
+  margin-left: auto;
+  height: 26px;
+}
+
+.nr-hierarchy-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.nr-h-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.nr-h-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nr-h-row-selected {
+  background: rgba(79, 124, 255, 0.25);
+}
+
+.nr-h-row-locked .nr-h-name {
+  opacity: 0.6;
+}
+
+.nr-h-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nr-h-btn {
+  border: none;
+  background: transparent;
+  color: var(--nr-text);
+  cursor: pointer;
+  font-size: 10px;
+  opacity: 0.5;
+  padding: 2px 3px;
+}
+
+.nr-h-btn:hover {
+  opacity: 1;
+}
+
+.nr-h-input {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 4px;
+  font-size: 12px;
+  border-radius: 3px;
+  border: 1px solid var(--nr-accent);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--nr-text);
+  outline: none;
+  user-select: text;
+}
+
+.nr-h-empty {
+  padding: 12px;
+  text-align: center;
+}
+
+/* ---------- Toast ---------- */
+
+.nr-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  z-index: 60;
+  max-width: calc(100% - 40px);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ---------- Ana penceredeki panolar sayfasi ---------- */
+
+.nr-projects-hint {
+  color: #9aa1b3;
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.nr-projects-hint code {
+  background: #23262f;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.nr-projects-error {
+  margin-top: 10px;
+  color: #ff7a7a;
+  font-size: 13px;
+}
+
+.nr-card-missing {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.nr-card-missing-badge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(229, 73, 58, 0.85);
+  color: #fff;
+  font-size: 11px;
+}
+
+.nr-modal-input {
+  width: 100%;
+  margin: 12px 0 4px;
+  font-size: 14px;
+  padding: 8px 10px;
+}
 * {
   box-sizing: border-box;
 }
@@ -7385,6 +8278,389 @@ button.launcher-featured-card:hover {
   color: #9aa1b3;
   font-size: 12px;
   cursor: default;
+}
+
+/* ---- NobleTalk ana sayfasi (Discord'un "Arkadaslar" sayfasinin ayni duzeni) ---- */
+
+.talkhome {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: #1c1f28;
+  color: #e6e8ee;
+}
+
+.talkhome-nav {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #14161c;
+  padding: 10px 8px;
+  overflow-y: auto;
+}
+
+.talkhome-back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: #9aa1b3;
+  font-size: 12px;
+  padding: 6px 4px 10px;
+  cursor: pointer;
+}
+
+.talkhome-back:hover {
+  color: #e6e8ee;
+}
+
+.talkhome-search-wrap {
+  margin-bottom: 10px;
+}
+
+.talkhome-search {
+  width: 100%;
+  background: #23262f;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 10px;
+  color: #dcddde;
+  font-size: 13px;
+  outline: none;
+}
+
+.talkhome-search::placeholder {
+  color: #72767d;
+}
+
+.talkhome-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #9aa1b3;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.talkhome-nav-item:hover {
+  background: #1c1f28;
+  color: #e6e8ee;
+}
+
+.talkhome-nav-item-active {
+  background: #2a2e3a;
+  color: #e6e8ee;
+}
+
+.talkhome-nav-icon {
+  font-size: 15px;
+}
+
+.talkhome-nav-label {
+  margin: 16px 8px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #72767d;
+  text-transform: uppercase;
+}
+
+.talkhome-nav-empty {
+  padding: 8px;
+  font-size: 12px;
+  color: #6b7080;
+}
+
+.talkhome-dm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.talkhome-dm-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: default;
+}
+
+.talkhome-dm-row:hover {
+  background: #1c1f28;
+}
+
+.talkhome-dm-avatar,
+.talkhome-friend-avatar {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #4f7cff;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.talkhome-friend-avatar {
+  width: 38px;
+  height: 38px;
+  font-size: 15px;
+}
+
+.talkhome-dm-avatar img,
+.talkhome-friend-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.talkhome-dm-dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #6b7080;
+  border: 2.5px solid #14161c;
+}
+
+.talkhome-friend-avatar .talkhome-dm-dot {
+  border-color: #1c1f28;
+}
+
+.talkhome-dm-dot-online {
+  background: #3ba55c;
+}
+
+.talkhome-dm-name {
+  font-size: 13px;
+  color: #dcddde;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.talkhome-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #23262f;
+  border-right: 1px solid #23262f;
+}
+
+.talkhome-main-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 48px;
+  flex-shrink: 0;
+  padding: 0 16px;
+  border-bottom: 1px solid #23262f;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.talkhome-main-header-title {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.talkhome-tabbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  padding-left: 14px;
+  border-left: 1px solid #3a3f4e;
+}
+
+.talkhome-tab {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #9aa1b3;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.talkhome-tab:hover {
+  color: #e6e8ee;
+}
+
+.talkhome-tab-active {
+  background: #23262f;
+  color: #e6e8ee;
+}
+
+.talkhome-tab-add {
+  margin-left: 4px;
+  color: #3ba55c;
+}
+
+.talkhome-tab-add.talkhome-tab-active {
+  background: #3ba55c;
+  color: #fff;
+}
+
+.talkhome-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 16px 16px;
+}
+
+.talkhome-list-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9aa1b3;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 14px 6px 6px;
+}
+
+.talkhome-friend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 6px;
+  border-radius: 6px;
+  border-top: 1px solid #23262f;
+}
+
+.talkhome-friend-row:hover {
+  background: #23262f;
+}
+
+.talkhome-friend-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.talkhome-friend-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e6e8ee;
+}
+
+.talkhome-friend-status {
+  font-size: 12px;
+  color: #8b909c;
+}
+
+.talkhome-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  color: #8b909c;
+}
+
+.talkhome-empty-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #e6e8ee;
+  margin-bottom: 6px;
+}
+
+.talkhome-empty p {
+  max-width: 320px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.talkhome-add {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 40px;
+  gap: 12px;
+}
+
+.talkhome-add h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #e6e8ee;
+}
+
+.talkhome-add p {
+  max-width: 420px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #9aa1b3;
+  margin: 0;
+}
+
+.talkhome-activity {
+  width: 300px;
+  flex-shrink: 0;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.talkhome-activity h3 {
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9aa1b3;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.talkhome-activity-empty {
+  border: 1px dashed #2a2e3a;
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.talkhome-activity-empty-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #9aa1b3;
+  margin-bottom: 6px;
+}
+
+.talkhome-activity-empty p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #6b7080;
+}
+
+@media (max-width: 1100px) {
+  .talkhome-activity {
+    display: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .talkhome-nav {
+    width: 200px;
+  }
 }
 
 /* ---- Kanal Ayarlari (tam ekran) ---- */

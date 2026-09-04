@@ -7896,7 +7896,7 @@ function generateUUID() {
   const uuid = _lut[d0 & 255] + _lut[d0 >> 8 & 255] + _lut[d0 >> 16 & 255] + _lut[d0 >> 24 & 255] + "-" + _lut[d1 & 255] + _lut[d1 >> 8 & 255] + "-" + _lut[d1 >> 16 & 15 | 64] + _lut[d1 >> 24 & 255] + "-" + _lut[d2 & 63 | 128] + _lut[d2 >> 8 & 255] + "-" + _lut[d2 >> 16 & 255] + _lut[d2 >> 24 & 255] + _lut[d3 & 255] + _lut[d3 >> 8 & 255] + _lut[d3 >> 16 & 255] + _lut[d3 >> 24 & 255];
   return uuid.toLowerCase();
 }
-function clamp$2(value2, min, max) {
+function clamp$3(value2, min, max) {
   return Math.max(min, Math.min(max, value2));
 }
 function euclideanModulo(n3, m2) {
@@ -8060,7 +8060,7 @@ const MathUtils = {
    * @param {number} max - The max value.
    * @return {number} The clamped value.
    */
-  clamp: clamp$2,
+  clamp: clamp$3,
   /**
    * Computes the Euclidean modulo of the given parameters that
    * is `( ( n % m ) + m ) % m`.
@@ -8585,8 +8585,8 @@ class Vector2 {
    * @return {Vector2} A reference to this vector.
    */
   clamp(min, max) {
-    this.x = clamp$2(this.x, min.x, max.x);
-    this.y = clamp$2(this.y, min.y, max.y);
+    this.x = clamp$3(this.x, min.x, max.x);
+    this.y = clamp$3(this.y, min.y, max.y);
     return this;
   }
   /**
@@ -8600,8 +8600,8 @@ class Vector2 {
    * @return {Vector2} A reference to this vector.
    */
   clampScalar(minVal, maxVal) {
-    this.x = clamp$2(this.x, minVal, maxVal);
-    this.y = clamp$2(this.y, minVal, maxVal);
+    this.x = clamp$3(this.x, minVal, maxVal);
+    this.y = clamp$3(this.y, minVal, maxVal);
     return this;
   }
   /**
@@ -8616,7 +8616,7 @@ class Vector2 {
    */
   clampLength(min, max) {
     const length = this.length();
-    return this.divideScalar(length || 1).multiplyScalar(clamp$2(length, min, max));
+    return this.divideScalar(length || 1).multiplyScalar(clamp$3(length, min, max));
   }
   /**
    * The components of this vector are rounded down to the nearest integer value.
@@ -8741,7 +8741,7 @@ class Vector2 {
     const denominator = Math.sqrt(this.lengthSq() * v2.lengthSq());
     if (denominator === 0) return Math.PI / 2;
     const theta = this.dot(v2) / denominator;
-    return Math.acos(clamp$2(theta, -1, 1));
+    return Math.acos(clamp$3(theta, -1, 1));
   }
   /**
    * Computes the distance from the given vector to this instance.
@@ -9228,7 +9228,7 @@ class Quaternion {
    * @return {number} The angle in radians.
    */
   angleTo(q) {
-    return 2 * Math.acos(Math.abs(clamp$2(this.dot(q), -1, 1)));
+    return 2 * Math.acos(Math.abs(clamp$3(this.dot(q), -1, 1)));
   }
   /**
    * Rotates this quaternion by a given angular step to the given quaternion.
@@ -9932,9 +9932,9 @@ class Vector3 {
    * @return {Vector3} A reference to this vector.
    */
   clamp(min, max) {
-    this.x = clamp$2(this.x, min.x, max.x);
-    this.y = clamp$2(this.y, min.y, max.y);
-    this.z = clamp$2(this.z, min.z, max.z);
+    this.x = clamp$3(this.x, min.x, max.x);
+    this.y = clamp$3(this.y, min.y, max.y);
+    this.z = clamp$3(this.z, min.z, max.z);
     return this;
   }
   /**
@@ -9948,9 +9948,9 @@ class Vector3 {
    * @return {Vector3} A reference to this vector.
    */
   clampScalar(minVal, maxVal) {
-    this.x = clamp$2(this.x, minVal, maxVal);
-    this.y = clamp$2(this.y, minVal, maxVal);
-    this.z = clamp$2(this.z, minVal, maxVal);
+    this.x = clamp$3(this.x, minVal, maxVal);
+    this.y = clamp$3(this.y, minVal, maxVal);
+    this.z = clamp$3(this.z, minVal, maxVal);
     return this;
   }
   /**
@@ -9965,7 +9965,7 @@ class Vector3 {
    */
   clampLength(min, max) {
     const length = this.length();
-    return this.divideScalar(length || 1).multiplyScalar(clamp$2(length, min, max));
+    return this.divideScalar(length || 1).multiplyScalar(clamp$3(length, min, max));
   }
   /**
    * The components of this vector are rounded down to the nearest integer value.
@@ -10175,7 +10175,7 @@ class Vector3 {
     const denominator = Math.sqrt(this.lengthSq() * v2.lengthSq());
     if (denominator === 0) return Math.PI / 2;
     const theta = this.dot(v2) / denominator;
-    return Math.acos(clamp$2(theta, -1, 1));
+    return Math.acos(clamp$3(theta, -1, 1));
   }
   /**
    * Computes the distance from the given vector to this instance.
@@ -11992,10 +11992,10 @@ class Vector4 {
    * @return {Vector4} A reference to this vector.
    */
   clamp(min, max) {
-    this.x = clamp$2(this.x, min.x, max.x);
-    this.y = clamp$2(this.y, min.y, max.y);
-    this.z = clamp$2(this.z, min.z, max.z);
-    this.w = clamp$2(this.w, min.w, max.w);
+    this.x = clamp$3(this.x, min.x, max.x);
+    this.y = clamp$3(this.y, min.y, max.y);
+    this.z = clamp$3(this.z, min.z, max.z);
+    this.w = clamp$3(this.w, min.w, max.w);
     return this;
   }
   /**
@@ -12009,10 +12009,10 @@ class Vector4 {
    * @return {Vector4} A reference to this vector.
    */
   clampScalar(minVal, maxVal) {
-    this.x = clamp$2(this.x, minVal, maxVal);
-    this.y = clamp$2(this.y, minVal, maxVal);
-    this.z = clamp$2(this.z, minVal, maxVal);
-    this.w = clamp$2(this.w, minVal, maxVal);
+    this.x = clamp$3(this.x, minVal, maxVal);
+    this.y = clamp$3(this.y, minVal, maxVal);
+    this.z = clamp$3(this.z, minVal, maxVal);
+    this.w = clamp$3(this.w, minVal, maxVal);
     return this;
   }
   /**
@@ -12027,7 +12027,7 @@ class Vector4 {
    */
   clampLength(min, max) {
     const length = this.length();
-    return this.divideScalar(length || 1).multiplyScalar(clamp$2(length, min, max));
+    return this.divideScalar(length || 1).multiplyScalar(clamp$3(length, min, max));
   }
   /**
    * The components of this vector are rounded down to the nearest integer value.
@@ -13771,7 +13771,7 @@ class Euler {
     const m31 = te2[2], m32 = te2[6], m33 = te2[10];
     switch (order) {
       case "XYZ":
-        this._y = Math.asin(clamp$2(m13, -1, 1));
+        this._y = Math.asin(clamp$3(m13, -1, 1));
         if (Math.abs(m13) < 0.9999999) {
           this._x = Math.atan2(-m23, m33);
           this._z = Math.atan2(-m12, m11);
@@ -13781,7 +13781,7 @@ class Euler {
         }
         break;
       case "YXZ":
-        this._x = Math.asin(-clamp$2(m23, -1, 1));
+        this._x = Math.asin(-clamp$3(m23, -1, 1));
         if (Math.abs(m23) < 0.9999999) {
           this._y = Math.atan2(m13, m33);
           this._z = Math.atan2(m21, m22);
@@ -13791,7 +13791,7 @@ class Euler {
         }
         break;
       case "ZXY":
-        this._x = Math.asin(clamp$2(m32, -1, 1));
+        this._x = Math.asin(clamp$3(m32, -1, 1));
         if (Math.abs(m32) < 0.9999999) {
           this._y = Math.atan2(-m31, m33);
           this._z = Math.atan2(-m12, m22);
@@ -13801,7 +13801,7 @@ class Euler {
         }
         break;
       case "ZYX":
-        this._y = Math.asin(-clamp$2(m31, -1, 1));
+        this._y = Math.asin(-clamp$3(m31, -1, 1));
         if (Math.abs(m31) < 0.9999999) {
           this._x = Math.atan2(m32, m33);
           this._z = Math.atan2(m21, m11);
@@ -13811,7 +13811,7 @@ class Euler {
         }
         break;
       case "YZX":
-        this._z = Math.asin(clamp$2(m21, -1, 1));
+        this._z = Math.asin(clamp$3(m21, -1, 1));
         if (Math.abs(m21) < 0.9999999) {
           this._x = Math.atan2(-m23, m22);
           this._y = Math.atan2(-m31, m11);
@@ -13821,7 +13821,7 @@ class Euler {
         }
         break;
       case "XZY":
-        this._z = Math.asin(-clamp$2(m12, -1, 1));
+        this._z = Math.asin(-clamp$3(m12, -1, 1));
         if (Math.abs(m12) < 0.9999999) {
           this._x = Math.atan2(m32, m22);
           this._y = Math.atan2(m13, m11);
@@ -15447,8 +15447,8 @@ let Color$1 = class Color {
    */
   setHSL(h2, s2, l2, colorSpace = ColorManagement.workingColorSpace) {
     h2 = euclideanModulo(h2, 1);
-    s2 = clamp$2(s2, 0, 1);
-    l2 = clamp$2(l2, 0, 1);
+    s2 = clamp$3(s2, 0, 1);
+    l2 = clamp$3(l2, 0, 1);
     if (s2 === 0) {
       this.r = this.g = this.b = l2;
     } else {
@@ -15634,7 +15634,7 @@ let Color$1 = class Color {
    */
   getHex(colorSpace = SRGBColorSpace) {
     ColorManagement.workingToColorSpace(_color.copy(this), colorSpace);
-    return Math.round(clamp$2(_color.r * 255, 0, 255)) * 65536 + Math.round(clamp$2(_color.g * 255, 0, 255)) * 256 + Math.round(clamp$2(_color.b * 255, 0, 255));
+    return Math.round(clamp$3(_color.r * 255, 0, 255)) * 65536 + Math.round(clamp$3(_color.g * 255, 0, 255)) * 256 + Math.round(clamp$3(_color.b * 255, 0, 255));
   }
   /**
    * Returns the hexadecimal value of this color as a string (for example, 'FFFFFF').
@@ -16981,7 +16981,7 @@ function _generateTables() {
 }
 function toHalfFloat(val) {
   if (Math.abs(val) > 65504) warn("DataUtils.toHalfFloat(): Value out of range.");
-  val = clamp$2(val, -65504, 65504);
+  val = clamp$3(val, -65504, 65504);
   _tables.floatView[0] = val;
   const f2 = _tables.uint32View[0];
   const e2 = f2 >> 23 & 511;
@@ -22141,13 +22141,13 @@ class Curve {
       vec.crossVectors(tangents[i3 - 1], tangents[i3]);
       if (vec.length() > Number.EPSILON) {
         vec.normalize();
-        const theta = Math.acos(clamp$2(tangents[i3 - 1].dot(tangents[i3]), -1, 1));
+        const theta = Math.acos(clamp$3(tangents[i3 - 1].dot(tangents[i3]), -1, 1));
         normals[i3].applyMatrix4(mat2.makeRotationAxis(vec, theta));
       }
       binormals[i3].crossVectors(tangents[i3], normals[i3]);
     }
     if (closed === true) {
-      let theta = Math.acos(clamp$2(normals[0].dot(normals[segments]), -1, 1));
+      let theta = Math.acos(clamp$3(normals[0].dot(normals[segments]), -1, 1));
       theta /= segments;
       if (tangents[0].dot(vec.crossVectors(normals[0], normals[segments])) > 0) {
         theta = -theta;
@@ -24428,7 +24428,7 @@ class MeshPhysicalMaterial extends MeshStandardMaterial {
     this.ior = 1.5;
     Object.defineProperty(this, "reflectivity", {
       get: function() {
-        return clamp$2(2.5 * (this.ior - 1) / (this.ior + 1), 0, 1);
+        return clamp$3(2.5 * (this.ior - 1) / (this.ior + 1), 0, 1);
       },
       set: function(reflectivity) {
         this.ior = (1 + 0.4 * reflectivity) / (1 - 0.4 * reflectivity);
@@ -29591,7 +29591,7 @@ class Spherical {
    */
   makeSafe() {
     const EPS = 1e-6;
-    this.phi = clamp$2(this.phi, EPS, Math.PI - EPS);
+    this.phi = clamp$3(this.phi, EPS, Math.PI - EPS);
     return this;
   }
   /**
@@ -29619,7 +29619,7 @@ class Spherical {
       this.phi = 0;
     } else {
       this.theta = Math.atan2(x2, z2);
-      this.phi = Math.acos(clamp$2(y3 / this.radius, -1, 1));
+      this.phi = Math.acos(clamp$3(y3 / this.radius, -1, 1));
     }
     return this;
   }
@@ -41120,7 +41120,7 @@ const debounce = (fn, ms) => {
     }, ms);
   };
 };
-const clamp$1 = (value2, lowerLimit, upperLimit) => Math.max(lowerLimit, Math.min(upperLimit, value2));
+const clamp$2 = (value2, lowerLimit, upperLimit) => Math.max(lowerLimit, Math.min(upperLimit, value2));
 const isDebugMode = (() => {
   const debugQueryParameterName = "model-viewer-debug-mode";
   const debugQueryParameter = new RegExp(`[?&]${debugQueryParameterName}(&|$)`);
@@ -41216,7 +41216,7 @@ const EnvironmentMixin = (ModelViewerElement2) => {
       }
       const updateEnvProgress = this[$progressTracker].beginActivity("environment-update");
       try {
-        const { environmentMap, skybox } = await textureUtils.generateEnvironmentMapAndSkybox(deserializeUrl(skyboxImage), environmentImage, (progress) => updateEnvProgress(clamp$1(progress, 0, 1)), this.withCredentials);
+        const { environmentMap, skybox } = await textureUtils.generateEnvironmentMapAndSkybox(deserializeUrl(skyboxImage), environmentImage, (progress) => updateEnvProgress(clamp$2(progress, 0, 1)), this.withCredentials);
         if (this[$currentEnvironmentMap] !== environmentMap) {
           this[$currentEnvironmentMap] = environmentMap;
           this.dispatchEvent(new CustomEvent("environment-change"));
@@ -49658,7 +49658,7 @@ const sequence = (tracks, weights) => {
   const cumulativeSum = ((sum) => (value2) => sum += value2);
   const times = weights.map(cumulativeSum(0));
   return (time) => {
-    time = clamp$1(time, 0, 1);
+    time = clamp$2(time, 0, 1);
     time *= times[times.length - 1];
     const i3 = times.findIndex((val) => val >= time);
     const start2 = i3 < 1 ? 0 : times[i3 - 1];
@@ -50679,12 +50679,12 @@ class SmoothControls extends EventDispatcher {
   setOrbit(goalTheta = this.goalSpherical.theta, goalPhi = this.goalSpherical.phi, goalRadius = this.goalSpherical.radius) {
     const { minimumAzimuthalAngle, maximumAzimuthalAngle, minimumPolarAngle, maximumPolarAngle, minimumRadius, maximumRadius } = this._options;
     const { theta, phi, radius } = this.goalSpherical;
-    const nextTheta = clamp$1(goalTheta, minimumAzimuthalAngle, maximumAzimuthalAngle);
+    const nextTheta = clamp$2(goalTheta, minimumAzimuthalAngle, maximumAzimuthalAngle);
     if (!isFinite(minimumAzimuthalAngle) && !isFinite(maximumAzimuthalAngle)) {
       this.spherical.theta = this.wrapAngle(this.spherical.theta - nextTheta) + nextTheta;
     }
-    const nextPhi = clamp$1(goalPhi, minimumPolarAngle, maximumPolarAngle);
-    const nextRadius = clamp$1(goalRadius, minimumRadius, maximumRadius);
+    const nextPhi = clamp$2(goalPhi, minimumPolarAngle, maximumPolarAngle);
+    const nextRadius = clamp$2(goalRadius, minimumRadius, maximumRadius);
     if (nextTheta === theta && nextPhi === phi && nextRadius === radius) {
       return false;
     }
@@ -50709,7 +50709,7 @@ class SmoothControls extends EventDispatcher {
    */
   setFieldOfView(fov2) {
     const { minimumFieldOfView, maximumFieldOfView } = this._options;
-    fov2 = clamp$1(fov2, minimumFieldOfView, maximumFieldOfView);
+    fov2 = clamp$2(fov2, minimumFieldOfView, maximumFieldOfView);
     this.goalLogFov = Math.log(fov2);
   }
   /**
@@ -50733,7 +50733,7 @@ class SmoothControls extends EventDispatcher {
     const { minimumRadius, maximumRadius, minimumFieldOfView, maximumFieldOfView } = this._options;
     const dTheta = this.spherical.theta - theta;
     const dThetaLimit = Math.PI - 1e-3;
-    const goalTheta = theta - clamp$1(deltaTheta, -dThetaLimit - dTheta, dThetaLimit - dTheta);
+    const goalTheta = theta - clamp$2(deltaTheta, -dThetaLimit - dTheta, dThetaLimit - dTheta);
     const goalPhi = phi - deltaPhi;
     const deltaRatio = deltaZoom === 0 ? 0 : ((deltaZoom > 0 ? maximumRadius : minimumRadius) - radius) / (Math.log(deltaZoom > 0 ? maximumFieldOfView : minimumFieldOfView) - this.goalLogFov);
     const goalRadius = radius + deltaZoom * (isFinite(deltaRatio) ? deltaRatio : (maximumRadius - minimumRadius) * 2);
@@ -54433,7 +54433,7 @@ class Renderer extends EventDispatcher {
   }
   updateRendererScale(delta) {
     const scaleStep = this.scaleStep;
-    this.avgFrameDuration += clamp$1(DURATION_DECAY * (delta - this.avgFrameDuration), -MAX_AVG_CHANGE_MS, MAX_AVG_CHANGE_MS);
+    this.avgFrameDuration += clamp$2(DURATION_DECAY * (delta - this.avgFrameDuration), -MAX_AVG_CHANGE_MS, MAX_AVG_CHANGE_MS);
     if (this.avgFrameDuration > HIGH_FRAME_DURATION_MS) {
       ++this.scaleStep;
     } else if (this.avgFrameDuration < LOW_FRAME_DURATION_MS && this.scaleStep > 0) {
@@ -58054,7 +58054,7 @@ class ProgressTracker extends EventTarget {
     }
     return (progress) => {
       let nextProgress;
-      nextProgress = Math.max(clamp$1(progress, 0, 1), activity.progress);
+      nextProgress = Math.max(clamp$2(progress, 0, 1), activity.progress);
       if (nextProgress !== activity.progress) {
         this.announceTotalProgress(activity, nextProgress, reason);
       }
@@ -58547,7 +58547,7 @@ loaded: ${this.loaded}`);
     scene.stopAnimation();
     const updateSourceProgress = this[$progressTracker].beginActivity("model-load");
     try {
-      const srcUpdated = scene.setSource(source, extraUrlsList, (progress) => updateSourceProgress(clamp$1(progress, 0, 1) * 0.95));
+      const srcUpdated = scene.setSource(source, extraUrlsList, (progress) => updateSourceProgress(clamp$2(progress, 0, 1) * 0.95));
       const envUpdated = this[$updateEnvironment]();
       await Promise.all([srcUpdated, envUpdated]);
       const extraModels2 = Array.from(this.querySelectorAll("extra-model"));
@@ -64036,7 +64036,7 @@ function getFitViewNodes(nodeLookup, options) {
   });
   return fitViewNodes;
 }
-async function fitViewport({ nodes, width, height, panZoom, minZoom, maxZoom }, options) {
+async function fitViewport$1({ nodes, width, height, panZoom, minZoom, maxZoom }, options) {
   if (nodes.size === 0) {
     return true;
   }
@@ -64124,10 +64124,10 @@ async function getElementsToRemove({ nodesToRemove = [], edgesToRemove = [], nod
   }
   return onBeforeDeleteResult;
 }
-const clamp = (val, min = 0, max = 1) => Math.min(Math.max(val, min), max);
+const clamp$1 = (val, min = 0, max = 1) => Math.min(Math.max(val, min), max);
 const clampPosition = (position = { x: 0, y: 0 }, extent, dimensions) => ({
-  x: clamp(position.x, extent[0][0], extent[1][0] - (dimensions?.width ?? 0)),
-  y: clamp(position.y, extent[0][1], extent[1][1] - (dimensions?.height ?? 0))
+  x: clamp$1(position.x, extent[0][0], extent[1][0] - (dimensions?.width ?? 0)),
+  y: clamp$1(position.y, extent[0][1], extent[1][1] - (dimensions?.height ?? 0))
 });
 function clampPositionToParent(childPosition, childDimensions, parent) {
   const { width: parentWidth, height: parentHeight } = getNodeDimensions(parent);
@@ -64139,9 +64139,9 @@ function clampPositionToParent(childPosition, childDimensions, parent) {
 }
 const calcAutoPanVelocity = (value2, min, max) => {
   if (value2 < min) {
-    return clamp(Math.abs(value2 - min), 1, min) / min;
+    return clamp$1(Math.abs(value2 - min), 1, min) / min;
   } else if (value2 > max) {
-    return -clamp(Math.abs(value2 - max), 1, min) / min;
+    return -clamp$1(Math.abs(value2 - max), 1, min) / min;
   }
   return 0;
 };
@@ -64274,7 +64274,7 @@ const getViewportForBounds = (bounds, width, height, minZoom, maxZoom, padding) 
   const xZoom = (width - p2.x) / bounds.width;
   const yZoom = (height - p2.y) / bounds.height;
   const zoom2 = Math.min(xZoom, yZoom);
-  const clampedZoom = clamp(zoom2, minZoom, maxZoom);
+  const clampedZoom = clamp$1(zoom2, minZoom, maxZoom);
   const boundsCenterX = bounds.x + bounds.width / 2;
   const boundsCenterY = bounds.y + bounds.height / 2;
   const x2 = width / 2 - boundsCenterX * clampedZoom;
@@ -65972,7 +65972,7 @@ function XYPanZoom({ domNode, minZoom, maxZoom, translateExtent, viewport, onPan
   setViewportConstrained({
     x: viewport.x,
     y: viewport.y,
-    zoom: clamp(viewport.zoom, minZoom, maxZoom)
+    zoom: clamp$1(viewport.zoom, minZoom, maxZoom)
   }, [
     [0, 0],
     [bbox.width, bbox.height]
@@ -69169,7 +69169,7 @@ const createStore = ({ nodes, edges, defaultNodes, defaultEdges, width, height, 
     if (!panZoom) {
       return;
     }
-    await fitViewport({
+    await fitViewport$1({
       nodes: nodeLookup,
       width: width2,
       height: height2,
@@ -70165,7 +70165,7 @@ function ImageLightbox({ imageDataUrl, label, onClose, onUseAsImageUpload }) {
   );
 }
 const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/webp"];
-function fileToDataUrl(file) {
+function fileToDataUrl$1(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
@@ -70181,7 +70181,7 @@ function ImageUploadNode({ id: id2, data }) {
   const previewUrl = useImageThumbnail(data?.imageDataUrl);
   async function loadFile(file) {
     if (!file || !ACCEPTED_TYPES.includes(file.type)) return;
-    const imageDataUrl = await fileToDataUrl(file);
+    const imageDataUrl = await fileToDataUrl$1(file);
     patch({ imageDataUrl, fileName: file.name });
   }
   async function handleFile(e2) {
@@ -71411,7 +71411,7 @@ function NodeSearchMenu({ x: x2, y: y3, catalog, onSelect, onClose }) {
     ] })
   ] });
 }
-function formatRelativeTime$1(timestamp) {
+function formatRelativeTime$2(timestamp) {
   const diffMs = Date.now() - timestamp;
   const minute = 60 * 1e3;
   const hour = 60 * minute;
@@ -71537,7 +71537,7 @@ function ProjectsScreen({ onOpenProject, onBackToHub }) {
           ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-card-name", children: project.name }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card-date", children: [
             "düzenlendi: ",
-            formatRelativeTime$1(project.updatedAt)
+            formatRelativeTime$2(project.updatedAt)
           ] })
         ] })
       ] }, project.id);
@@ -71633,11 +71633,11 @@ const APPS = {
   ref: {
     icon: { img: noblerefLogo },
     title: "NobleRef",
-    desc: "PureRef benzeri, sonsuz tuvalli referans görsel panosu",
+    desc: "PureRef tarzı, her zaman üstte duran sonsuz tuvalli referans görsel panosu",
     features: [
-      { icon: "🖼️", tag: "YAKINDA", tagColor: "#9aa1b3", title: "Referans panosu geliyor", url: null },
-      { icon: "📌", tag: "YAKINDA", tagColor: "#9aa1b3", title: "Her zaman üstte kalma modu", url: null },
-      { icon: "🗂️", tag: "YAKINDA", tagColor: "#9aa1b3", title: "Pano projelerini kaydet", url: null }
+      { icon: "🖼️", tag: "ÖZELLİK", tagColor: "#4f7cff", title: "Sürükle-bırak / yapıştır, taşı, ölçekle, döndür, kırp", url: null },
+      { icon: "📌", tag: "ÖZELLİK", tagColor: "#6fcf97", title: "Ayrı pencere: her zaman üstte, şeffaf, fareye geçirgen", url: null },
+      { icon: "🗂️", tag: "ÖZELLİK", tagColor: "#d99a3c", title: "Panolar .nref dosyası olarak bilgisayarında", url: null }
     ]
   }
 };
@@ -76080,7 +76080,7 @@ function useModalClose(open, onClose) {
   }
   return { visible, closing, requestClose };
 }
-function formatRelativeTime(timestamp) {
+function formatRelativeTime$1(timestamp) {
   if (!timestamp) return "Bilinmeyen";
   const diffMs = Date.now() - timestamp;
   const minute = 60 * 1e3;
@@ -76339,8 +76339,8 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
                       m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-role", children: "Sahip" })
                     ] })
                   ] }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime(m2.joined_at) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime(m2.user_created_at) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime$1(m2.joined_at) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime$1(m2.user_created_at) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: m2.role === "owner" ? "Sunucuyu Oluşturdu" : "Davet Kodu" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: (m2.roles || []).length === 0 ? "—" : m2.roles.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", style: r2.color ? { color: r2.color } : void 0, children: r2.name }, r2.id)) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: canManageRoles && /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -78830,7 +78830,7 @@ function formatTypingLabel(users) {
 }
 const BROADCAST_MENTIONS = /* @__PURE__ */ new Set(["everyone", "here"]);
 const URL_RE = /(https?:\/\/[^\s]+)/g;
-function extractUrls(content) {
+function extractUrls$1(content) {
   const matches = content.match(URL_RE) || [];
   return [...new Set(matches)];
 }
@@ -79863,7 +79863,7 @@ function NobleCoreView({
                               children: renderMessageContent(m2.content, members, user.id)
                             }
                           ),
-                          extractUrls(m2.content || "").slice(0, 3).map((url2) => /* @__PURE__ */ jsxRuntimeExports.jsx(LinkPreviewCard, { url: url2, token }, url2)),
+                          extractUrls$1(m2.content || "").slice(0, 3).map((url2) => /* @__PURE__ */ jsxRuntimeExports.jsx(LinkPreviewCard, { url: url2, token }, url2)),
                           m2.attachment_url && /* @__PURE__ */ jsxRuntimeExports.jsx(
                             "img",
                             {
@@ -80237,6 +80237,87 @@ function NobleCoreView({
     ] }) })
   ] });
 }
+function NobleTalkHome({ user, friends, onlineFriendIds, onBack, onOpenAddServer }) {
+  const [tab, setTab] = reactExports.useState("online");
+  const [query, setQuery] = reactExports.useState("");
+  const filtered = reactExports.useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return friends.filter((f2) => !q || f2.username.toLowerCase().includes(q));
+  }, [friends, query]);
+  const online = filtered.filter((f2) => onlineFriendIds.has(f2.id)).sort((a2, b2) => a2.username.localeCompare(b2.username, "tr"));
+  filtered.filter((f2) => !onlineFriendIds.has(f2.id)).sort((a2, b2) => a2.username.localeCompare(b2.username, "tr"));
+  const visible = tab === "online" ? online : filtered.sort((a2, b2) => a2.username.localeCompare(b2.username, "tr"));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-nav", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "talkhome-back", onClick: onBack, children: "‹ Hub" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-search-wrap", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          className: "talkhome-search",
+          placeholder: "Arkadaş bul ya da ara",
+          value: query,
+          onChange: (e2) => setQuery(e2.target.value)
+        }
+      ) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "talkhome-nav-item talkhome-nav-item-active", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "talkhome-nav-icon", children: "👥" }),
+        " Arkadaşlar"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-nav-label", children: "DİREKT MESAJLAR" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-dm-list", children: [
+        friends.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-nav-empty", children: "Henüz ortak sunucun olan biri yok." }),
+        friends.map((f2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-dm-row", title: "Direkt mesajlaşma NobleCore'a henüz eklenmedi", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "talkhome-dm-avatar", children: [
+            f2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: f2.avatar_url, alt: "" }) : f2.username[0].toUpperCase(),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `talkhome-dm-dot${onlineFriendIds.has(f2.id) ? " talkhome-dm-dot-online" : ""}` })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "talkhome-dm-name", children: f2.username })
+        ] }, f2.id))
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-main", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-main-header", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "talkhome-main-header-icon", children: "👥" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "talkhome-main-header-title", children: "Arkadaşlar" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-tabbar", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `talkhome-tab${tab === "online" ? " talkhome-tab-active" : ""}`, onClick: () => setTab("online"), children: "Çevrimiçi" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `talkhome-tab${tab === "all" ? " talkhome-tab-active" : ""}`, onClick: () => setTab("all"), children: "Tümü" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `talkhome-tab talkhome-tab-add${tab === "add" ? " talkhome-tab-active" : ""}`, onClick: () => setTab("add"), children: "Arkadaş Ekle" })
+        ] })
+      ] }),
+      tab === "add" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-add", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: `NobleCore'da "arkadaş" nasıl işler?` }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: `NobleCore'da henüz ayrı bir arkadaşlık isteği sistemi yok — bir sunucuyu paylaştığın herkes burada "Arkadaşlar" listende görünür. Yeni biriyle bağlantı kurmak için ortak bir sunucuda buluşun: kendi sunucunu oluştur ya da bir davet koduyla katıl.` }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: onOpenAddServer, children: "+ Sunucu Oluştur veya Katıl" })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-list", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-list-header", children: tab === "online" ? `ÇEVRİMİÇİ — ${online.length}` : `TÜMÜ — ${filtered.length}` }),
+        visible.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-empty", children: friends.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-empty-title", children: "Henüz kimse yok" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Bir sunucuya katıldığında ya da birini davet ettiğinde arkadaşların burada listelenir." })
+        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-empty-title", children: "Eşleşen kimse yok" }) }) : visible.map((f2) => {
+          const isOnline = onlineFriendIds.has(f2.id);
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-friend-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "talkhome-friend-avatar", children: [
+              f2.avatar_url ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: f2.avatar_url, alt: "" }) : f2.username[0].toUpperCase(),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `talkhome-dm-dot${isOnline ? " talkhome-dm-dot-online" : ""}` })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "talkhome-friend-info", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "talkhome-friend-name", children: f2.username }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "talkhome-friend-status", children: isOnline ? "Çevrimiçi" : "Çevrimdışı" })
+            ] })
+          ] }, f2.id);
+        })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-activity", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Şimdi Aktif" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "talkhome-activity-empty", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "talkhome-activity-empty-title", children: "Burası şimdilik sessiz..." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Bir arkadaşın bir oyun oynamaya ya da sesli kanala katılmaya başladığında burada göstereceğiz." })
+      ] })
+    ] })
+  ] });
+}
 function ScreenShareIcon() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "2", y: "3", width: "15", height: "15", rx: "3" }),
@@ -80588,8 +80669,9 @@ function useNobleCoreConnection(token) {
     handleLeaveVoice
   };
 }
-function HubScreen({ onOpenStudio, onOpenBoard }) {
+function HubScreen({ onOpenStudio, onOpenBoard, onOpenRef }) {
   const [activeApp, setActiveApp] = reactExports.useState("hub");
+  const [showTalkHome, setShowTalkHome] = reactExports.useState(false);
   const [nobleCoreToken, setNobleCoreTokenState] = reactExports.useState(null);
   const [nobleCoreUser, setNobleCoreUser] = reactExports.useState(null);
   const [nobleCoreServers, setNobleCoreServers] = reactExports.useState([]);
@@ -80750,7 +80832,8 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
   const app = mergeHubContent(APPS[activeApp], hubContent[activeApp]);
   function handleOpen() {
     if (activeApp === "board") onOpenBoard();
-    else if (activeApp === "ref") return;
+    else if (activeApp === "ref") onOpenRef();
+    else if (activeApp === "hub") setShowTalkHome(true);
     else onOpenStudio();
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher", children: [
@@ -80763,6 +80846,7 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
             onClick: () => {
               setActiveServerId(null);
               setActiveApp("hub");
+              setShowTalkHome(false);
             },
             title: "Hub",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(AppIcon, { icon: APPS.hub.icon, className: "launcher-rail-brand-icon" })
@@ -80819,6 +80903,15 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
           onJoinVoice: connection.handleJoinVoice,
           onLeaveVoice: connection.handleLeaveVoice
         }
+      ) : showTalkHome ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+        NobleTalkHome,
+        {
+          user: nobleCoreUser,
+          friends,
+          onlineFriendIds,
+          onBack: () => setShowTalkHome(false),
+          onOpenAddServer: handleAddServerClick
+        }
       ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-topbar", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-tabs", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -80860,7 +80953,7 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-fade" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-side-art-footer", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: handleOpen, disabled: activeApp === "ref", children: activeApp === "ref" ? "Yakında" : activeApp === "board" ? "NobleTask" : "AI Studio" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: handleOpen, children: activeApp === "ref" ? "NobleRef" : activeApp === "board" ? "NobleTask" : activeApp === "hub" ? "NobleTalk" : "AI Studio" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-version", children: "Sürüm: 1.0.0" })
             ] })
           ] }),
@@ -80904,7 +80997,7 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
           ] })
         ] })
       ] }) }),
-      !activeServer && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-sidebar", children: [
+      !activeServer && !showTalkHome && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-sidebar", children: [
         nobleCoreToken ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "friends-panel-header", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "friends-panel-icon-btn", disabled: true, title: "Yakında", children: "👤+" }),
@@ -81062,7 +81155,7 @@ const AVATAR_COLORS = [
   "#36B37E",
   "#0065FF"
 ];
-function uid(prefix = "id") {
+function uid$1(prefix = "id") {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 function colorForName(name = "") {
@@ -81104,7 +81197,7 @@ function createProject({ name, key, type = "scrum", lead }) {
   const now2 = Date.now();
   const leadMember = { id: lead?.id || "me", name: lead?.name || "Kullanıcı", avatarUrl: lead?.avatarUrl || null, color: colorForName(lead?.name || "Kullanıcı") };
   return {
-    id: uid("tp"),
+    id: uid$1("tp"),
     key,
     name,
     type,
@@ -81136,7 +81229,7 @@ function createIssue(project, fields, reporterId) {
   const number = project.issueCounter + 1;
   return {
     issue: {
-      id: uid("is"),
+      id: uid$1("is"),
       key: `${project.key}-${number}`,
       number,
       type: fields.type || "task",
@@ -81324,7 +81417,7 @@ const Icon = {
     /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3 10h18M8 3v4M16 3v4" })
   ] })
 };
-function Modal({ title, onClose, children: children2, width = 560, className = "", footer, headerExtra }) {
+function Modal$1({ title, onClose, children: children2, width = 560, className = "", footer, headerExtra }) {
   reactExports.useEffect(() => {
     function onKey(e2) {
       if (e2.key === "Escape") onClose?.();
@@ -81684,7 +81777,7 @@ function LabelsEditor({ value: value2 = [], onChange }) {
 }
 function ConfirmModal({ title, message, confirmLabel = "Sil", danger = true, onConfirm, onClose }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Modal,
+    Modal$1,
     {
       title,
       onClose,
@@ -81834,7 +81927,7 @@ function CreateIssueModal({ store, currentUser, defaults = {}, onClose, onCreate
     } else onClose();
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Modal,
+    Modal$1,
     {
       title: "İş kaydı oluştur",
       onClose,
@@ -82069,7 +82162,7 @@ function CreateProjectModal({ existingKeys, onClose, onCreate }) {
   }
   if (step === "template") {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      Modal,
+      Modal$1,
       {
         title: "Proje şablonu seç",
         onClose,
@@ -82091,7 +82184,7 @@ function CreateProjectModal({ existingKeys, onClose, onCreate }) {
     );
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Modal,
+    Modal$1,
     {
       title: "Proje ayrıntılarını ekle",
       onClose,
@@ -82172,7 +82265,7 @@ function useTaskProject(initialProject, currentUser) {
   }, []);
   const log2 = reactExports.useCallback(
     (p2, text) => ({
-      activity: [...p2.activity || [], { id: uid("act"), actorId: currentUser?.id || p2.leadId, text, createdAt: Date.now() }]
+      activity: [...p2.activity || [], { id: uid$1("act"), actorId: currentUser?.id || p2.leadId, text, createdAt: Date.now() }]
     }),
     [currentUser]
   );
@@ -82196,7 +82289,7 @@ function useTaskProject(initialProject, currentUser) {
       if (!trimmed) return;
       mutate((p2) => ({
         ...p2,
-        members: [...p2.members, { id: uid("m"), name: trimmed, avatarUrl: null, color: colorForName(trimmed) }],
+        members: [...p2.members, { id: uid$1("m"), name: trimmed, avatarUrl: null, color: colorForName(trimmed) }],
         ...log2(p2, `${trimmed} kişisini üyeliğe ekledi`)
       }));
     },
@@ -82223,7 +82316,7 @@ function useTaskProject(initialProject, currentUser) {
       if (!trimmed) return;
       mutate((p2) => {
         const doneIdx = p2.columns.findIndex((c2) => c2.category === "done");
-        const col = { id: uid("col"), name: trimmed.toUpperCase(), category: "inprogress" };
+        const col = { id: uid$1("col"), name: trimmed.toUpperCase(), category: "inprogress" };
         const cols = [...p2.columns];
         cols.splice(doneIdx === -1 ? cols.length : doneIdx, 0, col);
         return { ...p2, columns: cols, ...log2(p2, `"${col.name}" sütununu oluşturdu`) };
@@ -82356,13 +82449,13 @@ function useTaskProject(initialProject, currentUser) {
     (issueId, text, imageDataUrls = []) => {
       const trimmed = text.trim();
       if (!trimmed && imageDataUrls.length === 0) return;
-      const images = imageDataUrls.map((url2) => ({ id: uid("img"), url: url2 }));
+      const images = imageDataUrls.map((url2) => ({ id: uid$1("img"), url: url2 }));
       mutate((p2) => {
         const issue = p2.issues.find((i3) => i3.id === issueId);
         return {
           ...p2,
           issues: p2.issues.map(
-            (i3) => i3.id === issueId ? { ...i3, updatedAt: Date.now(), comments: [...i3.comments, { id: uid("c"), authorId: currentUser?.id || p2.leadId, text: trimmed, images, createdAt: Date.now() }] } : i3
+            (i3) => i3.id === issueId ? { ...i3, updatedAt: Date.now(), comments: [...i3.comments, { id: uid$1("c"), authorId: currentUser?.id || p2.leadId, text: trimmed, images, createdAt: Date.now() }] } : i3
           ),
           ...issue ? log2(p2, `${issue.key}'e ${images.length > 0 ? "görselli " : ""}yorum ekledi`) : {}
         };
@@ -82380,7 +82473,7 @@ function useTaskProject(initialProject, currentUser) {
   );
   const createSprint = reactExports.useCallback(
     () => mutate((p2) => {
-      const sprint = { id: uid("sp"), name: nextSprintName(p2), goal: "", state: "future", startDate: null, endDate: null, createdAt: Date.now() };
+      const sprint = { id: uid$1("sp"), name: nextSprintName(p2), goal: "", state: "future", startDate: null, endDate: null, createdAt: Date.now() };
       return { ...p2, sprints: [...p2.sprints, sprint], ...log2(p2, `${sprint.name} sprintini oluşturdu`) };
     }),
     [mutate, log2]
@@ -82403,7 +82496,7 @@ function useTaskProject(initialProject, currentUser) {
       let sprints = p2.sprints.map((s2) => s2.id === id2 ? { ...s2, state: "closed", completedAt: Date.now() } : s2);
       let targetId = moveTo === "backlog" ? null : moveTo;
       if (moveTo === "new") {
-        const ns = { id: uid("sp"), name: nextSprintName({ ...p2, sprints }), goal: "", state: "future", startDate: null, endDate: null, createdAt: Date.now() };
+        const ns = { id: uid$1("sp"), name: nextSprintName({ ...p2, sprints }), goal: "", state: "future", startDate: null, endDate: null, createdAt: Date.now() };
         sprints = [...sprints, ns];
         targetId = ns.id;
       }
@@ -82775,7 +82868,7 @@ function CompleteSprintModal({ store, sprint, onClose }) {
   const futureSprints = project.sprints.filter((s2) => s2.state === "future");
   const [moveTo, setMoveTo] = reactExports.useState(futureSprints[0]?.id || "new");
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Modal,
+    Modal$1,
     {
       title: `${sprint.name} sprintini tamamla`,
       onClose,
@@ -83090,7 +83183,7 @@ function StartSprintModal({ store, sprint, onClose }) {
     onClose();
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Modal,
+    Modal$1,
     {
       title: "Sprinti başlat",
       onClose,
@@ -83165,7 +83258,7 @@ function EditSprintModal({ store, sprint, onClose }) {
     onClose();
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Modal,
+    Modal$1,
     {
       title: "Sprinti düzenle",
       onClose,
@@ -83738,7 +83831,7 @@ function IssueModal({ store, issueId, currentUser, onClose, onOpenIssue, onCreat
     }
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Modal,
+    Modal$1,
     {
       onClose,
       width: 1e3,
@@ -84156,6 +84249,213 @@ function NobleTaskApp({ onBack }) {
       onBackToHub: onBack
     }
   );
+}
+function formatRelativeTime(timestamp) {
+  const diffMs = Date.now() - timestamp;
+  const minute = 60 * 1e3;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  if (diffMs < minute) return "az önce";
+  if (diffMs < hour) return `${Math.floor(diffMs / minute)} dakika önce`;
+  if (diffMs < day) return `${Math.floor(diffMs / hour)} saat önce`;
+  if (diffMs < 7 * day) return `${Math.floor(diffMs / day)} gün önce`;
+  return new Date(timestamp).toLocaleDateString("tr-TR");
+}
+function NobleRefProjectsScreen({ onBack }) {
+  const isWeb = window.api.nobleRef.capabilities?.osWindowControls === false;
+  const [projects, setProjects] = reactExports.useState([]);
+  const [loading2, setLoading] = reactExports.useState(true);
+  const [menuOpenId, setMenuOpenId] = reactExports.useState(null);
+  const [confirmDelete, setConfirmDelete] = reactExports.useState(null);
+  const [creating, setCreating] = reactExports.useState(false);
+  const [newName, setNewName] = reactExports.useState("");
+  const [renamingId, setRenamingId] = reactExports.useState(null);
+  const [nameDraft, setNameDraft] = reactExports.useState("");
+  const [error2, setError] = reactExports.useState(null);
+  async function refresh() {
+    try {
+      setProjects(await window.api.nobleRef.listProjects());
+    } finally {
+      setLoading(false);
+    }
+  }
+  reactExports.useEffect(() => {
+    refresh();
+    return window.api.nobleRef.onProjectsChanged(refresh);
+  }, []);
+  async function openProject(p2) {
+    setError(null);
+    try {
+      await window.api.nobleRef.openWindow(p2.id);
+    } catch (err2) {
+      setError(err2.message || String(err2));
+    }
+  }
+  async function createProject2() {
+    const name = newName.trim() || "İsimsiz Pano";
+    setCreating(false);
+    setNewName("");
+    try {
+      const meta = await window.api.nobleRef.createProject(name);
+      await refresh();
+      await window.api.nobleRef.openWindow(meta.id);
+    } catch (err2) {
+      setError(err2.message || String(err2));
+    }
+  }
+  async function importFile() {
+    setError(null);
+    try {
+      const meta = await window.api.nobleRef.importProjectFile();
+      if (meta) {
+        await refresh();
+        await window.api.nobleRef.openWindow(meta.id);
+      }
+    } catch (err2) {
+      setError(err2.message || String(err2));
+    }
+  }
+  async function commitRename(id2) {
+    const v2 = nameDraft.trim();
+    setRenamingId(null);
+    if (!v2) return;
+    await window.api.nobleRef.renameProject(id2, v2);
+    refresh();
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "projects-screen nr-projects", onClick: () => setMenuOpenId(null), children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "projects-topbar", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "toolbar-actions", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onBack, children: "← Hub" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toolbar-title", children: "NobleRef" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "toolbar-actions", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: importFile, children: "Dosya Aç… (.nref)" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: () => setCreating(true), children: "+ Yeni Pano" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "projects-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "Panolar" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "nr-projects-hint", children: isWeb ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        "Panolar bu tarayıcıda (cihaza özel) saklanır — hesaplar/cihazlar arası senkronize olmaz. Bir panoya tıklayınca yeni bir sekme/pencerede açılır; ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: '"her zaman üstte" ve "fareye şeffaf" gibi işletim sistemi seviyesindeki özellikler tarayıcı güvenliği yüzünden yalnızca masaüstü uygulamasında çalışır.' })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        "Her pano bilgisayarında bir ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: ".nref" }),
+        " dosyası olarak saklanır (varsayılan: Belgeler\\NobleRef). Bir panoya tıklayınca PureRef gibi ayrı, her zaman üstte kalabilen bir pencerede açılır."
+      ] }) }),
+      error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-projects-error", children: error2 })
+    ] }),
+    loading2 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Yükleniyor…" }) : projects.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "projects-empty", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Henüz bir panon yok." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: () => setCreating(true), children: "+ İlk Panoyu Oluştur" })
+    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "projects-grid", children: projects.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `project-card${p2.missing ? " nr-card-missing" : ""}`, onClick: () => !p2.missing && openProject(p2), title: p2.filePath, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-thumb", children: [
+        p2.thumbnail ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: p2.thumbnail, alt: p2.name }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-thumb-placeholder", children: "🖼️" }),
+        p2.missing && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-card-missing-badge", children: "Dosya bulunamadı" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            className: "project-menu-btn",
+            onClick: (e2) => {
+              e2.stopPropagation();
+              setMenuOpenId(menuOpenId === p2.id ? null : p2.id);
+            },
+            children: "⋮"
+          }
+        ),
+        menuOpenId === p2.id && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-menu", onClick: (e2) => e2.stopPropagation(), children: [
+          !p2.missing && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-item", onClick: () => {
+            setMenuOpenId(null);
+            openProject(p2);
+          }, children: "🪟 Aç" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-item", onClick: () => {
+            setMenuOpenId(null);
+            setRenamingId(p2.id);
+            setNameDraft(p2.name);
+          }, children: "✏️ Yeniden Adlandır" }),
+          !p2.missing && !isWeb && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-item", onClick: () => {
+            setMenuOpenId(null);
+            window.api.nobleRef.revealProject(p2.id);
+          }, children: "📁 Klasörde Göster" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-item project-menu-item-danger", onClick: () => {
+            setMenuOpenId(null);
+            setConfirmDelete({ id: p2.id, name: p2.name, missing: p2.missing });
+          }, children: "🗑️ Sil" })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card-footer", children: [
+        renamingId === p2.id ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            className: "project-rename-input",
+            autoFocus: true,
+            value: nameDraft,
+            onClick: (e2) => e2.stopPropagation(),
+            onChange: (e2) => setNameDraft(e2.target.value),
+            onBlur: () => commitRename(p2.id),
+            onKeyDown: (e2) => {
+              if (e2.key === "Enter") commitRename(p2.id);
+              if (e2.key === "Escape") setRenamingId(null);
+            }
+          }
+        ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-card-name", children: p2.name }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card-date", children: [
+          p2.itemCount || 0,
+          " öğe · ",
+          formatRelativeTime(p2.updatedAt)
+        ] })
+      ] })
+    ] }, p2.id)) }),
+    creating && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: () => setCreating(false), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal", onClick: (e2) => e2.stopPropagation(), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Yeni pano" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: isWeb ? "Pano bu tarayıcıya kaydedilecek ve yeni bir sekme/pencerede açılacak." : "Pano, Belgeler\\NobleRef klasörüne bir .nref dosyası olarak kaydedilecek ve ayrı bir pencerede açılacak." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          className: "project-rename-input nr-modal-input",
+          autoFocus: true,
+          placeholder: "Pano adı",
+          value: newName,
+          onChange: (e2) => setNewName(e2.target.value),
+          onKeyDown: (e2) => {
+            if (e2.key === "Enter") createProject2();
+            if (e2.key === "Escape") setCreating(false);
+          }
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => setCreating(false), children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: createProject2, children: "Oluştur ve Aç" })
+      ] })
+    ] }) }),
+    confirmDelete && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: () => setConfirmDelete(null), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal", onClick: (e2) => e2.stopPropagation(), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { children: [
+        '"',
+        confirmDelete.name,
+        '" silinsin mi?'
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "hint", children: isWeb ? "Bu işlem geri alınamaz." : "Panoyu listeden kaldırabilir ya da diskteki .nref dosyasını da silebilirsin. Dosya silme geri alınamaz." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => setConfirmDelete(null), children: "Vazgeç" }),
+        isWeb ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-danger-solid", onClick: async () => {
+          await window.api.nobleRef.deleteProject(confirmDelete.id, true);
+          setConfirmDelete(null);
+          refresh();
+        }, children: "Sil" }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: async () => {
+            await window.api.nobleRef.deleteProject(confirmDelete.id, false);
+            setConfirmDelete(null);
+            refresh();
+          }, children: "Sadece listeden kaldır" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-danger-solid", onClick: async () => {
+            await window.api.nobleRef.deleteProject(confirmDelete.id, true);
+            setConfirmDelete(null);
+            refresh();
+          }, children: "Dosyayı da sil" })
+        ] })
+      ] })
+    ] }) })
+  ] });
 }
 const nodeTypes = {
   imageUpload: ImageUploadNode,
@@ -84590,24 +84890,2583 @@ function App() {
   if (screen === "board") {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(NobleTaskApp, { onBack: () => setScreen("hub") });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(HubScreen, { onOpenStudio: () => setScreen("studio"), onOpenBoard: () => setScreen("board") });
+  if (screen === "ref") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(NobleRefProjectsScreen, { onBack: () => setScreen("hub") });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(HubScreen, { onOpenStudio: () => setScreen("studio"), onOpenBoard: () => setScreen("board"), onOpenRef: () => setScreen("ref") });
+}
+const HISTORY_LIMIT = 120;
+function useRefScene(initialScene) {
+  const [items, setItemsState] = reactExports.useState(initialScene.items || []);
+  const [canvas, setCanvasState] = reactExports.useState(initialScene.canvas);
+  const [selection2, setSelection] = reactExports.useState(() => /* @__PURE__ */ new Set());
+  const [dirty, setDirty] = reactExports.useState(false);
+  const pastRef = reactExports.useRef([]);
+  const futureRef = reactExports.useRef([]);
+  const itemsRef = reactExports.useRef(items);
+  itemsRef.current = items;
+  const previewBaseRef = reactExports.useRef(null);
+  const [historyVersion, setHistoryVersion] = reactExports.useState(0);
+  const pushHistory = reactExports.useCallback((snapshot) => {
+    pastRef.current.push(snapshot);
+    if (pastRef.current.length > HISTORY_LIMIT) pastRef.current.shift();
+    futureRef.current = [];
+    setHistoryVersion((v2) => v2 + 1);
+  }, []);
+  const commit = reactExports.useCallback(
+    (fn) => {
+      const cur = itemsRef.current;
+      const next = typeof fn === "function" ? fn(cur) : fn;
+      if (next === cur) return;
+      pushHistory(cur);
+      itemsRef.current = next;
+      setItemsState(next);
+      setDirty(true);
+    },
+    [pushHistory]
+  );
+  const preview = reactExports.useCallback((fn) => {
+    if (!previewBaseRef.current) previewBaseRef.current = itemsRef.current;
+    const next = typeof fn === "function" ? fn(itemsRef.current) : fn;
+    itemsRef.current = next;
+    setItemsState(next);
+  }, []);
+  const endPreview = reactExports.useCallback(() => {
+    const base = previewBaseRef.current;
+    previewBaseRef.current = null;
+    if (!base || base === itemsRef.current) return;
+    pushHistory(base);
+    setDirty(true);
+  }, [pushHistory]);
+  const cancelPreview = reactExports.useCallback(() => {
+    const base = previewBaseRef.current;
+    previewBaseRef.current = null;
+    if (!base) return;
+    itemsRef.current = base;
+    setItemsState(base);
+  }, []);
+  const undo = reactExports.useCallback(() => {
+    const prev = pastRef.current.pop();
+    if (!prev) return;
+    futureRef.current.push(itemsRef.current);
+    itemsRef.current = prev;
+    setItemsState(prev);
+    setDirty(true);
+    setHistoryVersion((v2) => v2 + 1);
+    setSelection((sel) => new Set([...sel].filter((id2) => prev.some((i3) => i3.id === id2))));
+  }, []);
+  const redo = reactExports.useCallback(() => {
+    const next = futureRef.current.pop();
+    if (!next) return;
+    pastRef.current.push(itemsRef.current);
+    itemsRef.current = next;
+    setItemsState(next);
+    setDirty(true);
+    setHistoryVersion((v2) => v2 + 1);
+    setSelection((sel) => new Set([...sel].filter((id2) => next.some((i3) => i3.id === id2))));
+  }, []);
+  const updateCanvas = reactExports.useCallback((patch) => {
+    setCanvasState((c2) => ({ ...c2, ...patch }));
+    setDirty(true);
+  }, []);
+  const setCamera = reactExports.useCallback((pan, zoom2) => {
+    setCanvasState((c2) => ({ ...c2, pan, zoom: zoom2 }));
+  }, []);
+  const selectedItems = reactExports.useMemo(() => items.filter((i3) => selection2.has(i3.id)), [items, selection2]);
+  const selectedUnlocked = reactExports.useMemo(() => selectedItems.filter((i3) => !i3.locked), [selectedItems]);
+  const patchItems = reactExports.useCallback(
+    (ids, patchFn) => {
+      const set2 = new Set(ids);
+      commit((cur) => cur.map((i3) => set2.has(i3.id) ? { ...i3, ...typeof patchFn === "function" ? patchFn(i3) : patchFn } : i3));
+    },
+    [commit]
+  );
+  const applyLayout = reactExports.useCallback(
+    (layout) => {
+      const ids = Object.keys(layout);
+      if (!ids.length) return;
+      commit((cur) => cur.map((i3) => layout[i3.id] ? { ...i3, ...layout[i3.id] } : i3));
+    },
+    [commit]
+  );
+  const removeItems = reactExports.useCallback(
+    (ids) => {
+      const set2 = new Set(ids);
+      commit((cur) => cur.filter((i3) => !set2.has(i3.id)));
+      setSelection((sel) => new Set([...sel].filter((id2) => !set2.has(id2))));
+    },
+    [commit]
+  );
+  const addItems = reactExports.useCallback(
+    (newItems, select2 = true) => {
+      if (!newItems.length) return;
+      commit((cur) => [...cur, ...newItems]);
+      if (select2) setSelection(new Set(newItems.map((i3) => i3.id)));
+    },
+    [commit]
+  );
+  const reorder = reactExports.useCallback(
+    (ids, direction) => {
+      const set2 = new Set(ids);
+      commit((cur) => {
+        const picked = cur.filter((i3) => set2.has(i3.id));
+        const rest = cur.filter((i3) => !set2.has(i3.id));
+        if (direction === "front") return [...rest, ...picked];
+        if (direction === "back") return [...picked, ...rest];
+        const arr = [...cur];
+        const indices = arr.map((i3, idx) => set2.has(i3.id) ? idx : -1).filter((x2) => x2 >= 0);
+        if (direction === "up") {
+          for (let k2 = indices.length - 1; k2 >= 0; k2--) {
+            const idx = indices[k2];
+            if (idx < arr.length - 1 && !set2.has(arr[idx + 1].id)) [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
+          }
+        } else {
+          for (const idx of indices) {
+            if (idx > 0 && !set2.has(arr[idx - 1].id)) [arr[idx], arr[idx - 1]] = [arr[idx - 1], arr[idx]];
+          }
+        }
+        return arr;
+      });
+    },
+    [commit]
+  );
+  return {
+    items,
+    itemsRef,
+    canvas,
+    selection: selection2,
+    setSelection,
+    selectedItems,
+    selectedUnlocked,
+    dirty,
+    setDirty,
+    commit,
+    preview,
+    endPreview,
+    cancelPreview,
+    undo,
+    redo,
+    canUndo: pastRef.current.length > 0,
+    canRedo: futureRef.current.length > 0,
+    historyVersion,
+    updateCanvas,
+    setCamera,
+    patchItems,
+    applyLayout,
+    removeItems,
+    addItems,
+    reorder
+  };
+}
+const MIN_ZOOM = 0.02;
+const MAX_ZOOM = 32;
+const PRESETS = {
+  dark: { label: "Koyu", bg: "#1d1f27", text: "#e6e8ee", opaque: true },
+  light: { label: "Açık", bg: "#f3f3f4", text: "#1c1f28", opaque: true },
+  glass: { label: "Cam", bg: "rgba(20, 22, 28, 0.35)", text: "#e6e8ee", opaque: false }
+};
+function uid(prefix = "it") {
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+function deg2rad(d2) {
+  return d2 * Math.PI / 180;
+}
+function clamp(v2, a2, b2) {
+  return Math.min(b2, Math.max(a2, v2));
+}
+function createImageItem({ src, name, naturalWidth, naturalHeight, x: x2, y: y3, width, sourcePath }) {
+  const w = width || Math.min(naturalWidth, 600);
+  const h2 = w * naturalHeight / naturalWidth;
+  return {
+    id: uid("img"),
+    type: "image",
+    name: name || "Görsel",
+    src,
+    naturalWidth,
+    naturalHeight,
+    x: x2 ?? 0,
+    y: y3 ?? 0,
+    width: w,
+    height: h2,
+    rotation: 0,
+    flipX: false,
+    flipY: false,
+    opacity: 1,
+    grayscale: false,
+    pixelated: false,
+    locked: false,
+    crop: null,
+    comment: "",
+    sourcePath: sourcePath || null,
+    addedAt: Date.now()
+  };
+}
+function createNoteItem({ text = "Not", x: x2 = 0, y: y3 = 0, width = 240, height = 120 } = {}) {
+  return {
+    id: uid("note"),
+    type: "note",
+    name: "Not",
+    text,
+    fontSize: 16,
+    color: "#1c1f28",
+    bg: "#fff5b8",
+    naturalWidth: width,
+    naturalHeight: height,
+    x: x2,
+    y: y3,
+    width,
+    height,
+    rotation: 0,
+    flipX: false,
+    flipY: false,
+    opacity: 1,
+    grayscale: false,
+    pixelated: false,
+    locked: false,
+    crop: null,
+    comment: "",
+    sourcePath: null,
+    addedAt: Date.now()
+  };
+}
+function itemCenter(it2) {
+  return { x: it2.x + it2.width / 2, y: it2.y + it2.height / 2 };
+}
+function rotatePoint(px2, py2, cx, cy, deg) {
+  const r2 = deg2rad(deg);
+  const cos = Math.cos(r2);
+  const sin = Math.sin(r2);
+  const dx = px2 - cx;
+  const dy = py2 - cy;
+  return { x: cx + dx * cos - dy * sin, y: cy + dx * sin + dy * cos };
+}
+function itemCorners(it2) {
+  const c2 = itemCenter(it2);
+  const pts = [
+    { x: it2.x, y: it2.y },
+    { x: it2.x + it2.width, y: it2.y },
+    { x: it2.x + it2.width, y: it2.y + it2.height },
+    { x: it2.x, y: it2.y + it2.height }
+  ];
+  if (!it2.rotation) return pts;
+  return pts.map((p2) => rotatePoint(p2.x, p2.y, c2.x, c2.y, it2.rotation));
+}
+function itemAABB(it2) {
+  const pts = itemCorners(it2);
+  const xs = pts.map((p2) => p2.x);
+  const ys = pts.map((p2) => p2.y);
+  const minX = Math.min(...xs);
+  const minY = Math.min(...ys);
+  return { x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
+}
+function unionAABB(items) {
+  if (!items.length) return null;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const it2 of items) {
+    const b2 = itemAABB(it2);
+    minX = Math.min(minX, b2.x);
+    minY = Math.min(minY, b2.y);
+    maxX = Math.max(maxX, b2.x + b2.w);
+    maxY = Math.max(maxY, b2.y + b2.h);
+  }
+  return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+}
+function worldToLocal(it2, wx, wy) {
+  const c2 = itemCenter(it2);
+  const p2 = rotatePoint(wx, wy, c2.x, c2.y, -it2.rotation);
+  return { x: p2.x - it2.x, y: p2.y - it2.y };
+}
+function rectsIntersect(a2, b2) {
+  return a2.x < b2.x + b2.w && a2.x + a2.w > b2.x && a2.y < b2.y + b2.h && a2.y + a2.h > b2.y;
+}
+function normalizeRect(x1, y1, x2, y22) {
+  return { x: Math.min(x1, x2), y: Math.min(y1, y22), w: Math.abs(x2 - x1), h: Math.abs(y22 - y1) };
+}
+function effectiveCrop(it2) {
+  return it2.crop || { x: 0, y: 0, w: it2.naturalWidth, h: it2.naturalHeight };
+}
+function applyCropRect(it2, local) {
+  const cur = effectiveCrop(it2);
+  const sx = cur.w / it2.width;
+  const sy = cur.h / it2.height;
+  const lx = clamp(local.x, 0, it2.width);
+  const ly = clamp(local.y, 0, it2.height);
+  const lw = clamp(local.w, 8, it2.width - lx);
+  const lh = clamp(local.h, 8, it2.height - ly);
+  const crop = { x: cur.x + lx * sx, y: cur.y + ly * sy, w: lw * sx, h: lh * sy };
+  const c2 = itemCenter(it2);
+  const newCenterLocal = { x: lx + lw / 2 - it2.width / 2, y: ly + lh / 2 - it2.height / 2 };
+  const nc = rotatePoint(c2.x + newCenterLocal.x, c2.y + newCenterLocal.y, c2.x, c2.y, it2.rotation);
+  return { ...it2, crop, width: lw, height: lh, x: nc.x - lw / 2, y: nc.y - lh / 2 };
+}
+function resetCrop(it2) {
+  if (!it2.crop || it2.type !== "image") return it2;
+  const scale = it2.width / it2.crop.w;
+  const w = it2.naturalWidth * scale;
+  const h2 = it2.naturalHeight * scale;
+  const c2 = itemCenter(it2);
+  return { ...it2, crop: null, width: w, height: h2, x: c2.x - w / 2, y: c2.y - h2 / 2 };
+}
+function resetTransform(it2) {
+  const base = resetCrop(it2);
+  const c2 = itemCenter(base);
+  const w = Math.min(base.naturalWidth, 600);
+  const h2 = w * base.naturalHeight / base.naturalWidth;
+  return { ...base, rotation: 0, flipX: false, flipY: false, width: w, height: h2, x: c2.x - w / 2, y: c2.y - h2 / 2 };
+}
+function refBox(items) {
+  const b2 = unionAABB(items);
+  return b2 || { x: 0, y: 0, w: 0, h: 0 };
+}
+function packItems(items, gap = 12) {
+  if (!items.length) return {};
+  const origin = refBox(items);
+  const sorted = [...items].sort((a2, b2) => itemAABB(b2).h - itemAABB(a2).h);
+  const totalArea = sorted.reduce((s2, it2) => {
+    const b2 = itemAABB(it2);
+    return s2 + (b2.w + gap) * (b2.h + gap);
+  }, 0);
+  const maxW = Math.max(...sorted.map((it2) => itemAABB(it2).w));
+  const targetW = Math.max(maxW, Math.sqrt(totalArea) * 1.15);
+  const out = {};
+  let cx = 0;
+  let cy = 0;
+  let rowH = 0;
+  for (const it2 of sorted) {
+    const b2 = itemAABB(it2);
+    if (cx > 0 && cx + b2.w > targetW) {
+      cx = 0;
+      cy += rowH + gap;
+      rowH = 0;
+    }
+    out[it2.id] = { x: it2.x + (origin.x + cx - b2.x), y: it2.y + (origin.y + cy - b2.y) };
+    cx += b2.w + gap;
+    rowH = Math.max(rowH, b2.h);
+  }
+  return out;
+}
+function arrangeGrid(items, sortBy = "addition", gap = 12) {
+  if (!items.length) return {};
+  const origin = refBox(items);
+  const sorted = [...items];
+  if (sortBy === "name") sorted.sort((a2, b2) => (a2.name || "").localeCompare(b2.name || "", "tr"));
+  else if (sortBy === "addition") sorted.sort((a2, b2) => (a2.addedAt || 0) - (b2.addedAt || 0));
+  else if (sortBy === "path") sorted.sort((a2, b2) => (a2.sourcePath || a2.name || "").localeCompare(b2.sourcePath || b2.name || "", "tr"));
+  const cols = Math.max(1, Math.ceil(Math.sqrt(sorted.length)));
+  const out = {};
+  let cx = 0;
+  let cy = 0;
+  let rowH = 0;
+  sorted.forEach((it2, i3) => {
+    const b2 = itemAABB(it2);
+    if (i3 > 0 && i3 % cols === 0) {
+      cx = 0;
+      cy += rowH + gap;
+      rowH = 0;
+    }
+    out[it2.id] = { x: it2.x + (origin.x + cx - b2.x), y: it2.y + (origin.y + cy - b2.y) };
+    cx += b2.w + gap;
+    rowH = Math.max(rowH, b2.h);
+  });
+  return out;
+}
+function stackItems(items) {
+  if (!items.length) return {};
+  const ref = items[0];
+  const c2 = itemCenter(ref);
+  const out = {};
+  for (const it2 of items) out[it2.id] = { x: c2.x - it2.width / 2, y: c2.y - it2.height / 2 };
+  return out;
+}
+function normalizeItems(items, mode) {
+  if (items.length < 2) return {};
+  const ref = items[0];
+  const refArea = ref.width * ref.height;
+  const refScale = ref.width / effectiveCrop(ref).w;
+  const out = {};
+  for (const it2 of items.slice(1)) {
+    const c2 = itemCenter(it2);
+    let w = it2.width;
+    let h2 = it2.height;
+    const aspect2 = it2.width / it2.height;
+    if (mode === "height") {
+      h2 = ref.height;
+      w = h2 * aspect2;
+    } else if (mode === "width") {
+      w = ref.width;
+      h2 = w / aspect2;
+    } else if (mode === "size") {
+      const s2 = Math.sqrt(refArea / (it2.width * it2.height));
+      w = it2.width * s2;
+      h2 = it2.height * s2;
+    } else if (mode === "scale") {
+      w = effectiveCrop(it2).w * refScale;
+      h2 = w / aspect2;
+    }
+    out[it2.id] = { width: w, height: h2, x: c2.x - w / 2, y: c2.y - h2 / 2 };
+  }
+  return out;
+}
+function alignItems(items, side) {
+  if (items.length < 2) return {};
+  const box = refBox(items);
+  const out = {};
+  for (const it2 of items) {
+    const b2 = itemAABB(it2);
+    if (side === "left") out[it2.id] = { x: it2.x + (box.x - b2.x) };
+    if (side === "right") out[it2.id] = { x: it2.x + (box.x + box.w - (b2.x + b2.w)) };
+    if (side === "top") out[it2.id] = { y: it2.y + (box.y - b2.y) };
+    if (side === "bottom") out[it2.id] = { y: it2.y + (box.y + box.h - (b2.y + b2.h)) };
+  }
+  return out;
+}
+function distributeItems(items, axis) {
+  if (items.length < 3) return {};
+  const key = axis === "horizontal" ? "x" : "y";
+  const size = axis === "horizontal" ? "w" : "h";
+  const sorted = [...items].sort((a2, b2) => itemAABB(a2)[key] - itemAABB(b2)[key]);
+  const first = itemAABB(sorted[0]);
+  const last = itemAABB(sorted[sorted.length - 1]);
+  const totalSize = sorted.reduce((s2, it2) => s2 + itemAABB(it2)[size], 0);
+  const span = last[key] + last[size] - first[key];
+  const gap = (span - totalSize) / (sorted.length - 1);
+  const out = {};
+  let cursor = first[key];
+  for (const it2 of sorted) {
+    const b2 = itemAABB(it2);
+    out[it2.id] = key === "x" ? { x: it2.x + (cursor - b2.x) } : { y: it2.y + (cursor - b2.y) };
+    cursor += b2[size] + gap;
+  }
+  return out;
+}
+function snapToNeighbors(box, others, threshold) {
+  let dx = 0;
+  let dy = 0;
+  let bestX = threshold;
+  let bestY = threshold;
+  const xEdges = [box.x, box.x + box.w, box.x + box.w / 2];
+  const yEdges = [box.y, box.y + box.h, box.y + box.h / 2];
+  for (const o2 of others) {
+    const ob = itemAABB(o2);
+    const oxs = [ob.x, ob.x + ob.w, ob.x + ob.w / 2];
+    const oys = [ob.y, ob.y + ob.h, ob.y + ob.h / 2];
+    for (const e2 of xEdges) for (const oe of oxs) if (Math.abs(oe - e2) < bestX) {
+      bestX = Math.abs(oe - e2);
+      dx = oe - e2;
+    }
+    for (const e2 of yEdges) for (const oe of oys) if (Math.abs(oe - e2) < bestY) {
+      bestY = Math.abs(oe - e2);
+      dy = oe - e2;
+    }
+  }
+  return { dx, dy };
+}
+function fitViewport(aabb, viewW, viewH, padding = 40) {
+  if (!aabb || aabb.w <= 0 || aabb.h <= 0) return { x: viewW / 2, y: viewH / 2, zoom: 1 };
+  const zoom2 = clamp(Math.min((viewW - padding * 2) / aabb.w, (viewH - padding * 2) / aabb.h), MIN_ZOOM, MAX_ZOOM);
+  return {
+    zoom: zoom2,
+    x: viewW / 2 - (aabb.x + aabb.w / 2) * zoom2,
+    y: viewH / 2 - (aabb.y + aabb.h / 2) * zoom2
+  };
+}
+function screenToWorld(vp, sx, sy) {
+  return { x: (sx - vp.x) / vp.zoom, y: (sy - vp.y) / vp.zoom };
+}
+function cascadePositions(startX, startY, count, step = 28) {
+  return Array.from({ length: count }, (_2, i3) => ({ x: startX + i3 * step, y: startY + i3 * step }));
+}
+const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/bmp", "image/svg+xml", "image/avif"];
+function isImageFile(file) {
+  return IMAGE_TYPES.includes(file.type) || /\.(png|jpe?g|webp|gif|bmp|svg|avif)$/i.test(file.name || "");
+}
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function loadImageSize(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve({ width: img.naturalWidth || img.width, height: img.naturalHeight || img.height });
+    img.onerror = () => reject(new Error("Görsel çözümlenemedi"));
+    img.src = src;
+  });
+}
+async function itemFromDataUrl({ dataUrl, name, sourcePath }, pos, targetWidth) {
+  const size = await loadImageSize(dataUrl);
+  return createImageItem({
+    src: dataUrl,
+    name: name || "Görsel",
+    naturalWidth: Math.max(1, size.width),
+    naturalHeight: Math.max(1, size.height),
+    x: pos?.x,
+    y: pos?.y,
+    width: targetWidth,
+    sourcePath
+  });
+}
+async function itemsFromFiles(files, positions) {
+  const out = [];
+  let i3 = 0;
+  for (const file of files) {
+    if (!isImageFile(file)) continue;
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      const sourcePath = window.api?.getPathForFile ? window.api.getPathForFile(file) : "";
+      out.push(await itemFromDataUrl({ dataUrl, name: file.name, sourcePath }, positions?.[i3]));
+      i3 += 1;
+    } catch {
+    }
+  }
+  return out;
+}
+function extractUrls(text) {
+  if (!text) return [];
+  return [...text.matchAll(/https?:\/\/[^\s"'<>)]+/gi)].map((m2) => m2[0]);
+}
+async function itemsFromUrls(urls, positions) {
+  const out = [];
+  let i3 = 0;
+  for (const url2 of urls.slice(0, 20)) {
+    try {
+      const res = await window.api.nobleRef.fetchImage(url2);
+      if (res?.dataUrl) {
+        const name = decodeURIComponent(url2.split("/").pop()?.split("?")[0] || "Görsel");
+        out.push(await itemFromDataUrl({ dataUrl: res.dataUrl, name }, positions?.[i3]));
+        i3 += 1;
+      } else if (res?.images?.length) {
+        for (const src of res.images.slice(0, 20)) {
+          try {
+            const inner = await window.api.nobleRef.fetchImage(src);
+            if (inner?.dataUrl) {
+              out.push(await itemFromDataUrl({ dataUrl: inner.dataUrl, name: decodeURIComponent(src.split("/").pop() || "Görsel") }, positions?.[i3]));
+              i3 += 1;
+            }
+          } catch {
+          }
+        }
+      }
+    } catch {
+    }
+  }
+  return out;
+}
+function RefCanvas({
+  scene,
+  viewport,
+  setViewport,
+  containerRef,
+  keys,
+  canvasLocked,
+  windowLocked,
+  editingNoteId,
+  setEditingNoteId,
+  onNoteCommit,
+  onContextMenu,
+  onOpenImagesDialog,
+  onDropFiles,
+  onDropUrls,
+  onWindowMoveBy,
+  onFocusItem,
+  preset
+}) {
+  const { items, selection: selection2, setSelection, preview, endPreview, commit } = scene;
+  const dragRef = reactExports.useRef(null);
+  const [boxRect, setBoxRect] = reactExports.useState(null);
+  const [cropRect, setCropRect] = reactExports.useState(null);
+  const [pickInfo, setPickInfo] = reactExports.useState(null);
+  const [dragOver, setDragOver] = reactExports.useState(false);
+  const pixelCanvases = reactExports.useRef(/* @__PURE__ */ new Map());
+  const rafRef = reactExports.useRef(null);
+  const vp = viewport;
+  const selectedItems = items.filter((i3) => selection2.has(i3.id));
+  const toWorld = reactExports.useCallback(
+    (clientX, clientY) => {
+      const rect = containerRef.current.getBoundingClientRect();
+      return screenToWorld(vp, clientX - rect.left, clientY - rect.top);
+    },
+    [containerRef, vp]
+  );
+  function screenPoint(e2) {
+    const rect = containerRef.current.getBoundingClientRect();
+    return { sx: e2.clientX - rect.left, sy: e2.clientY - rect.top };
+  }
+  reactExports.useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    function onWheel(e2) {
+      e2.preventDefault();
+      const rect = el.getBoundingClientRect();
+      const cx = e2.clientX - rect.left;
+      const cy = e2.clientY - rect.top;
+      const factor = Math.exp(-e2.deltaY * 12e-4);
+      setViewport((v2) => {
+        const zoom2 = clamp(v2.zoom * factor, MIN_ZOOM, MAX_ZOOM);
+        const ratio = zoom2 / v2.zoom;
+        return { zoom: zoom2, x: cx - (cx - v2.x) * ratio, y: cy - (cy - v2.y) * ratio };
+      });
+    }
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [containerRef, setViewport]);
+  function samplePixel(it2, wx, wy) {
+    const local = worldToLocal(it2, wx, wy);
+    const cr = effectiveCrop(it2);
+    let lx = local.x;
+    let ly = local.y;
+    if (it2.flipX) lx = it2.width - lx;
+    if (it2.flipY) ly = it2.height - ly;
+    const px2 = Math.floor(cr.x + lx / it2.width * cr.w);
+    const py2 = Math.floor(cr.y + ly / it2.height * cr.h);
+    if (px2 < 0 || py2 < 0 || px2 >= it2.naturalWidth || py2 >= it2.naturalHeight) return null;
+    let entry = pixelCanvases.current.get(it2.id);
+    if (!entry || entry.src !== it2.src) {
+      const imgEl = containerRef.current?.querySelector(`[data-item-id="${it2.id}"] img`);
+      if (!imgEl || !imgEl.complete) return { px: px2, py: py2, color: null };
+      const c2 = document.createElement("canvas");
+      c2.width = it2.naturalWidth;
+      c2.height = it2.naturalHeight;
+      try {
+        c2.getContext("2d").drawImage(imgEl, 0, 0, it2.naturalWidth, it2.naturalHeight);
+      } catch {
+        return { px: px2, py: py2, color: null };
+      }
+      entry = { src: it2.src, ctx: c2.getContext("2d", { willReadFrequently: true }) };
+      pixelCanvases.current.set(it2.id, entry);
+    }
+    try {
+      const d2 = entry.ctx.getImageData(px2, py2, 1, 1).data;
+      return { px: px2, py: py2, color: { r: d2[0], g: d2[1], b: d2[2], a: d2[3] } };
+    } catch {
+      return { px: px2, py: py2, color: null };
+    }
+  }
+  function hex2(c2) {
+    return "#" + [c2.r, c2.g, c2.b].map((v2) => v2.toString(16).padStart(2, "0")).join("").toUpperCase();
+  }
+  function hitFromEvent(e2) {
+    const handleEl = e2.target.closest?.("[data-handle]");
+    const itemEl = e2.target.closest?.("[data-item-id]");
+    return { handle: handleEl?.dataset.handle || null, itemId: itemEl?.dataset.itemId || null };
+  }
+  function startDrag(e2, mode, extra = {}) {
+    const { sx, sy } = screenPoint(e2);
+    dragRef.current = { mode, startSX: sx, startSY: sy, lastSX: sx, lastSY: sy, startScreenX: e2.screenX, startScreenY: e2.screenY, lastScreenX: e2.screenX, lastScreenY: e2.screenY, startVp: vp, moved: false, ...extra };
+    try {
+      containerRef.current.setPointerCapture(e2.pointerId);
+    } catch {
+    }
+  }
+  function onPointerDown2(e2) {
+    if (editingNoteId) {
+      if (e2.target.closest?.(".nr-note-editor")) return;
+      setEditingNoteId(null);
+    }
+    const k2 = keys.current;
+    const { handle, itemId } = hitFromEvent(e2);
+    const item = itemId ? items.find((i3) => i3.id === itemId) : null;
+    const w = toWorld(e2.clientX, e2.clientY);
+    if (e2.button === 1) {
+      e2.preventDefault();
+      startDrag(e2, "pan");
+      return;
+    }
+    if (e2.button === 2) {
+      startDrag(e2, "rightdown", { itemId });
+      return;
+    }
+    if (e2.button !== 0) return;
+    if (k2.has("z")) return startDrag(e2, "zoomDrag");
+    if (k2.has(" ")) {
+      k2.add("_dragged");
+      return startDrag(e2, "pan");
+    }
+    if (k2.has("alt") && !k2.has("shift") || canvasLocked) return startDrag(e2, "pan");
+    if (handle && selectedItems.length) {
+      const targets = selectedItems.filter((i3) => !i3.locked);
+      if (!targets.length) return;
+      if (handle === "rot") {
+        const center = targets.length === 1 ? itemCenter(targets[0]) : boxCenter(unionAABB(targets));
+        return startDrag(e2, "rotate", { base: snapshot(targets), center, startAngle: Math.atan2(w.y - center.y, w.x - center.x), baseRot: targets.length === 1 ? targets[0].rotation : 0 });
+      }
+      return startDrag(e2, "scale", { base: snapshot(targets), handle, fromCenter: k2.has("alt") });
+    }
+    if (item) {
+      if (k2.has("alt") && k2.has("shift")) {
+        commit((cur) => cur.map((i3) => i3.id === item.id ? { ...i3, flipX: !i3.flipX } : i3));
+        return;
+      }
+      if (k2.has("s") && item.type === "image") return startDrag(e2, "pick", { pickMode: "color", itemId });
+      if (k2.has("d") && item.type === "image") return startDrag(e2, "pick", { pickMode: "coords", itemId });
+      if (k2.has("c") && item.type === "image" && !item.locked) {
+        setSelection(/* @__PURE__ */ new Set([item.id]));
+        return startDrag(e2, "crop", { itemId, startLocal: worldToLocal(item, w.x, w.y) });
+      }
+      if (k2.has("v") && item.type === "image" && !item.locked) {
+        setSelection(/* @__PURE__ */ new Set([item.id]));
+        return startDrag(e2, k2.has("shift") ? "cropZoom" : "cropPan", { itemId, base: snapshot([item]) });
+      }
+      const ctrl = e2.ctrlKey || e2.metaKey;
+      let nextSel = selection2;
+      if (e2.shiftKey && !ctrl) {
+        nextSel = new Set(selection2);
+        const wasSelected = nextSel.has(item.id);
+        if (!wasSelected) nextSel.add(item.id);
+        setSelection(nextSel);
+        const targets2 = items.filter((i3) => nextSel.has(i3.id) && !i3.locked);
+        return startDrag(e2, "move", { base: snapshot(targets2), shiftToggleId: wasSelected ? item.id : null, axisSnap: true });
+      }
+      if (!selection2.has(item.id)) {
+        nextSel = /* @__PURE__ */ new Set([item.id]);
+        setSelection(nextSel);
+      }
+      const targets = items.filter((i3) => nextSel.has(i3.id) && !i3.locked);
+      if (ctrl && e2.altKey && e2.shiftKey) return startDrag(e2, "opacity", { base: snapshot(targets) });
+      if (ctrl && e2.altKey) {
+        const center = targets.length === 1 ? itemCenter(targets[0]) : boxCenter(unionAABB(targets));
+        return startDrag(e2, "scaleFree", { base: snapshot(targets), center, startDist: Math.hypot(w.x - center.x, w.y - center.y) });
+      }
+      if (ctrl) {
+        const center = targets.length === 1 ? itemCenter(targets[0]) : boxCenter(unionAABB(targets));
+        return startDrag(e2, "rotate", { base: snapshot(targets), center, startAngle: Math.atan2(w.y - center.y, w.x - center.x), baseRot: targets.length === 1 ? targets[0].rotation : 0 });
+      }
+      if (!targets.length) return startDrag(e2, "noop");
+      return startDrag(e2, "move", { base: snapshot(targets), axisSnap: false });
+    }
+    if (!e2.shiftKey) setSelection(/* @__PURE__ */ new Set());
+    startDrag(e2, "box", { additive: e2.shiftKey, prevSelection: new Set(selection2), startWorld: w });
+  }
+  function snapshot(list) {
+    return list.map((i3) => ({ ...i3 }));
+  }
+  function boxCenter(b2) {
+    return { x: b2.x + b2.w / 2, y: b2.y + b2.h / 2 };
+  }
+  function onPointerMove(e2) {
+    const d2 = dragRef.current;
+    if (!d2) return;
+    const { sx, sy } = screenPoint(e2);
+    const dxS = sx - d2.startSX;
+    const dyS = sy - d2.startSY;
+    if (!d2.moved && Math.hypot(dxS, dyS) > 3) d2.moved = true;
+    const k2 = keys.current;
+    switch (d2.mode) {
+      case "pan": {
+        setViewport({ ...d2.startVp, x: d2.startVp.x + dxS, y: d2.startVp.y + dyS });
+        break;
+      }
+      case "zoomDrag": {
+        const factor = Math.exp(dxS * 6e-3);
+        const zoom2 = clamp(d2.startVp.zoom * factor, MIN_ZOOM, MAX_ZOOM);
+        const ratio = zoom2 / d2.startVp.zoom;
+        setViewport({ zoom: zoom2, x: d2.startSX - (d2.startSX - d2.startVp.x) * ratio, y: d2.startSY - (d2.startSY - d2.startVp.y) * ratio });
+        break;
+      }
+      case "box": {
+        const w = toWorld(e2.clientX, e2.clientY);
+        setBoxRect(normalizeRect(d2.startWorld.x, d2.startWorld.y, w.x, w.y));
+        break;
+      }
+      case "rightdown": {
+        if (d2.moved && !windowLocked) {
+          d2.mode = "windowMove";
+        } else break;
+      }
+      // eslint-disable-next-line no-fallthrough
+      case "windowMove": {
+        const mdx = e2.screenX - d2.lastScreenX;
+        const mdy = e2.screenY - d2.lastScreenY;
+        d2.lastScreenX = e2.screenX;
+        d2.lastScreenY = e2.screenY;
+        if (mdx || mdy) onWindowMoveBy(mdx, mdy);
+        break;
+      }
+      case "move": {
+        let dx = dxS / vp.zoom;
+        let dy = dyS / vp.zoom;
+        if (e2.shiftKey && !k2.has(" ")) {
+          if (Math.abs(dx) > Math.abs(dy)) dy = 0;
+          else dx = 0;
+        }
+        const ids = new Set(d2.base.map((b2) => b2.id));
+        let moved = d2.base.map((b2) => ({ ...b2, x: b2.x + dx, y: b2.y + dy }));
+        if (e2.shiftKey && k2.has(" ")) {
+          const box = unionAABB(moved);
+          const others = items.filter((i3) => !ids.has(i3.id));
+          const s2 = snapToNeighbors(box, others, 12 / vp.zoom);
+          moved = moved.map((m2) => ({ ...m2, x: m2.x + s2.dx, y: m2.y + s2.dy }));
+        } else if (scene.canvas.grid) {
+          const g2 = scene.canvas.gridSize || 32;
+          const box = unionAABB(moved);
+          const snapX = Math.round(box.x / g2) * g2 - box.x;
+          const snapY = Math.round(box.y / g2) * g2 - box.y;
+          moved = moved.map((m2) => ({ ...m2, x: m2.x + snapX, y: m2.y + snapY }));
+        }
+        const byId = new Map(moved.map((m2) => [m2.id, m2]));
+        preview((cur) => cur.map((i3) => byId.get(i3.id) || i3));
+        break;
+      }
+      case "scale": {
+        const w = toWorld(e2.clientX, e2.clientY);
+        const base = d2.base;
+        const corner = d2.handle;
+        let updated;
+        if (base.length === 1) {
+          const it2 = base[0];
+          const c2 = itemCenter(it2);
+          const local = rotatePoint(w.x, w.y, c2.x, c2.y, -it2.rotation);
+          const hx = corner.includes("e") ? it2.width / 2 : -it2.width / 2;
+          const hy = corner.includes("s") ? it2.height / 2 : -it2.height / 2;
+          const anchor = d2.fromCenter ? { x: 0, y: 0 } : { x: -hx, y: -hy };
+          const p2 = { x: local.x - c2.x, y: local.y - c2.y };
+          const cornerVec = { x: hx - anchor.x, y: hy - anchor.y };
+          const pVec = { x: p2.x - anchor.x, y: p2.y - anchor.y };
+          const s2 = clamp((pVec.x * cornerVec.x + pVec.y * cornerVec.y) / (cornerVec.x ** 2 + cornerVec.y ** 2), 0.03, 200);
+          const nw = it2.width * s2;
+          const nh = it2.height * s2;
+          const anchorWorld = rotatePoint(c2.x + anchor.x, c2.y + anchor.y, c2.x, c2.y, it2.rotation);
+          const newCenterLocal = { x: -anchor.x * s2, y: -anchor.y * s2 };
+          const newCenter = rotatePoint(anchorWorld.x + newCenterLocal.x, anchorWorld.y + newCenterLocal.y, anchorWorld.x, anchorWorld.y, it2.rotation);
+          updated = [{ ...it2, width: nw, height: nh, x: newCenter.x - nw / 2, y: newCenter.y - nh / 2 }];
+        } else {
+          const box = unionAABB(base);
+          const ax = d2.fromCenter ? box.x + box.w / 2 : corner.includes("e") ? box.x : box.x + box.w;
+          const ay = d2.fromCenter ? box.y + box.h / 2 : corner.includes("s") ? box.y : box.y + box.h;
+          const cx = corner.includes("e") ? box.x + box.w : box.x;
+          const cy = corner.includes("s") ? box.y + box.h : box.y;
+          const cornerVec = { x: cx - ax, y: cy - ay };
+          const pVec = { x: w.x - ax, y: w.y - ay };
+          const s2 = clamp((pVec.x * cornerVec.x + pVec.y * cornerVec.y) / (cornerVec.x ** 2 + cornerVec.y ** 2), 0.03, 200);
+          updated = base.map((it2) => {
+            const c2 = itemCenter(it2);
+            const nc = { x: ax + (c2.x - ax) * s2, y: ay + (c2.y - ay) * s2 };
+            const nw = it2.width * s2;
+            const nh = it2.height * s2;
+            return { ...it2, width: nw, height: nh, x: nc.x - nw / 2, y: nc.y - nh / 2 };
+          });
+        }
+        const byId = new Map(updated.map((m2) => [m2.id, m2]));
+        preview((cur) => cur.map((i3) => byId.get(i3.id) || i3));
+        break;
+      }
+      case "scaleFree": {
+        const w = toWorld(e2.clientX, e2.clientY);
+        const dist2 = Math.hypot(w.x - d2.center.x, w.y - d2.center.y);
+        const s2 = clamp(dist2 / Math.max(1, d2.startDist), 0.03, 200);
+        const updated = d2.base.map((it2) => {
+          const c2 = itemCenter(it2);
+          const nc = { x: d2.center.x + (c2.x - d2.center.x) * s2, y: d2.center.y + (c2.y - d2.center.y) * s2 };
+          const nw = it2.width * s2;
+          const nh = it2.height * s2;
+          return { ...it2, width: nw, height: nh, x: nc.x - nw / 2, y: nc.y - nh / 2 };
+        });
+        const byId = new Map(updated.map((m2) => [m2.id, m2]));
+        preview((cur) => cur.map((i3) => byId.get(i3.id) || i3));
+        break;
+      }
+      case "rotate": {
+        const w = toWorld(e2.clientX, e2.clientY);
+        const angle = Math.atan2(w.y - d2.center.y, w.x - d2.center.x);
+        let delta = (angle - d2.startAngle) * 180 / Math.PI;
+        if (e2.shiftKey) {
+          if (d2.base.length === 1) {
+            const target2 = Math.round((d2.baseRot + delta) / 45) * 45;
+            delta = target2 - d2.baseRot;
+          } else delta = Math.round(delta / 45) * 45;
+        }
+        const updated = d2.base.map((it2) => {
+          const c2 = itemCenter(it2);
+          const nc = d2.base.length === 1 ? c2 : rotatePoint(c2.x, c2.y, d2.center.x, d2.center.y, delta);
+          return { ...it2, rotation: normDeg(it2.rotation + delta), x: nc.x - it2.width / 2, y: nc.y - it2.height / 2 };
+        });
+        const byId = new Map(updated.map((m2) => [m2.id, m2]));
+        preview((cur) => cur.map((i3) => byId.get(i3.id) || i3));
+        break;
+      }
+      case "opacity": {
+        const delta = dxS / 250;
+        const byId = new Map(d2.base.map((b2) => [b2.id, { ...b2, opacity: clamp((b2.opacity ?? 1) + delta, 0.05, 1) }]));
+        preview((cur) => cur.map((i3) => byId.get(i3.id) || i3));
+        break;
+      }
+      case "crop": {
+        const it2 = items.find((i3) => i3.id === d2.itemId);
+        if (!it2) break;
+        const w = toWorld(e2.clientX, e2.clientY);
+        const local = worldToLocal(it2, w.x, w.y);
+        const r2 = normalizeRect(d2.startLocal.x, d2.startLocal.y, clamp(local.x, 0, it2.width), clamp(local.y, 0, it2.height));
+        setCropRect({ itemId: it2.id, local: r2 });
+        break;
+      }
+      case "cropPan": {
+        const b2 = d2.base[0];
+        const cr = effectiveCrop(b2);
+        const dx = dxS / vp.zoom * (cr.w / b2.width);
+        const dy = dyS / vp.zoom * (cr.h / b2.height);
+        const nx = clamp(cr.x - (b2.flipX ? -dx : dx), 0, b2.naturalWidth - cr.w);
+        const ny = clamp(cr.y - (b2.flipY ? -dy : dy), 0, b2.naturalHeight - cr.h);
+        preview((cur) => cur.map((i3) => i3.id === b2.id ? { ...i3, crop: { ...cr, x: nx, y: ny } } : i3));
+        break;
+      }
+      case "cropZoom": {
+        const b2 = d2.base[0];
+        const cr = effectiveCrop(b2);
+        const s2 = clamp(Math.exp(-dxS * 5e-3), 0.05, 20);
+        let nw = clamp(cr.w * s2, 8, b2.naturalWidth);
+        let nh = clamp(cr.h * s2, 8, b2.naturalHeight);
+        const ratio = Math.min(nw / cr.w, nh / cr.h);
+        nw = cr.w * ratio;
+        nh = cr.h * ratio;
+        const cx = cr.x + cr.w / 2;
+        const cy = cr.y + cr.h / 2;
+        const nx = clamp(cx - nw / 2, 0, b2.naturalWidth - nw);
+        const ny = clamp(cy - nh / 2, 0, b2.naturalHeight - nh);
+        preview((cur) => cur.map((i3) => i3.id === b2.id ? { ...i3, crop: { x: nx, y: ny, w: nw, h: nh } } : i3));
+        break;
+      }
+      case "pick": {
+        const it2 = items.find((i3) => i3.id === d2.itemId);
+        if (!it2) break;
+        const w = toWorld(e2.clientX, e2.clientY);
+        const res = samplePixel(it2, w.x, w.y);
+        if (!res) {
+          setPickInfo(null);
+          break;
+        }
+        if (d2.pickMode === "coords") setPickInfo({ sx, sy, text: `X ${res.px}  Y ${res.py}`, color: null });
+        else if (res.color) {
+          const c2 = res.color;
+          setPickInfo({ sx, sy, text: `${hex2(c2)}  RGB ${c2.r}, ${c2.g}, ${c2.b}`, color: `rgb(${c2.r},${c2.g},${c2.b})` });
+        }
+        break;
+      }
+    }
+    d2.lastSX = sx;
+    d2.lastSY = sy;
+  }
+  function normDeg(deg) {
+    let d2 = deg % 360;
+    if (d2 > 180) d2 -= 360;
+    if (d2 < -180) d2 += 360;
+    return d2;
+  }
+  function onPointerUp(e2) {
+    const d2 = dragRef.current;
+    if (!d2) return;
+    dragRef.current = null;
+    try {
+      containerRef.current.releasePointerCapture(e2.pointerId);
+    } catch {
+    }
+    switch (d2.mode) {
+      case "box": {
+        const rect = boxRect;
+        setBoxRect(null);
+        if (rect && d2.moved) {
+          const hit = items.filter((i3) => rectsIntersect(rect, itemAABB(i3))).map((i3) => i3.id);
+          setSelection(d2.additive ? /* @__PURE__ */ new Set([...d2.prevSelection, ...hit]) : new Set(hit));
+        }
+        break;
+      }
+      case "move": {
+        if (!d2.moved && d2.shiftToggleId) {
+          setSelection((sel) => {
+            const next = new Set(sel);
+            next.delete(d2.shiftToggleId);
+            return next;
+          });
+        }
+        endPreview();
+        break;
+      }
+      case "scale":
+      case "scaleFree":
+      case "rotate":
+      case "opacity":
+      case "cropPan":
+      case "cropZoom":
+        endPreview();
+        break;
+      case "crop": {
+        const r2 = cropRect;
+        setCropRect(null);
+        if (r2 && r2.local.w > 4 && r2.local.h > 4) {
+          commit((cur) => cur.map((i3) => i3.id === r2.itemId ? applyCropRect(i3, r2.local) : i3));
+        }
+        break;
+      }
+      case "rightdown": {
+        if (!d2.moved) onContextMenu({ x: e2.clientX, y: e2.clientY, itemId: d2.itemId });
+        break;
+      }
+      case "pick":
+        setPickInfo(null);
+        break;
+    }
+  }
+  function onDoubleClick(e2) {
+    if (e2.button !== 0) return;
+    const { itemId } = hitFromEvent(e2);
+    if (!itemId) {
+      if (!canvasLocked) onOpenImagesDialog();
+      return;
+    }
+    const item = items.find((i3) => i3.id === itemId);
+    if (!item) return;
+    if (item.type === "note" && !item.locked && !canvasLocked) {
+      setSelection(/* @__PURE__ */ new Set([item.id]));
+      setEditingNoteId(item.id);
+      return;
+    }
+    onFocusItem(item.id);
+  }
+  function onDragOver(e2) {
+    e2.preventDefault();
+    if (!dragOver) setDragOver(true);
+  }
+  function onDragLeave(e2) {
+    if (e2.currentTarget.contains(e2.relatedTarget)) return;
+    setDragOver(false);
+  }
+  async function onDrop(e2) {
+    e2.preventDefault();
+    setDragOver(false);
+    if (canvasLocked) return;
+    const w = toWorld(e2.clientX, e2.clientY);
+    const files = [...e2.dataTransfer.files || []].filter(isImageFile);
+    if (files.length) return onDropFiles(files, w);
+    const html = e2.dataTransfer.getData("text/html");
+    const uri = e2.dataTransfer.getData("text/uri-list");
+    const text = e2.dataTransfer.getData("text/plain");
+    let urls = [];
+    if (html) {
+      const m2 = /<img[^>]+src=["']([^"']+)["']/i.exec(html);
+      if (m2) urls = [m2[1]];
+    }
+    if (!urls.length) urls = extractUrls(uri || text);
+    if (urls.length) onDropUrls(urls, w);
+  }
+  reactExports.useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
+  const worldStyle = { transform: `translate(${vp.x}px, ${vp.y}px) scale(${vp.zoom})` };
+  const gridSize = (scene.canvas.gridSize || 32) * vp.zoom;
+  const gridStyle = scene.canvas.grid ? { backgroundSize: `${gridSize}px ${gridSize}px`, backgroundPosition: `${vp.x}px ${vp.y}px` } : void 0;
+  const gizmoTargets = selectedItems.filter((i3) => !i3.locked);
+  const multiBox = gizmoTargets.length > 1 ? unionAABB(gizmoTargets) : null;
+  const handleScale = 1 / vp.zoom;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      ref: containerRef,
+      className: `nr-view nr-preset-${preset}${dragOver ? " nr-view-dragover" : ""}${canvasLocked ? " nr-view-locked" : ""}`,
+      onPointerDown: onPointerDown2,
+      onPointerMove,
+      onPointerUp,
+      onPointerCancel: onPointerUp,
+      onDoubleClick,
+      onDragOver,
+      onDragLeave,
+      onDrop,
+      onContextMenu: (e2) => e2.preventDefault(),
+      children: [
+        scene.canvas.grid && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-grid", style: gridStyle }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `nr-world${scene.canvas.grayscale ? " nr-world-gray" : ""}`, style: worldStyle, children: [
+          items.map((it2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            RefItem,
+            {
+              item: it2,
+              selected: selection2.has(it2.id),
+              zoom: vp.zoom,
+              editing: editingNoteId === it2.id,
+              onNoteCommit,
+              onStopEditing: () => setEditingNoteId(null)
+            },
+            it2.id
+          )),
+          gizmoTargets.length === 1 && !canvasLocked && /* @__PURE__ */ jsxRuntimeExports.jsx(Gizmo, { item: gizmoTargets[0], handleScale }),
+          multiBox && !canvasLocked && /* @__PURE__ */ jsxRuntimeExports.jsx(Gizmo, { box: multiBox, handleScale }),
+          cropRect && (() => {
+            const it2 = items.find((i3) => i3.id === cropRect.itemId);
+            if (!it2) return null;
+            return /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "nr-crop-overlay",
+                style: { left: it2.x, top: it2.y, width: it2.width, height: it2.height, transform: `rotate(${it2.rotation}deg)` },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-crop-rect", style: { left: cropRect.local.x, top: cropRect.local.y, width: cropRect.local.w, height: cropRect.local.h, borderWidth: handleScale } })
+              }
+            );
+          })()
+        ] }),
+        boxRect && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "nr-box-select",
+            style: { left: boxRect.x * vp.zoom + vp.x, top: boxRect.y * vp.zoom + vp.y, width: boxRect.w * vp.zoom, height: boxRect.h * vp.zoom }
+          }
+        ),
+        pickInfo && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-pick-tip", style: { left: pickInfo.sx + 14, top: pickInfo.sy + 14 }, children: [
+          pickInfo.color && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-pick-swatch", style: { background: pickInfo.color } }),
+          pickInfo.text
+        ] }),
+        items.length === 0 && !canvasLocked && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-empty-hint", children: [
+          "Görselleri buraya sürükle-bırak, yapıştır (Ctrl+V) ya da çift tıklayıp aç.",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Sağ tık: menü · Ctrl+Shift+P: komut paleti · Ctrl+H: kısayollar" })
+        ] })
+      ]
+    }
+  );
+}
+function RefItem({ item: it2, selected: selected2, zoom: zoom2, editing, onNoteCommit, onStopEditing }) {
+  const style2 = {
+    left: it2.x,
+    top: it2.y,
+    width: it2.width,
+    height: it2.height,
+    transform: `rotate(${it2.rotation || 0}deg)`,
+    opacity: it2.opacity ?? 1
+  };
+  const cls = `nr-item${selected2 ? " nr-item-selected" : ""}${it2.locked ? " nr-item-locked" : ""}${it2.grayscale ? " nr-item-gray" : ""}`;
+  const outline = selected2 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-item-outline", style: { borderWidth: Math.max(1, 1.5 / zoom2) } }) : null;
+  if (it2.type === "note") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "data-item-id": it2.id, className: `${cls} nr-item-note`, style: style2, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-note", style: { background: it2.bg, color: it2.color, fontSize: it2.fontSize }, children: editing ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "textarea",
+        {
+          className: "nr-note-editor",
+          autoFocus: true,
+          defaultValue: it2.text,
+          style: { fontSize: it2.fontSize, color: it2.color },
+          onBlur: (e2) => {
+            onNoteCommit(it2.id, e2.target.value);
+            onStopEditing();
+          },
+          onKeyDown: (e2) => {
+            e2.stopPropagation();
+            if (e2.key === "Escape") {
+              onNoteCommit(it2.id, e2.target.value);
+              onStopEditing();
+            }
+          },
+          onPointerDown: (e2) => e2.stopPropagation()
+        }
+      ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-note-text", children: it2.text }) }),
+      outline,
+      it2.locked && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-item-lock", style: { transform: `scale(${1 / zoom2})` }, children: "🔒" })
+    ] });
+  }
+  const cr = effectiveCrop(it2);
+  const sx = it2.width / cr.w;
+  const sy = it2.height / cr.h;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "data-item-id": it2.id, className: cls, style: style2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-item-clip", style: { transform: `scale(${it2.flipX ? -1 : 1}, ${it2.flipY ? -1 : 1})` }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "img",
+      {
+        src: it2.src,
+        alt: "",
+        draggable: false,
+        className: it2.pixelated ? "nr-pixelated" : "",
+        style: { left: -cr.x * sx, top: -cr.y * sy, width: it2.naturalWidth * sx, height: it2.naturalHeight * sy }
+      }
+    ) }),
+    outline,
+    it2.locked && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-item-lock", style: { transform: `scale(${1 / zoom2})` }, children: "🔒" }),
+    it2.comment && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-item-comment", title: it2.comment, style: { transform: `scale(${1 / zoom2})` }, children: "💬" })
+  ] });
+}
+function Gizmo({ item, box, handleScale }) {
+  const style2 = item ? { left: item.x, top: item.y, width: item.width, height: item.height, transform: `rotate(${item.rotation || 0}deg)` } : { left: box.x, top: box.y, width: box.w, height: box.h };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-gizmo", style: style2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-gizmo-border", style: { borderWidth: handleScale } }),
+    ["nw", "ne", "sw", "se"].map((h2) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-handle": h2, className: `nr-handle nr-handle-${h2}`, style: { transform: `translate(-50%, -50%) scale(${handleScale})` } }, h2)),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-gizmo-rot-line", style: { height: 28 * handleScale, width: handleScale, top: -28 * handleScale } }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-handle": "rot", className: "nr-handle nr-handle-rot", style: { top: -28 * handleScale, transform: `translate(-50%, -50%) scale(${handleScale})` }, title: "Döndür (Shift: 45° adım)" })
+  ] });
+}
+const CATEGORIES = {
+  file: "Dosya",
+  edit: "Düzenle",
+  select: "Seçim",
+  image: "Görsel",
+  arrange: "Diz / Hizala",
+  canvas: "Tuval",
+  window: "Pencere",
+  view: "Görünüm"
+};
+const COMMANDS = [
+  // ---- Dosya ----
+  { id: "save", label: "Kaydet", shortcut: "Ctrl+S", category: "file", run: (c2) => c2.save() },
+  { id: "saveAs", label: "Farklı kaydet", shortcut: "Ctrl+Shift+S", category: "file", run: (c2) => c2.saveAs() },
+  { id: "openImages", label: "Görsel aç…", shortcut: "Ctrl+I", category: "file", run: (c2) => c2.openImages() },
+  { id: "exportScene", label: "Sahneyi dışa aktar (PNG)", shortcut: "Ctrl+E", category: "file", run: (c2) => c2.exportScene(false) },
+  { id: "exportSelectedScene", label: "Seçimi sahne olarak dışa aktar", shortcut: "Ctrl+Shift+E", category: "file", run: (c2) => c2.exportScene(true), needsSelection: true },
+  { id: "exportAllImages", label: "Tüm görselleri dışa aktar", shortcut: "Ctrl+Alt+I", category: "file", run: (c2) => c2.exportImages(false) },
+  { id: "exportSelectedImages", label: "Seçili görselleri dışa aktar", shortcut: "Ctrl+Shift+I", category: "file", run: (c2) => c2.exportImages(true), needsSelection: true },
+  { id: "reveal", label: "Pano dosyasını klasörde göster", shortcut: "", category: "file", run: (c2) => c2.revealFile() },
+  { id: "close", label: "Kapat", shortcut: "Ctrl+Q", category: "file", run: (c2) => c2.requestClose() },
+  // ---- Duzenle ----
+  { id: "undo", label: "Geri al", shortcut: "Ctrl+Z", category: "edit", run: (c2) => c2.undo() },
+  { id: "redo", label: "Yinele", shortcut: "Ctrl+Shift+Z", category: "edit", run: (c2) => c2.redo() },
+  { id: "redo2", label: "Yinele", shortcut: "Ctrl+Y", category: "edit", hidden: true, run: (c2) => c2.redo() },
+  { id: "copy", label: "Kopyala", shortcut: "Ctrl+C", category: "edit", run: (c2) => c2.copy(), needsSelection: true },
+  { id: "cut", label: "Kes", shortcut: "Ctrl+X", category: "edit", run: (c2) => c2.cut(), needsSelection: true },
+  { id: "paste", label: "Yapıştır", shortcut: "Ctrl+V", category: "edit", run: (c2) => c2.paste() },
+  { id: "duplicate", label: "Çoğalt", shortcut: "Ctrl+D", category: "edit", run: (c2) => c2.duplicate(), needsSelection: true },
+  { id: "delete", label: "Sil", shortcut: "Del", category: "edit", run: (c2) => c2.deleteSelected(), needsSelection: true },
+  { id: "note", label: "Not ekle", shortcut: "Ctrl+N", category: "edit", run: (c2) => c2.addNote() },
+  { id: "comment", label: "Yorum", shortcut: "Alt+C", category: "edit", run: (c2) => c2.editComment(), needsSelection: true },
+  { id: "editItem", label: "Öğeyi düzenle (not)", shortcut: "Enter", category: "edit", hidden: true, run: (c2) => c2.editSelectedNote() },
+  // ---- Secim ----
+  { id: "selectAll", label: "Tümünü seç", shortcut: "Ctrl+A", category: "select", run: (c2) => c2.selectAll() },
+  { id: "clearSelection", label: "Seçimi temizle", shortcut: "Esc", category: "select", run: (c2) => c2.escape() },
+  { id: "focusImage", label: "Görseli odakla", shortcut: "Space", category: "select", run: (c2) => c2.focusSelection() },
+  { id: "focusNext", label: "Sonraki görsele odaklan", shortcut: "Right", category: "select", run: (c2) => c2.focusStep(1) },
+  { id: "focusPrev", label: "Önceki görsele odaklan", shortcut: "Left", category: "select", run: (c2) => c2.focusStep(-1) },
+  { id: "sendFront", label: "Öne getir", shortcut: "Up", category: "select", run: (c2) => c2.reorder("up"), needsSelection: true },
+  { id: "sendBack", label: "Arkaya gönder", shortcut: "Down", category: "select", run: (c2) => c2.reorder("down"), needsSelection: true },
+  { id: "sendFrontAll", label: "En öne getir", shortcut: "Shift+Up", category: "select", run: (c2) => c2.reorder("front"), needsSelection: true },
+  { id: "sendBackAll", label: "En arkaya gönder", shortcut: "Shift+Down", category: "select", run: (c2) => c2.reorder("back"), needsSelection: true },
+  { id: "slideshow", label: "Slayt gösterisi (seçim)", shortcut: "Alt+S", category: "select", run: (c2) => c2.toggleSlideshow() },
+  // ---- Gorsel ----
+  { id: "flipH", label: "Yatay çevir", shortcut: "Alt+Shift+H", category: "image", run: (c2) => c2.flip("x"), needsSelection: true },
+  { id: "flipV", label: "Dikey çevir", shortcut: "Alt+Shift+V", category: "image", run: (c2) => c2.flip("y"), needsSelection: true },
+  { id: "rotate90", label: "90° döndür", shortcut: "Ctrl+Alt+R", category: "image", run: (c2) => c2.rotateBy(90), needsSelection: true },
+  { id: "resetTransform", label: "Dönüşümü sıfırla", shortcut: "Ctrl+Shift+T", category: "image", run: (c2) => c2.resetTransform(), needsSelection: true },
+  { id: "cropImage", label: "Kırpma modu (C + sürükle)", shortcut: "Ctrl+Alt+Shift+C", category: "image", run: (c2) => c2.toast("Kırpmak için C tuşunu basılı tutup görselin üstünde bir dikdörtgen sürükle. V + sürükle: kırpma içinde kaydır, Shift+V: kırpma içinde yakınlaştır.") },
+  { id: "resetCrop", label: "Kırpmayı sıfırla", shortcut: "Ctrl+Shift+C", category: "image", run: (c2) => c2.resetCrop(), needsSelection: true },
+  { id: "grayscale", label: "Gri ton (seçili)", shortcut: "Alt+G", category: "image", run: (c2) => c2.toggleItemFlag("grayscale"), needsSelection: true },
+  { id: "lock", label: "Kilitle / kilidi aç", shortcut: "Alt+L", category: "image", run: (c2) => c2.toggleItemFlag("locked"), needsSelection: true },
+  { id: "bilinear", label: "Piksel örnekleme (yakın komşu / bilinear)", shortcut: "Alt+T", category: "image", run: (c2) => c2.toggleItemFlag("pixelated"), needsSelection: true },
+  { id: "opacityUp", label: "Öğe opaklığını artır", shortcut: "Alt+]", category: "image", run: (c2) => c2.itemOpacity(0.1), needsSelection: true },
+  { id: "opacityDown", label: "Öğe opaklığını azalt", shortcut: "Alt+[", category: "image", run: (c2) => c2.itemOpacity(-0.1), needsSelection: true },
+  { id: "openSource", label: "Kaynağı aç (dosya konumu)", shortcut: "Ctrl+Shift+O", category: "image", run: (c2) => c2.openSource(), needsSelection: true },
+  { id: "copyImageToClipboard", label: "Görseli panoya kopyala", shortcut: "", category: "image", run: (c2) => c2.copy(), needsSelection: true },
+  // ---- Diz / Hizala ----
+  { id: "arrangeOptimal", label: "Optimal diz (paketle)", shortcut: "Ctrl+P", category: "arrange", run: (c2) => c2.arrange("optimal") },
+  { id: "packAll", label: "Tümünü paketle ve tuvali optimize et", shortcut: "Ctrl+Alt+P", category: "arrange", run: (c2) => c2.packAllAndOptimize() },
+  { id: "arrangeName", label: "Ada göre diz", shortcut: "Ctrl+Alt+N", category: "arrange", run: (c2) => c2.arrange("name") },
+  { id: "arrangeAddition", label: "Ekleme sırasına göre diz", shortcut: "Ctrl+Alt+A", category: "arrange", run: (c2) => c2.arrange("addition") },
+  { id: "arrangeOrder", label: "Katman sırasına göre diz", shortcut: "Ctrl+Alt+O", category: "arrange", run: (c2) => c2.arrange("order") },
+  { id: "arrangePath", label: "Dosya yoluna göre diz", shortcut: "Ctrl+Alt+D", category: "arrange", run: (c2) => c2.arrange("path") },
+  { id: "stack", label: "Yığ (üst üste)", shortcut: "Ctrl+Alt+S", category: "arrange", run: (c2) => c2.arrange("stack"), needsSelection: true },
+  { id: "normalizeSize", label: "Boyutu eşitle", shortcut: "Ctrl+Alt+Up", category: "arrange", run: (c2) => c2.normalize("size"), needsSelection: true },
+  { id: "normalizeHeight", label: "Yüksekliği eşitle", shortcut: "Ctrl+Alt+Left", category: "arrange", run: (c2) => c2.normalize("height"), needsSelection: true },
+  { id: "normalizeWidth", label: "Genişliği eşitle", shortcut: "Ctrl+Alt+Right", category: "arrange", run: (c2) => c2.normalize("width"), needsSelection: true },
+  { id: "normalizeScale", label: "Ölçeği eşitle", shortcut: "Ctrl+Alt+Down", category: "arrange", run: (c2) => c2.normalize("scale"), needsSelection: true },
+  { id: "alignLeft", label: "Sola hizala", shortcut: "Ctrl+Left", category: "arrange", run: (c2) => c2.align("left"), needsSelection: true },
+  { id: "alignRight", label: "Sağa hizala", shortcut: "Ctrl+Right", category: "arrange", run: (c2) => c2.align("right"), needsSelection: true },
+  { id: "alignTop", label: "Üste hizala", shortcut: "Ctrl+Up", category: "arrange", run: (c2) => c2.align("top"), needsSelection: true },
+  { id: "alignBottom", label: "Alta hizala", shortcut: "Ctrl+Down", category: "arrange", run: (c2) => c2.align("bottom"), needsSelection: true },
+  { id: "distributeH", label: "Yatay dağıt", shortcut: "Ctrl+Alt+Shift+Up", category: "arrange", run: (c2) => c2.distribute("horizontal"), needsSelection: true },
+  { id: "distributeV", label: "Dikey dağıt", shortcut: "Ctrl+Alt+Shift+Down", category: "arrange", run: (c2) => c2.distribute("vertical"), needsSelection: true },
+  // ---- Tuval ----
+  { id: "optimizeCanvas", label: "Tuvali optimize et (pencereyi içeriğe sığdır)", shortcut: "Ctrl+O", category: "canvas", run: (c2) => c2.fitWindowTo(false) },
+  { id: "resizeToSelection", label: "Pencereyi seçime boyutla", shortcut: "Ctrl+Shift+R", category: "canvas", run: (c2) => c2.fitWindowTo(true), needsSelection: true },
+  { id: "focusCanvas", label: "Tuvali odakla (tümünü sığdır)", shortcut: "Ctrl+Space", category: "canvas", run: (c2) => c2.focusAll() },
+  { id: "resetZoom", label: "Yakınlaştırmayı sıfırla (%100)", shortcut: "Ctrl+0", category: "canvas", run: (c2) => c2.resetZoom() },
+  { id: "resetCamera", label: "Kamerayı sıfırla", shortcut: "", category: "canvas", run: (c2) => c2.resetCamera() },
+  { id: "zoomIn", label: "Yakınlaştır", shortcut: "Ctrl++", category: "canvas", run: (c2) => c2.zoomBy(1.25) },
+  { id: "zoomOut", label: "Uzaklaştır", shortcut: "Ctrl+-", category: "canvas", run: (c2) => c2.zoomBy(1 / 1.25) },
+  { id: "lockCanvas", label: "Tuvali kilitle", shortcut: "Ctrl+R", category: "canvas", toggle: (c2) => c2.canvas.locked, run: (c2) => c2.toggleCanvas("locked") },
+  { id: "grayscaleCanvas", label: "Tuvali gri tona çevir", shortcut: "Ctrl+Alt+G", category: "canvas", toggle: (c2) => c2.canvas.grayscale, run: (c2) => c2.toggleCanvas("grayscale") },
+  { id: "grid", label: "Izgara (yapışmalı)", shortcut: "G", category: "canvas", toggle: (c2) => c2.canvas.grid, run: (c2) => c2.toggleCanvas("grid") },
+  { id: "hierarchy", label: "Hiyerarşi paneli", shortcut: "Ctrl+J", category: "canvas", toggle: (c2) => c2.ui.hierarchy, run: (c2) => c2.toggleUi("hierarchy") },
+  // ---- Pencere ----
+  { id: "alwaysOnTop", label: "Her zaman üstte", shortcut: "Ctrl+Shift+A", category: "window", toggle: (c2) => c2.win.alwaysOnTop, run: (c2) => c2.toggleAlwaysOnTop() },
+  { id: "transparentToMouse", label: "Fareye şeffaf (tıklamalar altına geçer)", shortcut: "Ctrl+T", category: "window", run: (c2) => c2.setTransparentToMouse(true) },
+  { id: "lockWindow", label: "Pencereyi kilitle (taşıma/boyutlandırma kapalı)", shortcut: "Ctrl+W", category: "window", toggle: (c2) => c2.win.locked, run: (c2) => c2.toggleWindowLock() },
+  { id: "appOpacityUp", label: "Pencere opaklığını artır", shortcut: "Ctrl+Shift++", category: "window", run: (c2) => c2.appOpacity(0.1) },
+  { id: "appOpacityDown", label: "Pencere opaklığını azalt", shortcut: "Ctrl+Shift+-", category: "window", run: (c2) => c2.appOpacity(-0.1) },
+  { id: "maximize", label: "Büyüt / geri al", shortcut: "Ctrl+F", category: "window", run: (c2) => c2.toggleMaximize() },
+  { id: "minimize", label: "Küçült", shortcut: "Ctrl+M", category: "window", run: (c2) => c2.minimize() },
+  { id: "titleAlways", label: "Başlık çubuğu: her zaman", shortcut: "", category: "window", toggle: (c2) => c2.win.titleBar === "always", run: (c2) => c2.setTitleBar("always") },
+  { id: "titleHover", label: "Başlık çubuğu: üzerine gelince", shortcut: "", category: "window", toggle: (c2) => c2.win.titleBar === "hover", run: (c2) => c2.setTitleBar("hover") },
+  { id: "titleHidden", label: "Başlık çubuğu: gizli", shortcut: "", category: "window", toggle: (c2) => c2.win.titleBar === "hidden", run: (c2) => c2.setTitleBar("hidden") },
+  // ---- Gorunum ----
+  { id: "presetDark", label: "Görünüm: Koyu", shortcut: "Alt+1", category: "view", toggle: (c2) => c2.canvas.preset === "dark", run: (c2) => c2.setPreset("dark") },
+  { id: "presetLight", label: "Görünüm: Açık", shortcut: "Alt+2", category: "view", toggle: (c2) => c2.canvas.preset === "light", run: (c2) => c2.setPreset("light") },
+  { id: "presetGlass", label: "Görünüm: Cam (şeffaf)", shortcut: "Alt+3", category: "view", toggle: (c2) => c2.canvas.preset === "glass", run: (c2) => c2.setPreset("glass") },
+  { id: "palette", label: "Komut paleti", shortcut: "Ctrl+Shift+P", category: "view", run: (c2) => c2.toggleUi("palette") },
+  { id: "shortcuts", label: "Kısayollar", shortcut: "Ctrl+H", category: "view", run: (c2) => c2.toggleUi("shortcuts") },
+  { id: "devtools", label: "Geliştirici araçları", shortcut: "F12", category: "view", hidden: true, run: (c2) => c2.openDevTools() }
+];
+function eventToCombo(e2) {
+  const parts2 = [];
+  if (e2.ctrlKey || e2.metaKey) parts2.push("Ctrl");
+  if (e2.altKey) parts2.push("Alt");
+  if (e2.shiftKey) parts2.push("Shift");
+  let key = e2.key;
+  const map = {
+    " ": "Space",
+    Escape: "Esc",
+    Delete: "Del",
+    ArrowUp: "Up",
+    ArrowDown: "Down",
+    ArrowLeft: "Left",
+    ArrowRight: "Right",
+    "=": "+",
+    "_": "-"
+  };
+  if (map[key]) key = map[key];
+  else if (key.length === 1) key = key.toUpperCase();
+  if (key === "İ") key = "I";
+  if (key === "I" && e2.code === "KeyI") key = "I";
+  if (e2.code && /^Key[A-Z]$/.test(e2.code)) key = e2.code.slice(3);
+  if (e2.code && /^Digit[0-9]$/.test(e2.code)) key = e2.code.slice(5);
+  parts2.push(key);
+  return parts2.join("+");
+}
+const comboIndex = /* @__PURE__ */ new Map();
+for (const cmd of COMMANDS) {
+  if (cmd.shortcut) comboIndex.set(cmd.shortcut, cmd);
+}
+comboIndex.set("Ctrl+Shift++", COMMANDS.find((c2) => c2.id === "appOpacityUp"));
+comboIndex.set("Ctrl+Shift+=", COMMANDS.find((c2) => c2.id === "appOpacityUp"));
+comboIndex.set("Ctrl+=", COMMANDS.find((c2) => c2.id === "zoomIn"));
+function findCommandForEvent(e2) {
+  return comboIndex.get(eventToCombo(e2)) || null;
+}
+function commandById(id2) {
+  return COMMANDS.find((c2) => c2.id === id2) || null;
+}
+function TitleBar({ name, dirty, win: win2, mode, visible, onToggleAlwaysOnTop, onMinimize, onToggleMaximize, onClose, onMenu, onRename, transparent, pinDisabled }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `nr-titlebar nr-titlebar-${mode}${visible ? " nr-titlebar-visible" : ""}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-tb-btn nr-tb-menu", title: "Menü", onClick: (e2) => onMenu(e2.currentTarget.getBoundingClientRect()), children: "≡" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-tb-title", onDoubleClick: onRename, title: "Yeniden adlandırmak için çift tıkla", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-tb-brand", children: "NobleRef" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-tb-sep", children: "·" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-tb-name", children: name }),
+      dirty && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-tb-dirty", title: "Kaydedilmemiş değişiklikler", children: "●" }),
+      transparent && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-tb-flag", children: "fareye şeffaf — Ctrl+T ile geri" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        className: `nr-tb-btn${win2.alwaysOnTop ? " nr-tb-btn-active" : ""}${pinDisabled ? " nr-tb-btn-muted" : ""}`,
+        title: pinDisabled ? "Tarayıcıda desteklenmiyor — yalnızca masaüstü uygulamasında" : "Her zaman üstte (Ctrl+Shift+A)",
+        onClick: onToggleAlwaysOnTop,
+        children: "📌"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-tb-btn", title: "Küçült (Ctrl+M)", onClick: onMinimize, children: "–" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-tb-btn", title: "Büyüt (Ctrl+F)", onClick: onToggleMaximize, children: win2.maximized ? "❐" : "☐" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-tb-btn nr-tb-close", title: "Kapat (Ctrl+Q)", onClick: onClose, children: "✕" })
+  ] });
+}
+function ResizeHandles({ onResize, disabled }) {
+  const dragRef = reactExports.useRef(null);
+  function down(e2, dir) {
+    if (disabled || e2.button !== 0) return;
+    e2.preventDefault();
+    e2.stopPropagation();
+    dragRef.current = { dir, startX: e2.screenX, startY: e2.screenY };
+    const move = (ev) => {
+      const d2 = dragRef.current;
+      if (!d2) return;
+      onResize(d2.dir, ev.screenX - d2.startX, ev.screenY - d2.startY);
+    };
+    const up = () => {
+      dragRef.current = null;
+      onResize(null);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  }
+  if (disabled) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: ["n", "s", "e", "w", "ne", "nw", "se", "sw"].map((dir) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `nr-resize nr-resize-${dir}`, onPointerDown: (e2) => down(e2, dir) }, dir)) });
+}
+function ContextMenu({ x: x2, y: y3, items, onClose }) {
+  const ref = reactExports.useRef(null);
+  const [pos, setPos] = reactExports.useState({ left: x2, top: y3 });
+  reactExports.useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let left = x2;
+    let top = y3;
+    if (left + el.offsetWidth > window.innerWidth - 4) left = Math.max(4, window.innerWidth - 4 - el.offsetWidth);
+    if (top + el.offsetHeight > window.innerHeight - 4) top = Math.max(4, window.innerHeight - 4 - el.offsetHeight);
+    setPos({ left, top });
+  }, [x2, y3]);
+  reactExports.useEffect(() => {
+    function onDown(e2) {
+      if (!ref.current?.contains(e2.target)) onClose();
+    }
+    function onKey(e2) {
+      if (e2.key === "Escape") onClose();
+    }
+    document.addEventListener("pointerdown", onDown, true);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown, true);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref, className: "nr-menu", style: pos, onContextMenu: (e2) => e2.preventDefault(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(MenuList, { items, onClose }) });
+}
+function MenuList({ items, onClose }) {
+  const [openIdx, setOpenIdx] = reactExports.useState(null);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-menu-list", children: items.map((it2, idx) => {
+    if (it2.separator) return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-menu-sep" }, idx);
+    if (it2.header) return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-menu-header", children: it2.header }, idx);
+    const hasSub = Array.isArray(it2.submenu) && it2.submenu.length > 0;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: `nr-menu-item${it2.disabled ? " nr-menu-item-disabled" : ""}${openIdx === idx ? " nr-menu-item-open" : ""}`,
+        onMouseEnter: () => setOpenIdx(hasSub ? idx : null),
+        onClick: (e2) => {
+          e2.stopPropagation();
+          if (it2.disabled || hasSub) return;
+          onClose();
+          it2.onClick?.();
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-menu-check", children: it2.checked ? "✓" : "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-menu-label", children: it2.label }),
+          it2.shortcut && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-menu-shortcut", children: it2.shortcut }),
+          hasSub && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-menu-arrow", children: "▸" }),
+          hasSub && openIdx === idx && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-submenu", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MenuList, { items: it2.submenu, onClose }) })
+        ]
+      },
+      idx
+    );
+  }) });
+}
+function CommandPalette({ ctx, onClose }) {
+  const [q, setQ] = reactExports.useState("");
+  const [idx, setIdx] = reactExports.useState(0);
+  const list = reactExports.useMemo(() => {
+    const s2 = q.trim().toLowerCase();
+    return COMMANDS.filter((c2) => !c2.hidden && (!s2 || c2.label.toLowerCase().includes(s2) || (c2.shortcut || "").toLowerCase().includes(s2) || CATEGORIES[c2.category].toLowerCase().includes(s2)));
+  }, [q]);
+  reactExports.useEffect(() => setIdx(0), [q]);
+  function run(cmd) {
+    onClose();
+    setTimeout(() => cmd.run(ctx.current), 0);
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-overlay", onPointerDown: (e2) => e2.target === e2.currentTarget && onClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-palette", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        autoFocus: true,
+        placeholder: "Komut ara…",
+        value: q,
+        onChange: (e2) => setQ(e2.target.value),
+        onKeyDown: (e2) => {
+          e2.stopPropagation();
+          if (e2.key === "Escape") onClose();
+          if (e2.key === "ArrowDown") setIdx((i3) => Math.min(list.length - 1, i3 + 1));
+          if (e2.key === "ArrowUp") setIdx((i3) => Math.max(0, i3 - 1));
+          if (e2.key === "Enter" && list[idx]) run(list[idx]);
+        }
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-palette-list", children: [
+      list.map((c2, i3) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `nr-palette-item${i3 === idx ? " nr-palette-item-active" : ""}`, onMouseEnter: () => setIdx(i3), onClick: () => run(c2), children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-palette-cat", children: CATEGORIES[c2.category] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-palette-label", children: c2.label }),
+        c2.shortcut && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-menu-shortcut", children: c2.shortcut })
+      ] }, c2.id)),
+      list.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-palette-empty", children: "Eşleşen komut yok" })
+    ] })
+  ] }) });
+}
+function ShortcutsModal({ onClose }) {
+  const groups = Object.keys(CATEGORIES).map((cat) => ({ cat, cmds: COMMANDS.filter((c2) => c2.category === cat && !c2.hidden && c2.shortcut) }));
+  const mouse = [
+    ["Kaydır", "Orta tuş / Alt+Sol / Space+Sol / tuval kilitliyken Sol"],
+    ["Yakınlaştır", "Tekerlek (imlecin altına) / Z + Sol sürükle"],
+    ["Seç", "Sol tık · Shift+Sol: ekle-çıkar · boş alanda sürükle: kutu seçimi"],
+    ["Taşı", "Sol sürükle · Shift: eksene kilitli · Shift+Space: komşuya yapış"],
+    ["Döndür", "Ctrl+Sol sürükle (Shift: 45° adım) / üstteki yuvarlak tutamaç"],
+    ["Ölçekle", "Köşe tutamaçları (Alt: merkezden) / Ctrl+Alt+Sol sürükle"],
+    ["Opaklık", "Ctrl+Alt+Shift+Sol sürükle"],
+    ["Çevir", "Alt+Shift+Sol tık"],
+    ["Kırp", "C+Sol sürükle · V+Sol: kırpma içinde kaydır · Shift+V+Sol: büyüt/küçült"],
+    ["Renk kodu / koordinat", "S+Sol / D+Sol"],
+    ["Pencereyi taşı", "Sağ tuşla sürükle (başlık çubuğu da sürüklenir)"],
+    ["Menü", "Sağ tık"],
+    ["Odakla / düzenle", "Çift tık: görseli odakla, notu düzenle; boş alana çift tık: görsel aç"]
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-overlay", onPointerDown: (e2) => e2.target === e2.currentTarget && onClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-modal nr-modal-wide", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-modal-title", children: [
+      "Kısayollar",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-tb-btn", onClick: onClose, children: "✕" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-shortcuts", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-shortcuts-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Fare" }),
+        mouse.map(([k2, v2]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-shortcut-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: k2 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("kbd", { children: v2 })
+        ] }, k2))
+      ] }),
+      groups.map((g2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-shortcuts-col", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: CATEGORIES[g2.cat] }),
+        g2.cmds.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-shortcut-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: c2.label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("kbd", { children: c2.shortcut })
+        ] }, c2.id))
+      ] }, g2.cat))
+    ] })
+  ] }) });
+}
+function HierarchyPanel({ items, selection: selection2, onSelect, onToggleLock, onRename, onClose, onReorder }) {
+  const [renaming, setRenaming] = reactExports.useState(null);
+  const list = [...items].reverse();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-hierarchy", onPointerDown: (e2) => e2.stopPropagation(), children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-hierarchy-head", children: [
+      "Hiyerarşi ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-muted", children: items.length }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-tb-btn", onClick: onClose, title: "Kapat (Ctrl+J)", children: "✕" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-hierarchy-list", children: [
+      list.map((it2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: `nr-h-row${selection2.has(it2.id) ? " nr-h-row-selected" : ""}${it2.locked ? " nr-h-row-locked" : ""}`,
+          onClick: (e2) => onSelect(it2.id, e2.shiftKey),
+          onDoubleClick: () => setRenaming(it2.id),
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-h-icon", children: it2.type === "note" ? "📝" : "🖼️" }),
+            renaming === it2.id ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                autoFocus: true,
+                className: "nr-h-input",
+                defaultValue: it2.name,
+                onBlur: (e2) => {
+                  onRename(it2.id, e2.target.value);
+                  setRenaming(null);
+                },
+                onKeyDown: (e2) => {
+                  e2.stopPropagation();
+                  if (e2.key === "Enter") {
+                    onRename(it2.id, e2.target.value);
+                    setRenaming(null);
+                  }
+                  if (e2.key === "Escape") setRenaming(null);
+                },
+                onClick: (e2) => e2.stopPropagation()
+              }
+            ) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-h-name", title: it2.sourcePath || it2.name, children: it2.type === "note" ? (it2.text || "Not").split("\n")[0].slice(0, 40) : it2.name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-h-btn", title: "Öne getir", onClick: (e2) => {
+              e2.stopPropagation();
+              onReorder([it2.id], "up");
+            }, children: "▲" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-h-btn", title: "Arkaya gönder", onClick: (e2) => {
+              e2.stopPropagation();
+              onReorder([it2.id], "down");
+            }, children: "▼" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-h-btn", title: it2.locked ? "Kilidi aç" : "Kilitle", onClick: (e2) => {
+              e2.stopPropagation();
+              onToggleLock(it2.id);
+            }, children: it2.locked ? "🔒" : "🔓" })
+          ]
+        },
+        it2.id
+      )),
+      items.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-muted nr-h-empty", children: "Pano boş" })
+    ] })
+  ] });
+}
+function Modal({ title, children: children2, actions, onClose, width }) {
+  reactExports.useEffect(() => {
+    function onKey(e2) {
+      if (e2.key === "Escape") onClose?.();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-overlay", onPointerDown: (e2) => e2.target === e2.currentTarget && onClose?.(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-modal", style: width ? { width } : void 0, onKeyDown: (e2) => e2.stopPropagation(), children: [
+    title && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-modal-title", children: title }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-modal-body", children: children2 }),
+    actions && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-modal-actions", children: actions })
+  ] }) });
+}
+function TextPromptModal({ title, label, initial = "", multiline = false, onSubmit, onClose, submitLabel = "Tamam" }) {
+  const [v2, setV] = reactExports.useState(initial);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Modal,
+    {
+      title,
+      onClose,
+      actions: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-btn", onClick: onClose, children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-btn nr-btn-primary", onClick: () => onSubmit(v2), children: submitLabel })
+      ] }),
+      children: [
+        label && /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "nr-label", children: label }),
+        multiline ? /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { autoFocus: true, className: "nr-input nr-textarea", rows: 5, value: v2, onChange: (e2) => setV(e2.target.value) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            autoFocus: true,
+            className: "nr-input",
+            value: v2,
+            onChange: (e2) => setV(e2.target.value),
+            onKeyDown: (e2) => {
+              if (e2.key === "Enter") onSubmit(v2);
+            }
+          }
+        )
+      ]
+    }
+  );
+}
+function Toast({ message }) {
+  if (!message) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-toast", children: message });
+}
+const imageCache = /* @__PURE__ */ new Map();
+function loadImage(src) {
+  if (imageCache.has(src)) return imageCache.get(src);
+  const p2 = new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+  imageCache.set(src, p2);
+  return p2;
+}
+function drawNote(ctx, it2) {
+  ctx.fillStyle = it2.bg || "#fff5b8";
+  ctx.fillRect(0, 0, it2.width, it2.height);
+  ctx.fillStyle = it2.color || "#1c1f28";
+  const fs = it2.fontSize || 16;
+  ctx.font = `${fs}px "Segoe UI", system-ui, sans-serif`;
+  ctx.textBaseline = "top";
+  const pad = 10;
+  const maxW = it2.width - pad * 2;
+  let y3 = pad;
+  for (const paragraph of String(it2.text || "").split("\n")) {
+    const words = paragraph.split(" ");
+    let line = "";
+    for (const word of words) {
+      const test = line ? `${line} ${word}` : word;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, pad, y3);
+        y3 += fs * 1.35;
+        line = word;
+      } else line = test;
+    }
+    ctx.fillText(line, pad, y3);
+    y3 += fs * 1.35;
+    if (y3 > it2.height) break;
+  }
+}
+async function renderSceneToDataUrl({ items, preset = "dark", maxDim = 8192, padding = 24, format = "image/png", quality = 0.92, transparent = false }) {
+  if (!items.length) return null;
+  const box = unionAABB(items);
+  const scale = Math.min(1, maxDim / Math.max(box.w + padding * 2, box.h + padding * 2));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round((box.w + padding * 2) * scale));
+  canvas.height = Math.max(1, Math.round((box.h + padding * 2) * scale));
+  const ctx = canvas.getContext("2d");
+  const p2 = PRESETS[preset] || PRESETS.dark;
+  if (!transparent && p2.opaque) {
+    ctx.fillStyle = p2.bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  ctx.scale(scale, scale);
+  ctx.translate(padding - box.x, padding - box.y);
+  for (const it2 of items) {
+    ctx.save();
+    const c2 = itemCenter(it2);
+    ctx.translate(c2.x, c2.y);
+    ctx.rotate(deg2rad(it2.rotation || 0));
+    ctx.scale(it2.flipX ? -1 : 1, it2.flipY ? -1 : 1);
+    ctx.translate(-it2.width / 2, -it2.height / 2);
+    ctx.globalAlpha = it2.opacity ?? 1;
+    if (it2.grayscale) ctx.filter = "grayscale(1)";
+    if (it2.type === "note") {
+      drawNote(ctx, it2);
+    } else {
+      try {
+        const img = await loadImage(it2.src);
+        const cr = effectiveCrop(it2);
+        ctx.imageSmoothingEnabled = !it2.pixelated;
+        ctx.drawImage(img, cr.x, cr.y, cr.w, cr.h, 0, 0, it2.width, it2.height);
+      } catch {
+        ctx.fillStyle = "#444";
+        ctx.fillRect(0, 0, it2.width, it2.height);
+      }
+    }
+    ctx.restore();
+  }
+  return canvas.toDataURL(format, quality);
+}
+async function renderThumbnail(items, preset) {
+  if (!items.length) return null;
+  try {
+    return await renderSceneToDataUrl({ items, preset, maxDim: 420, padding: 12, format: "image/jpeg", quality: 0.75 });
+  } catch {
+    return null;
+  }
+}
+const DEFAULT_CANVAS = { pan: { x: 0, y: 0 }, zoom: 1, grayscale: false, locked: false, preset: "dark", grid: false, gridSize: 32 };
+function normalizeScene(s2) {
+  return { ...s2, canvas: { ...DEFAULT_CANVAS, ...s2.canvas || {} }, window: s2.window || {}, items: Array.isArray(s2.items) ? s2.items : [] };
+}
+const AUTOSAVE_MS = 5 * 60 * 1e3;
+function NobleRefWindow({ projectId }) {
+  const [loaded, setLoaded] = reactExports.useState(null);
+  const [error2, setError] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    let cancelled = false;
+    window.api.nobleRef.loadProject(projectId).then((res) => !cancelled && setLoaded(res)).catch((err2) => !cancelled && setError(err2.message || String(err2)));
+    return () => {
+      cancelled = true;
+    };
+  }, [projectId]);
+  if (error2) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-root nr-preset-dark nr-loading", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-error", children: error2 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-btn", onClick: () => window.api.nobleRef.window.close(true), children: "Kapat" })
+    ] }) });
+  }
+  if (!loaded) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-root nr-preset-dark nr-loading", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nr-muted", children: "Pano yükleniyor…" }) });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(RefWorkspace, { projectId, meta: loaded.meta, initialScene: normalizeScene(loaded.scene) });
+}
+function RefWorkspace({ projectId, meta, initialScene }) {
+  const isWeb = window.api.nobleRef.capabilities?.osWindowControls === false;
+  const scene = useRefScene(initialScene);
+  const { items, selection: selection2, setSelection, selectedItems, selectedUnlocked, canvas, dirty, setDirty } = scene;
+  const [name, setName] = reactExports.useState(meta.name);
+  const [viewport, setViewportState] = reactExports.useState(() => ({ x: initialScene.canvas?.pan?.x ?? 0, y: initialScene.canvas?.pan?.y ?? 0, zoom: initialScene.canvas?.zoom ?? 1 }));
+  const viewportRef = reactExports.useRef(viewport);
+  viewportRef.current = viewport;
+  const setViewport = reactExports.useCallback((v2) => {
+    setViewportState((prev) => {
+      const next = typeof v2 === "function" ? v2(prev) : v2;
+      viewportRef.current = next;
+      return next;
+    });
+  }, []);
+  const containerRef = reactExports.useRef(null);
+  const keys = reactExports.useRef(/* @__PURE__ */ new Set());
+  const [win2, setWin] = reactExports.useState({ maximized: false, alwaysOnTop: meta.alwaysOnTop !== false, focused: true, opacity: initialScene.window?.opacity ?? 1, bounds: null, locked: false, titleBar: initialScene.window?.titleBar || "always" });
+  const winRef = reactExports.useRef(win2);
+  winRef.current = win2;
+  const [transparentToMouse, setTransparentToMouse] = reactExports.useState(false);
+  const [titleHover, setTitleHover] = reactExports.useState(false);
+  const [editingNoteId, setEditingNoteId] = reactExports.useState(null);
+  const [ui, setUi] = reactExports.useState({ palette: false, shortcuts: false, hierarchy: false });
+  const [contextMenu, setContextMenu] = reactExports.useState(null);
+  const [modal, setModal] = reactExports.useState(null);
+  const [toast, setToast] = reactExports.useState(null);
+  const [slideshow, setSlideshow] = reactExports.useState(false);
+  const clipboardRef = reactExports.useRef(null);
+  const savingRef = reactExports.useRef(false);
+  const toastTimer = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    window.api.nobleRef.window.getState().then((s2) => setWin((w) => ({ ...w, ...s2, titleBar: w.titleBar })));
+    const offState = window.api.nobleRef.window.onStateChanged((s2) => setWin((w) => ({ ...w, ...s2, titleBar: w.titleBar })));
+    const offT = window.api.nobleRef.window.onTransparentToMouse((flag) => setTransparentToMouse(flag));
+    const offRename = window.api.nobleRef.onRenamed((n3) => setName(n3));
+    if (initialScene.window?.opacity && initialScene.window.opacity < 1) window.api.nobleRef.window.setOpacity(initialScene.window.opacity);
+    return () => {
+      offState();
+      offT();
+      offRename();
+    };
+  }, [initialScene]);
+  reactExports.useEffect(() => {
+    document.title = `${name}${dirty ? " •" : ""} — NobleRef`;
+  }, [name, dirty]);
+  const showToast = reactExports.useCallback((msg, ms = 2200) => {
+    setToast(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), ms);
+  }, []);
+  const serialize = reactExports.useCallback(() => {
+    const vp = viewportRef.current;
+    return {
+      name,
+      canvas: { ...canvas, pan: { x: vp.x, y: vp.y }, zoom: vp.zoom },
+      window: { alwaysOnTop: winRef.current.alwaysOnTop, opacity: winRef.current.opacity, titleBar: winRef.current.titleBar },
+      items: scene.itemsRef.current
+    };
+  }, [name, canvas, scene.itemsRef]);
+  const save = reactExports.useCallback(async () => {
+    if (savingRef.current) return false;
+    savingRef.current = true;
+    try {
+      const data = serialize();
+      const thumbnail = await renderThumbnail(data.items, canvas.preset);
+      await window.api.nobleRef.saveProject({ id: projectId, scene: data, thumbnail, windowBounds: winRef.current.bounds, alwaysOnTop: winRef.current.alwaysOnTop });
+      setDirty(false);
+      showToast("Kaydedildi");
+      return true;
+    } catch (err2) {
+      showToast("Kaydedilemedi: " + (err2.message || err2), 4e3);
+      return false;
+    } finally {
+      savingRef.current = false;
+    }
+  }, [projectId, serialize, canvas.preset, setDirty, showToast]);
+  const saveAs = reactExports.useCallback(async () => {
+    try {
+      const data = serialize();
+      const thumbnail = await renderThumbnail(data.items, canvas.preset);
+      const res = await window.api.nobleRef.saveProjectAs({ id: projectId, scene: data, thumbnail });
+      if (res) {
+        setName(res.name);
+        setDirty(false);
+        showToast("Kaydedildi: " + res.filePath, 3500);
+      }
+    } catch (err2) {
+      showToast("Kaydedilemedi: " + (err2.message || err2), 4e3);
+    }
+  }, [projectId, serialize, canvas.preset, setDirty, showToast]);
+  const dirtyRef = reactExports.useRef(dirty);
+  dirtyRef.current = dirty;
+  const saveRef = reactExports.useRef(save);
+  saveRef.current = save;
+  reactExports.useEffect(() => {
+    const t2 = setInterval(() => {
+      if (dirtyRef.current) saveRef.current();
+    }, AUTOSAVE_MS);
+    return () => clearInterval(t2);
+  }, []);
+  reactExports.useEffect(() => {
+    return window.api.nobleRef.window.onCloseRequested(({ quitting }) => {
+      if (!dirtyRef.current) {
+        window.api.nobleRef.window.close(true);
+        return;
+      }
+      if (quitting) {
+        saveRef.current().finally(() => window.api.nobleRef.window.close(true));
+        return;
+      }
+      setModal({ type: "unsaved" });
+    });
+  }, []);
+  reactExports.useEffect(() => {
+    if (!isWeb) return;
+    function onBeforeUnload(e2) {
+      if (!dirtyRef.current) return;
+      e2.preventDefault();
+      e2.returnValue = "";
+    }
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, []);
+  const viewSize = reactExports.useCallback(() => {
+    const r2 = containerRef.current?.getBoundingClientRect();
+    return { w: r2?.width || 800, h: r2?.height || 600 };
+  }, []);
+  const focusItems = reactExports.useCallback(
+    (list) => {
+      if (!list.length) return;
+      const { w, h: h2 } = viewSize();
+      setViewport(fitViewport(unionAABB(list), w, h2, 40));
+    },
+    [setViewport, viewSize]
+  );
+  const focusItemById = reactExports.useCallback(
+    (id2) => {
+      const it2 = scene.itemsRef.current.find((i3) => i3.id === id2);
+      if (it2) {
+        setSelection(/* @__PURE__ */ new Set([id2]));
+        focusItems([it2]);
+      }
+    },
+    [focusItems, scene.itemsRef, setSelection]
+  );
+  const placeNewItems = reactExports.useCallback(
+    (newItems, at) => {
+      if (!newItems.length) return;
+      const vp = viewportRef.current;
+      const { w, h: h2 } = viewSize();
+      const origin = at || { x: (w / 2 - vp.x) / vp.zoom, y: (h2 / 2 - vp.y) / vp.zoom };
+      const positions = cascadePositions(origin.x, origin.y, newItems.length, 32);
+      const placed = newItems.map((it2, i3) => ({ ...it2, x: positions[i3].x - it2.width / 2, y: positions[i3].y - it2.height / 2 }));
+      const wasEmpty = scene.itemsRef.current.length === 0;
+      scene.addItems(placed);
+      if (wasEmpty) setTimeout(() => focusItems(placed), 0);
+    },
+    [scene, viewSize, focusItems]
+  );
+  const addFiles = reactExports.useCallback(
+    async (files, at) => {
+      const newItems = await itemsFromFiles(files);
+      if (!newItems.length) return showToast("Desteklenen bir görsel bulunamadı");
+      placeNewItems(newItems, at);
+    },
+    [placeNewItems, showToast]
+  );
+  const addUrls = reactExports.useCallback(
+    async (urls, at) => {
+      showToast("İndiriliyor…", 6e4);
+      const newItems = await itemsFromUrls(urls);
+      if (!newItems.length) return showToast("Bağlantıdan görsel alınamadı", 3e3);
+      placeNewItems(newItems, at);
+      showToast(`${newItems.length} görsel eklendi`);
+    },
+    [placeNewItems, showToast]
+  );
+  const openImages = reactExports.useCallback(async () => {
+    const files = await window.api.nobleRef.openImagesDialog();
+    if (!files?.length) return;
+    const newItems = [];
+    for (const f2 of files) {
+      try {
+        newItems.push(await itemFromDataUrl(f2));
+      } catch {
+      }
+    }
+    placeNewItems(newItems);
+  }, [placeNewItems]);
+  const copySelection = reactExports.useCallback(async () => {
+    const list = selectedItems;
+    if (!list.length) return;
+    clipboardRef.current = { items: list.map((i3) => ({ ...i3 })), osDataUrl: null };
+    if (list.length === 1 && list[0].type === "image") {
+      try {
+        await window.api.nobleRef.copyImage(list[0].src);
+        clipboardRef.current.osDataUrl = list[0].src;
+      } catch {
+      }
+    }
+    showToast(`${list.length} öğe kopyalandı`);
+  }, [selectedItems, showToast]);
+  const pasteInternal = reactExports.useCallback(() => {
+    const clip = clipboardRef.current;
+    if (!clip?.items?.length) return false;
+    const copies = clip.items.map((i3) => ({ ...i3, id: uid(i3.type === "note" ? "note" : "img"), x: i3.x + 30, y: i3.y + 30, addedAt: Date.now(), locked: false }));
+    scene.addItems(copies);
+    clipboardRef.current = { ...clip, items: copies.map((c2) => ({ ...c2 })) };
+    return true;
+  }, [scene]);
+  const pasteFromOs = reactExports.useCallback(
+    async (at) => {
+      const res = await window.api.nobleRef.readClipboard();
+      if (res?.dataUrl) {
+        const clip = clipboardRef.current;
+        if (clip?.osDataUrl && clip.osDataUrl.length === res.dataUrl.length && clip.osDataUrl.slice(0, 200) === res.dataUrl.slice(0, 200)) return pasteInternal();
+        const it2 = await itemFromDataUrl({ dataUrl: res.dataUrl, name: "Pano görseli" });
+        placeNewItems([it2], at);
+        return true;
+      }
+      const urls = extractUrls(res?.text);
+      if (urls.length) {
+        addUrls(urls, at);
+        return true;
+      }
+      if (res?.text?.trim()) {
+        placeNewItems([createNoteItem({ text: res.text.trim() })], at);
+        return true;
+      }
+      return false;
+    },
+    [pasteInternal, placeNewItems, addUrls]
+  );
+  const paste = reactExports.useCallback(async () => {
+    if (canvas.locked) return;
+    if (clipboardRef.current?.items?.length && !clipboardRef.current.osDataUrl) {
+      const res = await window.api.nobleRef.readClipboard().catch(() => null);
+      if (!res?.dataUrl && !res?.text?.trim()) return pasteInternal();
+      if (res?.dataUrl || extractUrls(res?.text).length) return pasteFromOs();
+      return pasteInternal();
+    }
+    const ok = await pasteFromOs();
+    if (!ok) pasteInternal();
+  }, [canvas.locked, pasteInternal, pasteFromOs]);
+  reactExports.useEffect(() => {
+    function onPaste(e2) {
+      const files = [...e2.clipboardData?.files || []].filter(isImageFile);
+      if (files.length) {
+        e2.preventDefault();
+        addFiles(files);
+      }
+    }
+    window.addEventListener("paste", onPaste);
+    return () => window.removeEventListener("paste", onPaste);
+  }, [addFiles]);
+  const ctxRef = reactExports.useRef(null);
+  const ctx = {
+    canvas,
+    win: { ...win2, titleBar: win2.titleBar },
+    ui,
+    selection: selection2,
+    selectedItems,
+    save,
+    saveAs,
+    openImages,
+    exportScene: async (selectedOnly) => {
+      const list = selectedOnly ? selectedItems : items;
+      if (!list.length) return showToast("Dışa aktarılacak öğe yok");
+      showToast("Görüntü hazırlanıyor…", 6e4);
+      try {
+        const dataUrl = await renderSceneToDataUrl({ items: list, preset: canvas.preset, transparent: canvas.preset === "glass" });
+        const res = await window.api.nobleRef.exportSceneImage(dataUrl, name);
+        showToast(res?.saved ? "Dışa aktarıldı" : "Vazgeçildi");
+      } catch (err2) {
+        showToast("Dışa aktarılamadı: " + (err2.message || err2), 4e3);
+      }
+    },
+    exportImages: async (selectedOnly) => {
+      const list = (selectedOnly ? selectedItems : items).filter((i3) => i3.type === "image");
+      if (!list.length) return showToast("Dışa aktarılacak görsel yok");
+      const res = await window.api.nobleRef.exportImages(list.map((i3) => ({ name: i3.name || "gorsel", dataUrl: i3.src })));
+      showToast(res?.saved ? `${res.saved} görsel kaydedildi` : "Vazgeçildi");
+    },
+    revealFile: () => window.api.nobleRef.revealProject(projectId),
+    requestClose: () => {
+      if (!dirty) window.api.nobleRef.window.close(true);
+      else setModal({ type: "unsaved" });
+    },
+    undo: scene.undo,
+    redo: scene.redo,
+    copy: copySelection,
+    cut: async () => {
+      await copySelection();
+      scene.removeItems(selectedUnlocked.map((i3) => i3.id));
+    },
+    paste,
+    duplicate: () => {
+      if (!selectedItems.length) return;
+      const copies = selectedItems.map((i3) => ({ ...i3, id: uid(i3.type === "note" ? "note" : "img"), x: i3.x + 30, y: i3.y + 30, addedAt: Date.now(), locked: false }));
+      scene.addItems(copies);
+    },
+    deleteSelected: () => scene.removeItems(selectedUnlocked.map((i3) => i3.id)),
+    addNote: () => {
+      const note = createNoteItem({ text: "Not" });
+      placeNewItems([note]);
+      setTimeout(() => setEditingNoteId(note.id), 50);
+    },
+    editComment: () => {
+      const it2 = selectedItems[0];
+      if (it2) setModal({ type: "comment", itemId: it2.id, initial: it2.comment || "" });
+    },
+    editSelectedNote: () => {
+      const it2 = selectedItems[0];
+      if (it2?.type === "note" && !it2.locked) setEditingNoteId(it2.id);
+    },
+    selectAll: () => setSelection(new Set(items.map((i3) => i3.id))),
+    escape: () => {
+      if (slideshow) setSlideshow(false);
+      setEditingNoteId(null);
+      setSelection(/* @__PURE__ */ new Set());
+    },
+    focusSelection: () => focusItems(selectedItems.length ? selectedItems : items),
+    focusAll: () => focusItems(items),
+    focusStep: (dir) => {
+      if (!items.length) return;
+      const ordered = [...items].sort((a2, b2) => a2.x - b2.x || a2.y - b2.y);
+      const currentId = selectedItems[0]?.id;
+      let idx = ordered.findIndex((i3) => i3.id === currentId);
+      idx = idx === -1 ? dir > 0 ? 0 : ordered.length - 1 : (idx + dir + ordered.length) % ordered.length;
+      focusItemById(ordered[idx].id);
+    },
+    reorder: (dir) => scene.reorder(selectedItems.map((i3) => i3.id), dir),
+    toggleSlideshow: () => setSlideshow((s2) => !s2),
+    flip: (axis) => scene.patchItems(selectedUnlocked.map((i3) => i3.id), (i3) => axis === "x" ? { flipX: !i3.flipX } : { flipY: !i3.flipY }),
+    rotateBy: (deg) => scene.patchItems(selectedUnlocked.map((i3) => i3.id), (i3) => ({ rotation: (i3.rotation + deg + 540) % 360 - 180 })),
+    resetTransform: () => scene.commit((cur) => cur.map((i3) => selection2.has(i3.id) && !i3.locked ? resetTransform(i3) : i3)),
+    resetCrop: () => scene.commit((cur) => cur.map((i3) => selection2.has(i3.id) && !i3.locked ? resetCrop(i3) : i3)),
+    toggleItemFlag: (flag) => {
+      const ids = flag === "locked" ? selectedItems.map((i3) => i3.id) : selectedUnlocked.map((i3) => i3.id);
+      scene.patchItems(ids, (i3) => ({ [flag]: !i3[flag] }));
+    },
+    itemOpacity: (delta) => scene.patchItems(selectedUnlocked.map((i3) => i3.id), (i3) => ({ opacity: clamp((i3.opacity ?? 1) + delta, 0.05, 1) })),
+    setItemOpacity: (v2) => scene.patchItems(selectedUnlocked.map((i3) => i3.id), { opacity: v2 }),
+    openSource: () => {
+      const it2 = selectedItems.find((i3) => i3.sourcePath);
+      if (it2) window.api.nobleRef.revealPath(it2.sourcePath);
+      else showToast("Bu görselin bilinen bir dosya kaynağı yok (panodan/bağlantıdan eklenmiş).", 3500);
+    },
+    arrange: (mode) => {
+      const list = selectedUnlocked.length > 1 ? selectedUnlocked : items.filter((i3) => !i3.locked);
+      if (mode === "optimal") scene.applyLayout(packItems(list));
+      else if (mode === "stack") scene.applyLayout(stackItems(selectedUnlocked));
+      else scene.applyLayout(arrangeGrid(list, mode));
+    },
+    packAllAndOptimize: () => {
+      const list = items.filter((i3) => !i3.locked);
+      scene.applyLayout(packItems(list));
+      setTimeout(() => ctxRef.current.fitWindowTo(false), 30);
+    },
+    normalize: (mode) => scene.applyLayout(normalizeItems(selectedUnlocked, mode)),
+    align: (side) => scene.applyLayout(alignItems(selectedUnlocked, side)),
+    distribute: (axis) => scene.applyLayout(distributeItems(selectedUnlocked, axis)),
+    // Pencereyi icerige (ya da secime) sigdir: PureRef "Optimize canvas"
+    fitWindowTo: async (selectedOnly) => {
+      const list = selectedOnly ? selectedItems : scene.itemsRef.current;
+      if (!list.length) return;
+      const box = unionAABB(list);
+      const vp = viewportRef.current;
+      const state = await window.api.nobleRef.window.getState();
+      const pad = 16;
+      const titleH = winRef.current.titleBar === "hidden" ? 0 : 30;
+      const w = Math.round(box.w * vp.zoom + pad * 2);
+      const h2 = Math.round(box.h * vp.zoom + pad * 2 + titleH);
+      await window.api.nobleRef.window.setBounds({ x: state.bounds.x, y: state.bounds.y, width: Math.max(320, w), height: Math.max(240, h2) });
+      setViewport({ zoom: vp.zoom, x: pad - box.x * vp.zoom, y: pad - box.y * vp.zoom });
+    },
+    resetZoom: () => {
+      const { w, h: h2 } = viewSize();
+      const vp = viewportRef.current;
+      const cx = w / 2;
+      const cy = h2 / 2;
+      const ratio = 1 / vp.zoom;
+      setViewport({ zoom: 1, x: cx - (cx - vp.x) * ratio, y: cy - (cy - vp.y) * ratio });
+    },
+    resetCamera: () => setViewport({ x: 0, y: 0, zoom: 1 }),
+    zoomBy: (factor) => {
+      const { w, h: h2 } = viewSize();
+      const vp = viewportRef.current;
+      const zoom2 = clamp(vp.zoom * factor, MIN_ZOOM, MAX_ZOOM);
+      const ratio = zoom2 / vp.zoom;
+      setViewport({ zoom: zoom2, x: w / 2 - (w / 2 - vp.x) * ratio, y: h2 / 2 - (h2 / 2 - vp.y) * ratio });
+    },
+    toggleCanvas: (flag) => scene.updateCanvas({ [flag]: !canvas[flag] }),
+    toggleUi: (key) => setUi((u2) => ({ ...u2, [key]: !u2[key] })),
+    toggleAlwaysOnTop: async () => {
+      if (isWeb) return showToast("Tarayıcı sekmeleri diğer programların üzerinde sabit kalamaz — bu özellik yalnızca masaüstü uygulamasında var.", 4500);
+      const s2 = await window.api.nobleRef.window.setAlwaysOnTop(!win2.alwaysOnTop);
+      setWin((w) => ({ ...w, ...s2 }));
+      setDirty(true);
+    },
+    setTransparentToMouse: async (flag) => {
+      if (isWeb) return showToast("Fareye şeffaflık tarayıcı güvenliği yüzünden mümkün değil — yalnızca masaüstü uygulamasında var.", 4500);
+      await window.api.nobleRef.window.setTransparentToMouse(flag);
+      setTransparentToMouse(flag);
+      if (flag) showToast("Fareye şeffaf mod: tıklamalar altındaki pencereye geçer. Geri almak için Ctrl+T.", 5e3);
+    },
+    toggleWindowLock: async () => {
+      if (isWeb) return showToast("Pencere kilidi yalnızca masaüstü uygulamasında var.", 3500);
+      const s2 = await window.api.nobleRef.window.setLocked(!win2.locked);
+      setWin((w) => ({ ...w, ...s2 }));
+    },
+    appOpacity: async (delta) => {
+      const v2 = clamp((win2.opacity ?? 1) + delta, 0.15, 1);
+      const applied = await window.api.nobleRef.window.setOpacity(v2);
+      setWin((w) => ({ ...w, opacity: applied }));
+      setDirty(true);
+    },
+    toggleMaximize: async () => {
+      const s2 = await window.api.nobleRef.window.toggleMaximize();
+      setWin((w) => ({ ...w, ...s2 }));
+    },
+    minimize: () => window.api.nobleRef.window.minimize(),
+    setTitleBar: (mode) => {
+      setWin((w) => ({ ...w, titleBar: mode }));
+      setDirty(true);
+    },
+    setPreset: (p2) => scene.updateCanvas({ preset: p2 }),
+    openDevTools: () => window.api.nobleRef.window.openDevTools(),
+    toast: showToast,
+    rename: () => setModal({ type: "rename" })
+  };
+  ctxRef.current = ctx;
+  reactExports.useEffect(() => {
+    function isEditable(el) {
+      return el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+    }
+    function onKeyDown(e2) {
+      const map = { Alt: "alt", Control: "ctrl", Shift: "shift", " ": " " };
+      const k2 = map[e2.key] || (e2.key.length === 1 ? e2.key.toLowerCase() : null);
+      if (k2) keys.current.add(k2);
+      if (isEditable(document.activeElement)) return;
+      if (e2.key === " ") e2.preventDefault();
+      const cmd = findCommandForEvent(e2);
+      if (!cmd) return;
+      e2.preventDefault();
+      if (e2.repeat) return;
+      if (cmd.id === "focusImage") {
+        keys.current.delete("_dragged");
+        return;
+      }
+      if (cmd.needsSelection && !ctxRef.current.selectedItems.length) return;
+      cmd.run(ctxRef.current);
+    }
+    function onKeyUp(e2) {
+      const map = { Alt: "alt", Control: "ctrl", Shift: "shift", " ": " " };
+      const k2 = map[e2.key] || (e2.key.length === 1 ? e2.key.toLowerCase() : null);
+      if (k2) keys.current.delete(k2);
+      if (e2.key === "Alt") e2.preventDefault();
+      if (e2.key === " " && !isEditable(document.activeElement)) {
+        const dragged = keys.current.has("_dragged");
+        keys.current.delete("_dragged");
+        if (!dragged) ctxRef.current.focusSelection();
+      }
+    }
+    function onBlur() {
+      keys.current.clear();
+    }
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, []);
+  reactExports.useEffect(() => {
+    if (!slideshow) return;
+    const list = selectedItems.length > 1 ? selectedItems : items;
+    if (!list.length) {
+      setSlideshow(false);
+      return;
+    }
+    let idx = 0;
+    focusItems([list[0]]);
+    const t2 = setInterval(() => {
+      idx = (idx + 1) % list.length;
+      focusItems([list[idx]]);
+    }, 1e4);
+    return () => clearInterval(t2);
+  }, [slideshow]);
+  reactExports.useEffect(() => {
+    if (win2.titleBar !== "hover") return;
+    function onMove(e2) {
+      setTitleHover(e2.clientY < 40);
+    }
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [win2.titleBar]);
+  const resizeStart = reactExports.useRef(null);
+  const handleResize = reactExports.useCallback(async (dir, dx, dy) => {
+    if (!dir) {
+      resizeStart.current = null;
+      return;
+    }
+    if (!resizeStart.current) resizeStart.current = (await window.api.nobleRef.window.getState()).bounds;
+    const b2 = resizeStart.current;
+    let { x: x2, y: y3, width, height } = b2;
+    if (dir.includes("e")) width = Math.max(320, b2.width + dx);
+    if (dir.includes("s")) height = Math.max(240, b2.height + dy);
+    if (dir.includes("w")) {
+      width = Math.max(320, b2.width - dx);
+      x2 = b2.x + (b2.width - width);
+    }
+    if (dir.includes("n")) {
+      height = Math.max(240, b2.height - dy);
+      y3 = b2.y + (b2.height - height);
+    }
+    window.api.nobleRef.window.setBounds({ x: x2, y: y3, width, height });
+  }, []);
+  const menuItems = reactExports.useMemo(() => buildMenu(ctxRef, { hasSelection: selectedItems.length > 0, selected: selectedItems, canvas, win: win2, items, isWeb }), [selectedItems, canvas, win2, items]);
+  const preset = PRESETS[canvas.preset] ? canvas.preset : "dark";
+  const titleVisible = win2.titleBar === "always" || win2.titleBar === "hover" && titleHover;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `nr-root nr-preset-${preset}${win2.locked ? " nr-root-locked" : ""}`, style: { "--nr-bg": PRESETS[preset].bg, "--nr-text": PRESETS[preset].text }, children: [
+    win2.titleBar !== "hidden" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      TitleBar,
+      {
+        name,
+        dirty,
+        win: win2,
+        mode: win2.titleBar,
+        visible: titleVisible,
+        transparent: transparentToMouse,
+        pinDisabled: isWeb,
+        onToggleAlwaysOnTop: ctx.toggleAlwaysOnTop,
+        onMinimize: ctx.minimize,
+        onToggleMaximize: ctx.toggleMaximize,
+        onClose: ctx.requestClose,
+        onRename: ctx.rename,
+        onMenu: (rect) => setContextMenu({ x: rect.left, y: rect.bottom + 2, itemId: null })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      RefCanvas,
+      {
+        scene,
+        viewport,
+        setViewport,
+        containerRef,
+        keys,
+        canvasLocked: canvas.locked,
+        windowLocked: win2.locked,
+        editingNoteId,
+        setEditingNoteId,
+        onNoteCommit: (id2, text) => scene.patchItems([id2], { text }),
+        onContextMenu: (info) => setContextMenu(info),
+        onOpenImagesDialog: openImages,
+        onDropFiles: addFiles,
+        onDropUrls: addUrls,
+        onWindowMoveBy: (dx, dy) => window.api.nobleRef.window.moveBy(dx, dy),
+        onFocusItem: focusItemById,
+        preset
+      }
+    ),
+    ui.hierarchy && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HierarchyPanel,
+      {
+        items,
+        selection: selection2,
+        onSelect: (id2, additive) => setSelection((sel) => {
+          if (!additive) return /* @__PURE__ */ new Set([id2]);
+          const next = new Set(sel);
+          if (next.has(id2)) next.delete(id2);
+          else next.add(id2);
+          return next;
+        }),
+        onToggleLock: (id2) => scene.patchItems([id2], (i3) => ({ locked: !i3.locked })),
+        onRename: (id2, v2) => v2.trim() && scene.patchItems([id2], { name: v2.trim() }),
+        onReorder: (ids, dir) => scene.reorder(ids, dir),
+        onClose: () => setUi((u2) => ({ ...u2, hierarchy: false }))
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nr-statusbar", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        Math.round(viewport.zoom * 100),
+        "%"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        items.length,
+        " öğe",
+        selectedItems.length ? ` · ${selectedItems.length} seçili` : ""
+      ] }),
+      canvas.locked && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-status-flag", children: "Tuval kilitli" }),
+      canvas.grayscale && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-status-flag", children: "Gri ton" }),
+      canvas.grid && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-status-flag", children: "Izgara" }),
+      slideshow && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nr-status-flag", children: "Slayt gösterisi (Esc)" }),
+      win2.opacity < 1 && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nr-status-flag", children: [
+        "Opaklık ",
+        Math.round(win2.opacity * 100),
+        "%"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResizeHandles, { onResize: handleResize, disabled: win2.locked || win2.maximized }),
+    contextMenu && /* @__PURE__ */ jsxRuntimeExports.jsx(ContextMenu, { x: contextMenu.x, y: contextMenu.y, items: menuItems, onClose: () => setContextMenu(null) }),
+    ui.palette && /* @__PURE__ */ jsxRuntimeExports.jsx(CommandPalette, { ctx: ctxRef, onClose: () => setUi((u2) => ({ ...u2, palette: false })) }),
+    ui.shortcuts && /* @__PURE__ */ jsxRuntimeExports.jsx(ShortcutsModal, { onClose: () => setUi((u2) => ({ ...u2, shortcuts: false })) }),
+    modal?.type === "unsaved" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Modal,
+      {
+        title: "Kaydedilmemiş değişiklikler",
+        onClose: () => setModal(null),
+        actions: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-btn", onClick: () => setModal(null), children: "İptal" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nr-btn nr-btn-danger", onClick: () => window.api.nobleRef.window.close(true), children: "Kaydetme" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "nr-btn nr-btn-primary",
+              onClick: async () => {
+                const ok = await save();
+                if (ok) window.api.nobleRef.window.close(true);
+              },
+              children: "Kaydet"
+            }
+          )
+        ] }),
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+          '"',
+          name,
+          '" panosunda kaydedilmemiş değişiklikler var. Kapatmadan önce kaydedilsin mi?'
+        ] })
+      }
+    ),
+    modal?.type === "rename" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      TextPromptModal,
+      {
+        title: "Panoyu yeniden adlandır",
+        initial: name,
+        onClose: () => setModal(null),
+        onSubmit: async (v2) => {
+          setModal(null);
+          if (v2.trim() && v2.trim() !== name) {
+            const m2 = await window.api.nobleRef.renameProject(projectId, v2.trim());
+            setName(m2.name);
+          }
+        }
+      }
+    ),
+    modal?.type === "comment" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      TextPromptModal,
+      {
+        title: "Yorum",
+        label: "Bu öğe için not/yorum (hiyerarşide ve görselin köşesinde 💬 olarak görünür)",
+        initial: modal.initial,
+        multiline: true,
+        submitLabel: "Kaydet",
+        onClose: () => setModal(null),
+        onSubmit: (v2) => {
+          scene.patchItems([modal.itemId], { comment: v2.trim() });
+          setModal(null);
+        }
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Toast, { message: toast })
+  ] });
+}
+function buildMenu(ctxRef, { hasSelection, selected: selected2, canvas, win: win2, items, isWeb }) {
+  const c2 = () => ctxRef.current;
+  const cmd = (id2, overrides = {}) => {
+    const def = commandById(id2);
+    return {
+      label: def.label,
+      shortcut: def.shortcut,
+      checked: def.toggle ? def.toggle(c2()) : void 0,
+      disabled: def.needsSelection && !hasSelection,
+      onClick: () => def.run(c2()),
+      ...overrides
+    };
+  };
+  const single = selected2.length === 1 ? selected2[0] : null;
+  return [
+    cmd("openImages"),
+    cmd("paste"),
+    cmd("note"),
+    { separator: true },
+    ...hasSelection ? [
+      cmd("copy"),
+      cmd("cut"),
+      cmd("duplicate"),
+      cmd("delete"),
+      {
+        label: "Görsel",
+        submenu: [
+          cmd("flipH"),
+          cmd("flipV"),
+          cmd("rotate90"),
+          cmd("resetTransform"),
+          { separator: true },
+          cmd("resetCrop"),
+          { label: "Kırpma nasıl yapılır?", onClick: () => c2().toast("C basılı tutup görselin üstünde dikdörtgen sürükle · V+sürükle: kırpma içinde kaydır · Shift+V+sürükle: büyüt/küçült", 6e3) },
+          { separator: true },
+          cmd("grayscale", { checked: single ? !!single.grayscale : void 0 }),
+          cmd("lock", { checked: single ? !!single.locked : void 0 }),
+          cmd("bilinear", { checked: single ? !!single.pixelated : void 0 }),
+          {
+            label: "Opaklık",
+            submenu: [1, 0.75, 0.5, 0.25].map((v2) => ({ label: `${Math.round(v2 * 100)}%`, checked: single ? Math.abs((single.opacity ?? 1) - v2) < 0.01 : void 0, onClick: () => c2().setItemOpacity(v2) }))
+          },
+          { separator: true },
+          cmd("sendFront"),
+          cmd("sendBack"),
+          cmd("sendFrontAll"),
+          cmd("sendBackAll"),
+          { separator: true },
+          cmd("comment"),
+          cmd("openSource"),
+          cmd("focusImage")
+        ]
+      },
+      { separator: true }
+    ] : [],
+    {
+      label: "Diz / Hizala",
+      submenu: [
+        cmd("arrangeOptimal"),
+        cmd("packAll"),
+        cmd("arrangeName"),
+        cmd("arrangeAddition"),
+        cmd("arrangeOrder"),
+        cmd("arrangePath"),
+        cmd("stack"),
+        { separator: true },
+        cmd("normalizeSize"),
+        cmd("normalizeHeight"),
+        cmd("normalizeWidth"),
+        cmd("normalizeScale"),
+        { separator: true },
+        cmd("alignLeft"),
+        cmd("alignRight"),
+        cmd("alignTop"),
+        cmd("alignBottom"),
+        cmd("distributeH"),
+        cmd("distributeV")
+      ]
+    },
+    {
+      label: "Tuval",
+      submenu: [
+        cmd("optimizeCanvas"),
+        cmd("resizeToSelection"),
+        cmd("focusCanvas"),
+        cmd("resetZoom"),
+        cmd("resetCamera"),
+        cmd("zoomIn"),
+        cmd("zoomOut"),
+        { separator: true },
+        cmd("lockCanvas"),
+        cmd("grayscaleCanvas"),
+        cmd("grid"),
+        cmd("hierarchy"),
+        cmd("slideshow"),
+        cmd("selectAll")
+      ]
+    },
+    {
+      label: "Pencere",
+      submenu: [
+        cmd("alwaysOnTop", isWeb ? { label: "Her zaman üstte (tarayıcıda yok)" } : {}),
+        cmd("transparentToMouse", isWeb ? { label: "Fareye şeffaf (tarayıcıda yok)" } : {}),
+        cmd("lockWindow", isWeb ? { label: "Pencereyi kilitle (tarayıcıda yok)" } : {}),
+        cmd("appOpacityUp"),
+        cmd("appOpacityDown"),
+        { separator: true },
+        cmd("titleAlways"),
+        cmd("titleHover"),
+        cmd("titleHidden"),
+        { separator: true },
+        cmd("presetDark"),
+        cmd("presetLight"),
+        cmd("presetGlass"),
+        { separator: true },
+        cmd("maximize"),
+        cmd("minimize")
+      ]
+    },
+    {
+      label: "Dosya",
+      submenu: [
+        cmd("save"),
+        cmd("saveAs"),
+        { label: "Yeniden adlandır", onClick: () => c2().rename() },
+        ...isWeb ? [] : [cmd("reveal")],
+        { separator: true },
+        cmd("exportScene"),
+        cmd("exportSelectedScene"),
+        cmd("exportAllImages"),
+        cmd("exportSelectedImages")
+      ]
+    },
+    { separator: true },
+    cmd("undo"),
+    cmd("redo"),
+    cmd("palette"),
+    cmd("shortcuts"),
+    { separator: true },
+    { header: `${items.length} öğe · ${canvas.preset === "glass" ? "Cam" : canvas.preset === "light" ? "Açık" : "Koyu"} · ${win2.alwaysOnTop ? "üstte" : "normal"}` },
+    cmd("close")
+  ];
 }
 export {
   App as A,
   BASE_URL as B,
-  NobleTaskApp as N,
+  NobleRefWindow as N,
   ReactDOM as R,
   StudioApp as S,
   VoiceStatusBar as V,
   React as a,
   mergeHubContent as b,
   APPS as c,
-  NobleCoreAuthModal as d,
-  AppIcon as e,
-  NobleCoreView as f,
-  ServerModal as g,
-  heroBanner as h,
+  NobleTaskApp as d,
+  NobleRefProjectsScreen as e,
+  NobleCoreAuthModal as f,
+  AppIcon as g,
+  NobleCoreView as h,
+  heroBanner as i,
   jsxRuntimeExports as j,
+  ServerModal as k,
   listServers as l,
   me as m,
   noblecoreLogo as n,
