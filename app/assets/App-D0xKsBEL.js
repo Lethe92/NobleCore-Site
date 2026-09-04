@@ -70016,8 +70016,8 @@ function useImageThumbnail(imageDataUrl) {
   }, [imageDataUrl]);
   return thumbUrl || imageDataUrl;
 }
-const ZOOM_MIN$2 = 100;
-const ZOOM_MAX$2 = 400;
+const ZOOM_MIN$1 = 100;
+const ZOOM_MAX$1 = 400;
 const ZOOM_STEP = 25;
 function sanitizeFileName$2(name) {
   return (name || "gorsel").replace(/[\\/:*?"<>|]/g, "").trim() || "gorsel";
@@ -70058,7 +70058,7 @@ function ImageLightbox({ imageDataUrl, label, onClose, onUseAsImageUpload }) {
   }
   function zoomAt(newZoomRaw, cx, cy) {
     if (!baseSize) return;
-    const newZoom = Math.min(ZOOM_MAX$2, Math.max(ZOOM_MIN$2, newZoomRaw));
+    const newZoom = Math.min(ZOOM_MAX$1, Math.max(ZOOM_MIN$1, newZoomRaw));
     setView((v2) => {
       if (newZoom === v2.zoom) return v2;
       const ratio = newZoom / v2.zoom;
@@ -70149,12 +70149,12 @@ function ImageLightbox({ imageDataUrl, label, onClose, onUseAsImageUpload }) {
       ),
       label && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "lightbox-label", children: label }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lightbox-zoom-row", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "lightbox-zoom-btn", onClick: () => zoomByButton(-ZOOM_STEP), disabled: zoom2 <= ZOOM_MIN$2, children: "−" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "lightbox-zoom-btn", onClick: () => zoomByButton(-ZOOM_STEP), disabled: zoom2 <= ZOOM_MIN$1, children: "−" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "lightbox-zoom-value", children: [
           zoom2,
           "%"
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "lightbox-zoom-btn", onClick: () => zoomByButton(ZOOM_STEP), disabled: zoom2 >= ZOOM_MAX$2, children: "+" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "lightbox-zoom-btn", onClick: () => zoomByButton(ZOOM_STEP), disabled: zoom2 >= ZOOM_MAX$1, children: "+" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "lightbox-actions", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleSave, disabled: saveStatus === "saving", children: saveStatus === "saved" ? "✓ Kaydedildi" : "💾 Bilgisayara Kaydet" }),
@@ -71411,7 +71411,7 @@ function NodeSearchMenu({ x: x2, y: y3, catalog, onSelect, onClose }) {
     ] })
   ] });
 }
-function formatRelativeTime$2(timestamp) {
+function formatRelativeTime$1(timestamp) {
   const diffMs = Date.now() - timestamp;
   const minute = 60 * 1e3;
   const hour = 60 * minute;
@@ -71537,7 +71537,7 @@ function ProjectsScreen({ onOpenProject, onBackToHub }) {
           ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-card-name", children: project.name }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card-date", children: [
             "düzenlendi: ",
-            formatRelativeTime$2(project.updatedAt)
+            formatRelativeTime$1(project.updatedAt)
           ] })
         ] })
       ] }, project.id);
@@ -71622,12 +71622,12 @@ const APPS = {
   },
   board: {
     icon: { img: nobletaskLogo },
-    title: "Kanban",
-    desc: "Sonsuz tuval üzerinde serbest çalışma alanı",
+    title: "NobleTask",
+    desc: "Jira tarzı proje ve iş takibi: Scrum/Kanban board, backlog, sprint",
     features: [
-      { icon: "🖱️", tag: "ÖZELLİK", tagColor: "#4f7cff", title: "Pan & Zoom", url: null },
-      { icon: "🗂️", tag: "ÖZELLİK", tagColor: "#6fcf97", title: "Projeler", url: null },
-      { icon: "🚧", tag: "YAKINDA", tagColor: "#d99a3c", title: "Daha Fazlası Geliyor", url: null }
+      { icon: "📋", tag: "ÖZELLİK", tagColor: "#4f7cff", title: "Sürükle-bırak Board ve Backlog", url: null },
+      { icon: "🏃", tag: "ÖZELLİK", tagColor: "#6fcf97", title: "Sprint planlama (Scrum) veya sürekli akış (Kanban)", url: null },
+      { icon: "🧩", tag: "ÖZELLİK", tagColor: "#d99a3c", title: "Epik, hikâye, görev, hata; öncelik, etiket, yorum", url: null }
     ]
   },
   ref: {
@@ -75179,8 +75179,8 @@ function NobleCoreAuthModal({ open, onClose, onAuthenticated }) {
 }
 const VIEWPORT$1 = 220;
 const OUTPUT_SIZE = 256;
-const ZOOM_MIN$1 = 1;
-const ZOOM_MAX$1 = 3;
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 3;
 function AvatarCropper({ imageUrl, onCancel, onConfirm }) {
   const imgRef = reactExports.useRef(null);
   const dragRef = reactExports.useRef(null);
@@ -75284,8 +75284,8 @@ function AvatarCropper({ imageUrl, onCancel, onConfirm }) {
       {
         className: "avatar-cropper-zoom",
         type: "range",
-        min: ZOOM_MIN$1,
-        max: ZOOM_MAX$1,
+        min: ZOOM_MIN,
+        max: ZOOM_MAX,
         step: 0.01,
         value: zoom2,
         onChange: handleZoomChange
@@ -75297,7 +75297,7 @@ function AvatarCropper({ imageUrl, onCancel, onConfirm }) {
     ] })
   ] });
 }
-const TEMPLATES = [
+const TEMPLATES$1 = [
   { icon: "🎮", label: "Oyun" },
   { icon: "💞", label: "Arkadaşlar" },
   { icon: "🧑‍🎨", label: "Çalışma Grubu" },
@@ -75369,7 +75369,7 @@ function ServerModal({ open, onClose, token, username, onServerReady }) {
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "server-choose-row-chevron", children: "›" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "server-choose-section-label", children: "BİR ŞABLON KULLANARAK BAŞLA" }),
-      TEMPLATES.map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "server-choose-row", disabled: true, title: "Şablonlar yakında", children: [
+      TEMPLATES$1.map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "server-choose-row", disabled: true, title: "Şablonlar yakında", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "server-choose-row-icon", children: t2.icon }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "server-choose-row-label", children: t2.label }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "server-choose-row-chevron", children: "›" })
@@ -76080,7 +76080,7 @@ function useModalClose(open, onClose) {
   }
   return { visible, closing, requestClose };
 }
-function formatRelativeTime$1(timestamp) {
+function formatRelativeTime(timestamp) {
   if (!timestamp) return "Bilinmeyen";
   const diffMs = Date.now() - timestamp;
   const minute = 60 * 1e3;
@@ -76339,8 +76339,8 @@ function ServerSettingsModal({ open, onClose, token, server, currentUserId, onRe
                       m2.role === "owner" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "noblecore-member-role", children: "Sahip" })
                     ] })
                   ] }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime$1(m2.joined_at) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime$1(m2.user_created_at) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime(m2.joined_at) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: formatRelativeTime(m2.user_created_at) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: m2.role === "owner" ? "Sunucuyu Oluşturdu" : "Davet Kodu" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: (m2.roles || []).length === 0 ? "—" : m2.roles.map((r2) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "noblecore-member-role", style: r2.color ? { color: r2.color } : void 0, children: r2.name }, r2.id)) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: canManageRoles && /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -78180,7 +78180,7 @@ function clampFlyoutPosition(anchorRect, menuHeight, gap = 8) {
   const top = Math.max(gap, Math.min(anchorRect.top, maxTop));
   return { top, left: anchorRect.right + gap };
 }
-const DURATIONS = ["15 Dakika", "1 Saat", "8 Saat", "24 Saat", "3 gün boyunca", "Her Zaman"];
+const DURATIONS$1 = ["15 Dakika", "1 Saat", "8 Saat", "24 Saat", "3 gün boyunca", "Her Zaman"];
 function UserStatusDurationMenu({ anchorRef, onSelect, onMouseEnter, onMouseLeave }) {
   const anchorRect = anchorRef.current?.getBoundingClientRect();
   const [pos, setPos] = reactExports.useState(() => anchorRect ? { top: anchorRect.top, left: anchorRect.right + 8 } : null);
@@ -78201,7 +78201,7 @@ function UserStatusDurationMenu({ anchorRef, onSelect, onMouseEnter, onMouseLeav
       ref,
       onMouseEnter,
       onMouseLeave,
-      children: DURATIONS.map((d2) => /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "user-status-duration-menu-row", onClick: () => onSelect(d2), children: d2 }, d2))
+      children: DURATIONS$1.map((d2) => /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", className: "user-status-duration-menu-row", onClick: () => onSelect(d2), children: d2 }, d2))
     }
   );
 }
@@ -80844,7 +80844,7 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
             {
               className: `launcher-tab launcher-tab-board${activeApp === "board" ? " launcher-tab-active" : ""}`,
               onClick: () => setActiveApp("board"),
-              title: "Kanban",
+              title: "NobleTask",
               children: /* @__PURE__ */ jsxRuntimeExports.jsx(AppIcon, { icon: APPS.board.icon, className: "launcher-tab-icon" })
             }
           )
@@ -80860,7 +80860,7 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-fade" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "launcher-side-art-footer", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: handleOpen, disabled: activeApp === "ref", children: activeApp === "ref" ? "Yakında" : "AI Studio" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "launcher-play-btn", onClick: handleOpen, disabled: activeApp === "ref", children: activeApp === "ref" ? "Yakında" : activeApp === "board" ? "NobleTask" : "AI Studio" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "launcher-side-art-version", children: "Sürüm: 1.0.0" })
             ] })
           ] }),
@@ -80991,338 +80991,3171 @@ function HubScreen({ onOpenStudio, onOpenBoard }) {
     )
   ] });
 }
-function formatRelativeTime(timestamp) {
-  const diffMs = Date.now() - timestamp;
-  const minute = 60 * 1e3;
-  const hour = 60 * minute;
-  const day = 24 * hour;
-  const week = 7 * day;
-  const month = 30 * day;
-  if (diffMs < minute) return "az önce";
-  if (diffMs < hour) return `${Math.floor(diffMs / minute)} dakika önce`;
-  if (diffMs < day) return `${Math.floor(diffMs / hour)} saat önce`;
-  if (diffMs < week) return `${Math.floor(diffMs / day)} gün önce`;
-  if (diffMs < month) return `${Math.floor(diffMs / week)} hafta önce`;
-  return `${Math.floor(diffMs / month)} ay önce`;
+const LS_KEY = "nobletask.projects";
+function readLocal() {
+  try {
+    return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+  } catch {
+    return {};
+  }
 }
-function BoardProjectsScreen({ onOpenProject, onBackToHub }) {
-  const [projects, setProjects] = reactExports.useState([]);
-  const [loading2, setLoading] = reactExports.useState(true);
-  const [menuOpenId, setMenuOpenId] = reactExports.useState(null);
-  const [confirmDeleteId, setConfirmDeleteId] = reactExports.useState(null);
-  const [renamingId, setRenamingId] = reactExports.useState(null);
-  const [nameDraft, setNameDraft] = reactExports.useState("");
+function writeLocal(map) {
+  localStorage.setItem(LS_KEY, JSON.stringify(map));
+}
+const localAdapter = {
+  async list() {
+    return Object.values(readLocal()).sort((a2, b2) => b2.updatedAt - a2.updatedAt);
+  },
+  async get(id2) {
+    return readLocal()[id2] || null;
+  },
+  async save(project) {
+    const map = readLocal();
+    map[project.id] = { ...project, updatedAt: Date.now() };
+    writeLocal(map);
+    return map[project.id];
+  },
+  async remove(id2) {
+    const map = readLocal();
+    delete map[id2];
+    writeLocal(map);
+    return true;
+  }
+};
+const electronAdapter = {
+  list: () => window.api.listTaskProjects(),
+  get: (id2) => window.api.getTaskProject(id2),
+  save: (project) => window.api.saveTaskProject(project),
+  remove: (id2) => window.api.deleteTaskProject(id2)
+};
+const taskStorage = typeof window !== "undefined" && window.api && typeof window.api.listTaskProjects === "function" ? electronAdapter : localAdapter;
+const ISSUE_TYPES = {
+  task: { id: "task", label: "Görev", color: "#4BADE8" },
+  story: { id: "story", label: "Hikâye", color: "#63BA3C" },
+  bug: { id: "bug", label: "Hata", color: "#E5493A" },
+  epic: { id: "epic", label: "Epik", color: "#904EE2" },
+  subtask: { id: "subtask", label: "Alt görev", color: "#4BADE8" }
+};
+const ISSUE_TYPE_ORDER = ["task", "story", "bug", "epic", "subtask"];
+const PRIORITIES = {
+  highest: { id: "highest", label: "En yüksek", color: "#FF5630" },
+  high: { id: "high", label: "Yüksek", color: "#FF7452" },
+  medium: { id: "medium", label: "Orta", color: "#FFAB00" },
+  low: { id: "low", label: "Düşük", color: "#0065FF" },
+  lowest: { id: "lowest", label: "En düşük", color: "#2684FF" }
+};
+const PRIORITY_ORDER = ["highest", "high", "medium", "low", "lowest"];
+const STATUS_CATEGORIES = {
+  todo: { id: "todo", label: "Yapılacak" },
+  inprogress: { id: "inprogress", label: "Devam ediyor" },
+  done: { id: "done", label: "Tamamlandı" }
+};
+const AVATAR_COLORS = [
+  "#0052CC",
+  "#00875A",
+  "#FF5630",
+  "#6554C0",
+  "#FF991F",
+  "#00B8D9",
+  "#DE350B",
+  "#5243AA",
+  "#36B37E",
+  "#0065FF"
+];
+function uid(prefix = "id") {
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+function colorForName(name = "") {
+  let hash = 0;
+  for (const ch of name) hash = hash * 31 + ch.charCodeAt(0) >>> 0;
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+}
+function initials(name = "") {
+  const parts2 = name.trim().split(/\s+/).filter(Boolean);
+  if (parts2.length === 0) return "?";
+  if (parts2.length === 1) return parts2[0].slice(0, 2).toUpperCase();
+  return (parts2[0][0] + parts2[parts2.length - 1][0]).toUpperCase();
+}
+function suggestProjectKey(name, existingKeys = []) {
+  const ascii = name.replace(/ç/gi, "c").replace(/ğ/gi, "g").replace(/ı/g, "i").replace(/İ/g, "I").replace(/ö/gi, "o").replace(/ş/gi, "s").replace(/ü/gi, "u");
+  const words = ascii.split(/[^a-zA-Z0-9]+/).filter(Boolean);
+  let base;
+  if (words.length === 0) base = "NT";
+  else if (words.length === 1) base = words[0].slice(0, 4).toUpperCase();
+  else base = words.map((w) => w[0]).join("").slice(0, 10).toUpperCase();
+  base = base.replace(/^[0-9]+/, "") || "NT";
+  let key = base;
+  let n3 = 1;
+  const taken = new Set(existingKeys.map((k2) => k2.toUpperCase()));
+  while (taken.has(key)) {
+    n3 += 1;
+    key = `${base}${n3}`;
+  }
+  return key;
+}
+function defaultColumns() {
+  return [
+    { id: "todo", name: "YAPILACAK", category: "todo" },
+    { id: "inprogress", name: "DEVAM EDİYOR", category: "inprogress" },
+    { id: "done", name: "TAMAMLANDI", category: "done" }
+  ];
+}
+function createProject({ name, key, type = "scrum", lead }) {
+  const now2 = Date.now();
+  const leadMember = { id: lead?.id || "me", name: lead?.name || "Kullanıcı", avatarUrl: lead?.avatarUrl || null, color: colorForName(lead?.name || "Kullanıcı") };
+  return {
+    id: uid("tp"),
+    key,
+    name,
+    type,
+    leadId: leadMember.id,
+    createdAt: now2,
+    updatedAt: now2,
+    issueCounter: 0,
+    columns: defaultColumns(),
+    members: [leadMember],
+    sprints: [],
+    issues: [],
+    activity: []
+  };
+}
+function nextSprintName(project) {
+  return `${project.key} Sprint ${project.sprints.length + 1}`;
+}
+function rankBetween(before, after) {
+  if (before == null && after == null) return 1e3;
+  if (before == null) return after - 1e3;
+  if (after == null) return before + 1e3;
+  return (before + after) / 2;
+}
+function maxRank(issues) {
+  return issues.reduce((m2, i3) => i3.rank > m2 ? i3.rank : m2, 0);
+}
+function createIssue(project, fields, reporterId) {
+  const now2 = Date.now();
+  const number = project.issueCounter + 1;
+  return {
+    issue: {
+      id: uid("is"),
+      key: `${project.key}-${number}`,
+      number,
+      type: fields.type || "task",
+      summary: fields.summary.trim(),
+      description: fields.description || "",
+      status: fields.status || project.columns[0]?.id || "todo",
+      priority: fields.priority || "medium",
+      assigneeId: fields.assigneeId || null,
+      reporterId: reporterId || null,
+      labels: fields.labels || [],
+      sprintId: fields.sprintId || null,
+      // Kanban projelerinde: true = henuz board'a alinmamis (Backlog'da)
+      inBacklog: fields.inBacklog ?? project.type === "kanban",
+      parentId: fields.parentId || null,
+      storyPoints: fields.storyPoints ?? null,
+      dueDate: fields.dueDate || null,
+      rank: maxRank(project.issues) + 1e3,
+      createdAt: now2,
+      updatedAt: now2,
+      resolvedAt: null,
+      comments: []
+    },
+    issueCounter: number
+  };
+}
+function sortByRank(list) {
+  return [...list].sort((a2, b2) => a2.rank - b2.rank);
+}
+function formatDate(ts) {
+  if (!ts) return "—";
+  return new Date(ts).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
+}
+function formatDateTime(ts) {
+  if (!ts) return "—";
+  return new Date(ts).toLocaleString("tr-TR", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+function formatRelative(ts) {
+  if (!ts) return "—";
+  const diff = Date.now() - ts;
+  const m2 = 60 * 1e3;
+  const h2 = 60 * m2;
+  const d2 = 24 * h2;
+  if (diff < m2) return "az önce";
+  if (diff < h2) return `${Math.floor(diff / m2)} dk önce`;
+  if (diff < d2) return `${Math.floor(diff / h2)} sa önce`;
+  if (diff < 7 * d2) return `${Math.floor(diff / d2)} gün önce`;
+  return formatDate(ts);
+}
+function daysLeft(endDate) {
+  if (!endDate) return null;
+  const end = new Date(endDate);
+  end.setHours(23, 59, 59, 999);
+  return Math.ceil((end.getTime() - Date.now()) / (24 * 60 * 60 * 1e3));
+}
+function getIssueThumbnail(issue) {
+  if (issue.coverImage === null) return null;
+  if (typeof issue.coverImage === "string") return issue.coverImage;
+  for (const c2 of issue.comments) {
+    if (c2.images?.length) return c2.images[0].url;
+  }
+  return null;
+}
+function toDateInputValue(ts) {
+  const d2 = ts ? new Date(ts) : /* @__PURE__ */ new Date();
+  const pad = (n3) => String(n3).padStart(2, "0");
+  return `${d2.getFullYear()}-${pad(d2.getMonth() + 1)}-${pad(d2.getDate())}`;
+}
+function IssueTypeIcon({ type, size = 16, className = "" }) {
+  const t2 = ISSUE_TYPES[type] || ISSUE_TYPES.task;
+  const common2 = { width: size, height: size, viewBox: "0 0 16 16", className: `nt-type-icon ${className}`, "aria-label": t2.label };
+  switch (type) {
+    case "bug":
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { ...common2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { width: "16", height: "16", rx: "2", fill: t2.color }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "8", cy: "8", r: "3.5", fill: "#fff" })
+      ] });
+    case "story":
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { ...common2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { width: "16", height: "16", rx: "2", fill: t2.color }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M5 4h6v8l-3-2-3 2V4z", fill: "#fff" })
+      ] });
+    case "epic":
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { ...common2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { width: "16", height: "16", rx: "2", fill: t2.color }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M9 3L4.5 9H8l-1 4 4.5-6H8l1-4z", fill: "#fff" })
+      ] });
+    case "subtask":
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { ...common2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { width: "16", height: "16", rx: "2", fill: t2.color }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4 4h3v3H4zM9 9h3v3H9zM7 5.5h2v5", stroke: "#fff", strokeWidth: "1.3", fill: "none" })
+      ] });
+    default:
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { ...common2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { width: "16", height: "16", rx: "2", fill: t2.color }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4.5 8.2l2.3 2.3 4.7-4.8", stroke: "#fff", strokeWidth: "1.8", fill: "none", strokeLinecap: "round", strokeLinejoin: "round" })
+      ] });
+  }
+}
+function PriorityIcon({ priority, size = 16, className = "" }) {
+  const p2 = PRIORITIES[priority] || PRIORITIES.medium;
+  const common2 = { width: size, height: size, viewBox: "0 0 16 16", className: `nt-priority-icon ${className}`, "aria-label": p2.label };
+  const stroke = { stroke: p2.color, strokeWidth: 2, fill: "none", strokeLinecap: "round", strokeLinejoin: "round" };
+  switch (priority) {
+    case "highest":
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { ...common2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3.5 7.5L8 3l4.5 4.5", ...stroke }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3.5 12.5L8 8l4.5 4.5", ...stroke })
+      ] });
+    case "high":
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { ...common2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3.5 10L8 5.5l4.5 4.5", ...stroke }) });
+    case "low":
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { ...common2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3.5 6L8 10.5 12.5 6", ...stroke }) });
+    case "lowest":
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { ...common2, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3.5 3.5L8 8l4.5-4.5", ...stroke }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3.5 8.5L8 13l4.5-4.5", ...stroke })
+      ] });
+    default:
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { ...common2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3 5.5h10M3 10.5h10", ...stroke }) });
+  }
+}
+function Avatar({ member, size = 24, className = "" }) {
+  if (!member) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `nt-avatar nt-avatar-empty ${className}`, style: { width: size, height: size }, title: "Atanmamış", children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: size * 0.6, height: size * 0.6, viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z" }) }) });
+  }
+  const style2 = { width: size, height: size, fontSize: Math.max(9, Math.round(size * 0.42)) };
+  if (member.avatarUrl) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `nt-avatar ${className}`, src: member.avatarUrl, alt: "", title: member.name, style: style2 });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `nt-avatar ${className}`, style: { ...style2, background: member.color }, title: member.name, children: member.initials });
+}
+const Icon = {
+  Search: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "11", cy: "11", r: "7" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M20 20l-3.5-3.5", strokeLinecap: "round" })
+  ] }),
+  Plus: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M12 5v14M5 12h14" }) }),
+  More: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "5", cy: "12", r: "2" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "12", cy: "12", r: "2" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "19", cy: "12", r: "2" })
+  ] }),
+  Close: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M6 6l12 12M18 6L6 18" }) }),
+  ChevronDown: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M6 9l6 6 6-6" }) }),
+  ChevronRight: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M9 6l6 6-6 6" }) }),
+  Board: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "3", y: "4", width: "5", height: "16", rx: "1" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "9.5", y: "4", width: "5", height: "11", rx: "1" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "16", y: "4", width: "5", height: "7", rx: "1" })
+  ] }),
+  Backlog: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4 6h16M4 12h16M4 18h10" }) }),
+  List: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M8 6h13M8 12h13M8 18h13" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "4", cy: "6", r: "1", fill: "currentColor" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "4", cy: "12", r: "1", fill: "currentColor" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "4", cy: "18", r: "1", fill: "currentColor" })
+  ] }),
+  Summary: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4 20V10M10 20V4M16 20v-7M22 20H2" }) }),
+  Timeline: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3 7h8M9 12h10M5 17h7" }) }),
+  Settings: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "12", cy: "12", r: "3" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 01-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 01-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 012.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 012.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z" })
+  ] }),
+  Projects: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "3", y: "3", width: "8", height: "8", rx: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "13", y: "3", width: "8", height: "8", rx: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "3", y: "13", width: "8", height: "8", rx: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "13", y: "13", width: "8", height: "8", rx: "1.5" })
+  ] }),
+  Check: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M5 12l5 5L20 7" }) }),
+  Trash: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" }) }),
+  Edit: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M4 20h4l10-10-4-4L4 16v4zM13 7l4 4" }) }),
+  Back: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M15 18l-6-6 6-6" }) }),
+  Drag: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "currentColor", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "9", cy: "6", r: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "15", cy: "6", r: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "9", cy: "12", r: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "15", cy: "12", r: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "9", cy: "18", r: "1.5" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "15", cy: "18", r: "1.5" })
+  ] }),
+  Sprint: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "18", height: "18", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", ...p2, children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3 12a9 9 0 0115.5-6.3L21 8M21 3v5h-5M21 12a9 9 0 01-15.5 6.3L3 16M3 21v-5h5" }) }),
+  Calendar: (p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", ...p2, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("rect", { x: "3", y: "5", width: "18", height: "16", rx: "2" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M3 10h18M8 3v4M16 3v4" })
+  ] })
+};
+function Modal({ title, onClose, children: children2, width = 560, className = "", footer, headerExtra }) {
   reactExports.useEffect(() => {
-    refresh();
-  }, []);
-  async function refresh() {
-    setLoading(true);
-    const list = await window.api.listBoardProjects();
-    setProjects(list);
-    setLoading(false);
-  }
-  async function handleNewProject() {
-    const project = await window.api.createBoardProject();
-    onOpenProject(project);
-  }
-  function openMenu(e2, id2) {
-    e2.stopPropagation();
-    setConfirmDeleteId(null);
-    setMenuOpenId(menuOpenId === id2 ? null : id2);
-  }
-  function closeMenus() {
-    setMenuOpenId(null);
-    setConfirmDeleteId(null);
-  }
-  function startRename(e2, project) {
-    e2.stopPropagation();
-    setMenuOpenId(null);
-    setRenamingId(project.id);
-    setNameDraft(project.name);
-  }
-  async function commitRename(id2) {
-    const trimmed = nameDraft.trim() || "İsimsiz Board";
-    setRenamingId(null);
-    await window.api.renameBoardProject(id2, trimmed);
-    setProjects((prev) => prev.map((p2) => p2.id === id2 ? { ...p2, name: trimmed } : p2));
-  }
-  function askDelete(e2, id2) {
-    e2.stopPropagation();
-    setConfirmDeleteId(id2);
-  }
-  async function confirmDelete(e2, id2) {
-    e2.stopPropagation();
-    await window.api.deleteBoardProject(id2);
-    setProjects((prev) => prev.filter((p2) => p2.id !== id2));
-    setMenuOpenId(null);
-    setConfirmDeleteId(null);
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "projects-screen", onClick: closeMenus, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "projects-topbar", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "toolbar-actions", children: [
-        onBackToHub && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: onBackToHub, children: "← Hub" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toolbar-title", children: "Board" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleNewProject, children: "+ Yeni Proje" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "projects-header", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "Projeler" }) }),
-    loading2 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hint", children: "Yükleniyor…" }) : projects.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "projects-empty", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Henüz bir projeniz yok." }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn btn-primary", onClick: handleNewProject, children: "+ Yeni Proje Oluştur" })
-    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "projects-grid", children: projects.map((project) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card", onClick: () => onOpenProject(project), children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-thumb", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-thumb-placeholder", children: "📋" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-btn", onClick: (e2) => openMenu(e2, project.id), children: "⋮" }),
-        menuOpenId === project.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-menu", onClick: (e2) => e2.stopPropagation(), children: confirmDeleteId === project.id ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-menu-confirm-text", children: "Silinsin mi?" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-item project-menu-item-danger", onClick: (e2) => confirmDelete(e2, project.id), children: "Evet, Sil" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-item", onClick: () => setConfirmDeleteId(null), children: "Vazgeç" })
-        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "project-menu-item", onClick: (e2) => startRename(e2, project), children: "✏️ Yeniden Adlandır" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "project-menu-item project-menu-item-danger",
-              onClick: (e2) => askDelete(e2, project.id),
-              children: "🗑️ Sil"
-            }
-          )
-        ] }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card-footer", children: [
-        renamingId === project.id ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            className: "project-rename-input",
-            autoFocus: true,
-            value: nameDraft,
-            onClick: (e2) => e2.stopPropagation(),
-            onChange: (e2) => setNameDraft(e2.target.value),
-            onBlur: () => commitRename(project.id),
-            onKeyDown: (e2) => {
-              if (e2.key === "Enter") commitRename(project.id);
-              if (e2.key === "Escape") setRenamingId(null);
-            }
-          }
-        ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "project-card-name", children: project.name }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "project-card-date", children: [
-          "düzenlendi: ",
-          formatRelativeTime(project.updatedAt)
+    function onKey(e2) {
+      if (e2.key === "Escape") onClose?.();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  return reactDomExports.createPortal(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-modal-overlay", onMouseDown: (e2) => e2.target === e2.currentTarget && onClose?.(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `nt-modal ${className}`, style: { width }, role: "dialog", children: [
+      (title || onClose) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-modal-header", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-modal-title", children: title }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-modal-header-actions", children: [
+          headerExtra,
+          onClose && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-icon-btn", onClick: onClose, title: "Kapat", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Close, {}) })
         ] })
-      ] })
-    ] }, project.id)) })
-  ] });
-}
-const ZOOM_MIN = 0.02;
-const ZOOM_MAX = 20;
-const ZOOM_WHEEL_FACTOR = 15e-4;
-const ZOOM_BUTTON_STEP = 1.25;
-const GRID_BASE_PX = 32;
-const GRID_MAJOR_EVERY = 5;
-const GRID_OFFSET = 4e3;
-function BoardCanvas({ project, onBack }) {
-  const wrapRef = reactExports.useRef(null);
-  const dragRef = reactExports.useRef(null);
-  const [isPanning, setIsPanning] = reactExports.useState(false);
-  const [viewport, setViewport] = reactExports.useState(project.viewport || { x: 0, y: 0, zoom: 1 });
-  const [projectName, setProjectName] = reactExports.useState(project.name);
-  const [editingName, setEditingName] = reactExports.useState(false);
-  const [nameDraft, setNameDraft] = reactExports.useState(project.name);
-  const viewportRef = reactExports.useRef(viewport);
-  reactExports.useEffect(() => {
-    viewportRef.current = viewport;
-  }, [viewport]);
-  const isFirstRun = reactExports.useRef(true);
-  reactExports.useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    }
-    const timeout2 = setTimeout(() => {
-      window.api.saveBoardProject({ id: project.id, viewport });
-    }, 1e3);
-    return () => clearTimeout(timeout2);
-  }, [viewport, project.id]);
-  const handleBack = reactExports.useCallback(async () => {
-    await window.api.saveBoardProject({ id: project.id, viewport: viewportRef.current });
-    onBack();
-  }, [project.id, onBack]);
-  async function commitName() {
-    const trimmed = nameDraft.trim() || "İsimsiz Board";
-    setEditingName(false);
-    if (trimmed !== projectName) {
-      setProjectName(trimmed);
-      await window.api.renameBoardProject(project.id, trimmed);
-    }
-  }
-  function zoomAt(newZoomRaw, cx, cy) {
-    const newZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, newZoomRaw));
-    setViewport((v2) => {
-      if (newZoom === v2.zoom) return v2;
-      const ratio = newZoom / v2.zoom;
-      return {
-        zoom: newZoom,
-        x: cx - (cx - v2.x) * ratio,
-        y: cy - (cy - v2.y) * ratio
-      };
-    });
-  }
-  reactExports.useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
-    function handleWheel(e2) {
-      e2.preventDefault();
-      const rect = wrap.getBoundingClientRect();
-      const cx = e2.clientX - rect.left;
-      const cy = e2.clientY - rect.top;
-      const factor = Math.exp(-e2.deltaY * ZOOM_WHEEL_FACTOR);
-      zoomAt(viewportRef.current.zoom * factor, cx, cy);
-    }
-    wrap.addEventListener("wheel", handleWheel, { passive: false });
-    return () => wrap.removeEventListener("wheel", handleWheel);
-  }, []);
-  function zoomByButton(factor) {
-    const rect = wrapRef.current?.getBoundingClientRect();
-    const cx = rect ? rect.width / 2 : 0;
-    const cy = rect ? rect.height / 2 : 0;
-    zoomAt(viewportRef.current.zoom * factor, cx, cy);
-  }
-  function handleResetView() {
-    setViewport({ x: 0, y: 0, zoom: 1 });
-  }
-  function handleMouseDown(e2) {
-    if (e2.button !== 0) return;
-    dragRef.current = { startX: e2.clientX, startY: e2.clientY, startViewport: viewport };
-    setIsPanning(true);
-  }
-  reactExports.useEffect(() => {
-    if (!isPanning) return;
-    let raf = null;
-    function handleMove(e2) {
-      if (!dragRef.current) return;
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = null;
-        if (!dragRef.current) return;
-        const dx = e2.clientX - dragRef.current.startX;
-        const dy = e2.clientY - dragRef.current.startY;
-        setViewport((v2) => ({ ...v2, x: dragRef.current.startViewport.x + dx, y: dragRef.current.startViewport.y + dy }));
-      });
-    }
-    function handleUp() {
-      dragRef.current = null;
-      setIsPanning(false);
-    }
-    window.addEventListener("mousemove", handleMove);
-    window.addEventListener("mouseup", handleUp);
-    return () => {
-      if (raf) cancelAnimationFrame(raf);
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("mouseup", handleUp);
-    };
-  }, [isPanning]);
-  const contentTransform = `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`;
-  const gridTransform = `translate(${viewport.x}px, ${viewport.y}px)`;
-  const gridLevel = Math.round(Math.log2(viewport.zoom));
-  const minorPx = GRID_BASE_PX * Math.pow(2, gridLevel);
-  const majorPx = minorPx * GRID_MAJOR_EVERY;
-  const minorPos = GRID_OFFSET % minorPx;
-  const majorPos = GRID_OFFSET % majorPx;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-shell", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "toolbar", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "toolbar-actions", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: handleBack, children: "← Board Projeleri" }),
-        editingName ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            className: "project-name-input",
-            autoFocus: true,
-            value: nameDraft,
-            onChange: (e2) => setNameDraft(e2.target.value),
-            onBlur: commitName,
-            onKeyDown: (e2) => {
-              if (e2.key === "Enter") commitName();
-              if (e2.key === "Escape") {
-                setNameDraft(projectName);
-                setEditingName(false);
-              }
-            }
-          }
-        ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            className: "toolbar-title toolbar-title-editable",
-            title: "Yeniden adlandırmak için tıklayın",
-            onClick: () => {
-              setNameDraft(projectName);
-              setEditingName(true);
-            },
-            children: projectName
-          }
-        )
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toolbar-actions" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-modal-body", children: children2 }),
+      footer && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-modal-footer", children: footer })
+    ] }) }),
+    document.body
+  );
+}
+function Popover({ anchorRef, onClose, children: children2, align = "left", width, className = "" }) {
+  const ref = reactExports.useRef(null);
+  const [pos, setPos] = reactExports.useState(null);
+  reactExports.useLayoutEffect(() => {
+    const anchor = anchorRef.current;
+    const el = ref.current;
+    if (!anchor || !el) return;
+    const r2 = anchor.getBoundingClientRect();
+    const w = el.offsetWidth;
+    const h2 = el.offsetHeight;
+    let left = align === "right" ? r2.right - w : r2.left;
+    let top = r2.bottom + 4;
+    if (left + w > window.innerWidth - 8) left = window.innerWidth - 8 - w;
+    if (left < 8) left = 8;
+    if (top + h2 > window.innerHeight - 8) top = Math.max(8, r2.top - h2 - 4);
+    setPos({ left, top });
+  }, [anchorRef, align]);
+  reactExports.useEffect(() => {
+    function onDown(e2) {
+      if (ref.current?.contains(e2.target)) return;
+      if (anchorRef.current?.contains(e2.target)) return;
+      onClose();
+    }
+    function onKey(e2) {
+      if (e2.key === "Escape") onClose();
+    }
+    document.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose, anchorRef]);
+  return reactDomExports.createPortal(
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       {
-        ref: wrapRef,
-        className: "board-canvas-wrap",
-        onMouseDown: handleMouseDown,
-        style: { cursor: isPanning ? "grabbing" : "grab" },
+        ref,
+        className: `nt-popover ${className}`,
+        style: { left: pos?.left ?? -9999, top: pos?.top ?? -9999, width, visibility: pos ? "visible" : "hidden" },
+        children: children2
+      }
+    ),
+    document.body
+  );
+}
+function MenuButton({ items, children: children2, className = "nt-icon-btn", title, align = "right", stopPropagation = true }) {
+  const btnRef = reactExports.useRef(null);
+  const [open, setOpen] = reactExports.useState(false);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        ref: btnRef,
+        className: `${className}${open ? " nt-active" : ""}`,
+        title,
+        onClick: (e2) => {
+          if (stopPropagation) e2.stopPropagation();
+          setOpen((o2) => !o2);
+        },
+        children: children2 ?? /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.More, {})
+      }
+    ),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { anchorRef: btnRef, onClose: () => setOpen(false), align, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-menu", children: items.map(
+      (it2, idx) => it2.separator ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-menu-separator" }, idx) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: `nt-menu-item${it2.danger ? " nt-menu-item-danger" : ""}`,
+          disabled: it2.disabled,
+          onClick: (e2) => {
+            e2.stopPropagation();
+            setOpen(false);
+            it2.onClick?.();
+          },
+          children: [
+            it2.icon && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-menu-item-icon", children: it2.icon }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: it2.label }),
+            it2.hint && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-menu-item-hint", children: it2.hint })
+          ]
+        },
+        idx
+      )
+    ) }) })
+  ] });
+}
+function StatusLozenge({ column, className = "", caret = false }) {
+  if (!column) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `nt-lozenge nt-lozenge-${column.category} ${className}`, children: [
+    column.name,
+    caret && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.ChevronDown, { width: 12, height: 12 })
+  ] });
+}
+function StatusPicker({ columns, value: value2, onChange, size = "md" }) {
+  const btnRef = reactExports.useRef(null);
+  const [open, setOpen] = reactExports.useState(false);
+  const current = columns.find((c2) => c2.id === value2) || columns[0];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        ref: btnRef,
+        className: `nt-status-btn nt-status-btn-${current?.category} nt-status-btn-${size}`,
+        onClick: (e2) => {
+          e2.stopPropagation();
+          setOpen((o2) => !o2);
+        },
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "div",
-            {
-              className: "board-canvas-grid",
-              style: {
-                transform: gridTransform,
-                willChange: "transform",
-                backgroundSize: `${minorPx}px ${minorPx}px, ${minorPx}px ${minorPx}px, ${majorPx}px ${majorPx}px, ${majorPx}px ${majorPx}px`,
-                backgroundPosition: `${minorPos}px ${minorPos}px, ${minorPos}px ${minorPos}px, ${majorPos}px ${majorPos}px, ${majorPos}px ${majorPos}px`
-              }
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "board-canvas-layer", style: { transform: contentTransform, willChange: "transform" } }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "zoom-control-bar", onMouseDown: (e2) => e2.stopPropagation(), children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "zoom-control-btn", title: "Görünümü sıfırla", onClick: handleResetView, children: "⛶" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: "zoom-control-btn",
-                title: "Uzaklaştır",
-                disabled: viewport.zoom <= ZOOM_MIN,
-                onClick: () => zoomByButton(1 / ZOOM_BUTTON_STEP),
-                children: "−"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "zoom-control-value", children: [
-              Math.round(viewport.zoom * 100),
-              "%"
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: "zoom-control-btn",
-                title: "Yakınlaştır",
-                disabled: viewport.zoom >= ZOOM_MAX,
-                onClick: () => zoomByButton(ZOOM_BUTTON_STEP),
-                children: "+"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "zoom-control-btn", title: "Yardım", children: "?" })
-          ] })
+          current?.name,
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.ChevronDown, { width: 14, height: 14 })
         ]
+      }
+    ),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { anchorRef: btnRef, onClose: () => setOpen(false), children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-menu", children: columns.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        className: `nt-menu-item${c2.id === value2 ? " nt-menu-item-selected" : ""}`,
+        onClick: (e2) => {
+          e2.stopPropagation();
+          setOpen(false);
+          onChange(c2.id);
+        },
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusLozenge, { column: c2 })
+      },
+      c2.id
+    )) }) })
+  ] });
+}
+function PickerButton({ btnRef, open, setOpen, children: children2, className = "", compact }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      ref: btnRef,
+      className: `nt-picker-btn${compact ? " nt-picker-btn-compact" : ""}${open ? " nt-active" : ""} ${className}`,
+      onClick: (e2) => {
+        e2.stopPropagation();
+        setOpen((o2) => !o2);
+      },
+      children: [
+        children2,
+        !compact && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.ChevronDown, { width: 14, height: 14, className: "nt-picker-caret" })
+      ]
+    }
+  );
+}
+function TypePicker({ value: value2, onChange, compact = false, allowed = ISSUE_TYPE_ORDER }) {
+  const btnRef = reactExports.useRef(null);
+  const [open, setOpen] = reactExports.useState(false);
+  const t2 = ISSUE_TYPES[value2] || ISSUE_TYPES.task;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(PickerButton, { btnRef, open, setOpen, compact, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: value2 }),
+      !compact && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: t2.label })
+    ] }),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { anchorRef: btnRef, onClose: () => setOpen(false), children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-menu", children: allowed.map((id2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        className: `nt-menu-item${id2 === value2 ? " nt-menu-item-selected" : ""}`,
+        onClick: (e2) => {
+          e2.stopPropagation();
+          setOpen(false);
+          onChange(id2);
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: id2 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: ISSUE_TYPES[id2].label })
+        ]
+      },
+      id2
+    )) }) })
+  ] });
+}
+function PriorityPicker({ value: value2, onChange, compact = false }) {
+  const btnRef = reactExports.useRef(null);
+  const [open, setOpen] = reactExports.useState(false);
+  const p2 = PRIORITIES[value2] || PRIORITIES.medium;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(PickerButton, { btnRef, open, setOpen, compact, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityIcon, { priority: value2 }),
+      !compact && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: p2.label })
+    ] }),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { anchorRef: btnRef, onClose: () => setOpen(false), children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-menu", children: PRIORITY_ORDER.map((id2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        className: `nt-menu-item${id2 === value2 ? " nt-menu-item-selected" : ""}`,
+        onClick: (e2) => {
+          e2.stopPropagation();
+          setOpen(false);
+          onChange(id2);
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityIcon, { priority: id2 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: PRIORITIES[id2].label })
+        ]
+      },
+      id2
+    )) }) })
+  ] });
+}
+function AssigneePicker({ members, value: value2, onChange, compact = false, currentUserId, placeholder = "Atanmamış" }) {
+  const btnRef = reactExports.useRef(null);
+  const [open, setOpen] = reactExports.useState(false);
+  const [q, setQ] = reactExports.useState("");
+  const current = members.find((m2) => m2.id === value2) || null;
+  const filtered = members.filter((m2) => m2.name.toLowerCase().includes(q.toLowerCase()));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(PickerButton, { btnRef, open, setOpen, compact, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: current, size: compact ? 24 : 24 }),
+      !compact && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: current ? "" : "nt-muted", children: current ? current.name : placeholder })
+    ] }),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { anchorRef: btnRef, onClose: () => setOpen(false), width: 260, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-menu", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-menu-search", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Search, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { autoFocus: true, placeholder: "Kişi ara…", value: q, onChange: (e2) => setQ(e2.target.value) })
+      ] }),
+      currentUserId && members.some((m2) => m2.id === currentUserId) && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: "nt-menu-item",
+          onClick: (e2) => {
+            e2.stopPropagation();
+            setOpen(false);
+            onChange(currentUserId);
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: members.find((m2) => m2.id === currentUserId), size: 24 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Bana ata" })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: `nt-menu-item${!value2 ? " nt-menu-item-selected" : ""}`,
+          onClick: (e2) => {
+            e2.stopPropagation();
+            setOpen(false);
+            onChange(null);
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: null, size: 24 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Atanmamış" })
+          ]
+        }
+      ),
+      filtered.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: `nt-menu-item${m2.id === value2 ? " nt-menu-item-selected" : ""}`,
+          onClick: (e2) => {
+            e2.stopPropagation();
+            setOpen(false);
+            onChange(m2.id);
+          },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: m2, size: 24 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: m2.name })
+          ]
+        },
+        m2.id
+      )),
+      filtered.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-menu-empty", children: "Eşleşen kişi yok" })
+    ] }) })
+  ] });
+}
+function SelectPicker({ options, value: value2, onChange, placeholder = "Yok", compact = false, width }) {
+  const btnRef = reactExports.useRef(null);
+  const [open, setOpen] = reactExports.useState(false);
+  const current = options.find((o2) => o2.value === value2) || null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(PickerButton, { btnRef, open, setOpen, compact, children: [
+      current?.icon,
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: current ? "" : "nt-muted", children: current ? current.label : placeholder })
+    ] }),
+    open && /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { anchorRef: btnRef, onClose: () => setOpen(false), width, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-menu", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: `nt-menu-item${value2 == null ? " nt-menu-item-selected" : ""}`,
+          onClick: (e2) => {
+            e2.stopPropagation();
+            setOpen(false);
+            onChange(null);
+          },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-muted", children: placeholder })
+        }
+      ),
+      options.map((o2) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: `nt-menu-item${o2.value === value2 ? " nt-menu-item-selected" : ""}`,
+          onClick: (e2) => {
+            e2.stopPropagation();
+            setOpen(false);
+            onChange(o2.value);
+          },
+          children: [
+            o2.icon,
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: o2.label })
+          ]
+        },
+        String(o2.value)
+      ))
+    ] }) })
+  ] });
+}
+function LabelsEditor({ value: value2 = [], onChange }) {
+  const [draft, setDraft] = reactExports.useState("");
+  function commit() {
+    const v2 = draft.trim();
+    if (v2 && !value2.includes(v2)) onChange([...value2, v2]);
+    setDraft("");
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-labels-editor", children: [
+    value2.map((l2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-label-chip", children: [
+      l2,
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => onChange(value2.filter((x2) => x2 !== l2)), title: "Kaldır", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Close, { width: 10, height: 10 }) })
+    ] }, l2)),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        placeholder: value2.length ? "" : "Etiket ekle…",
+        value: draft,
+        onChange: (e2) => setDraft(e2.target.value),
+        onKeyDown: (e2) => {
+          if (e2.key === "Enter" || e2.key === ",") {
+            e2.preventDefault();
+            commit();
+          }
+          if (e2.key === "Backspace" && !draft && value2.length) onChange(value2.slice(0, -1));
+        },
+        onBlur: commit
       }
     )
   ] });
 }
-function BoardScreen({ onBack }) {
-  const [activeProject, setActiveProject] = reactExports.useState(null);
-  if (!activeProject) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(BoardProjectsScreen, { onOpenProject: setActiveProject, onBackToHub: onBack });
+function ConfirmModal({ title, message, confirmLabel = "Sil", danger = true, onConfirm, onClose }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Modal,
+    {
+      title,
+      onClose,
+      width: 440,
+      footer: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: onClose, children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `nt-btn ${danger ? "nt-btn-danger" : "nt-btn-primary"}`, onClick: () => {
+          onConfirm();
+          onClose();
+        }, children: confirmLabel })
+      ] }),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "nt-modal-text", children: message })
+    }
+  );
+}
+function InlineEditText({ value: value2, onCommit, className = "", placeholder = "", multiline = false, inputClassName = "" }) {
+  const [editing, setEditing] = reactExports.useState(false);
+  const [draft, setDraft] = reactExports.useState(value2);
+  reactExports.useEffect(() => {
+    if (!editing) setDraft(value2);
+  }, [value2, editing]);
+  function commit() {
+    setEditing(false);
+    const v2 = draft.trim();
+    if (v2 !== value2) onCommit(v2);
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(BoardCanvas, { project: activeProject, onBack: () => setActiveProject(null) }, activeProject.id);
+  if (editing) {
+    const props = {
+      autoFocus: true,
+      className: `nt-inline-input ${inputClassName}`,
+      value: draft,
+      onChange: (e2) => setDraft(e2.target.value),
+      onBlur: commit,
+      onKeyDown: (e2) => {
+        if (e2.key === "Escape") {
+          setDraft(value2);
+          setEditing(false);
+        }
+        if (e2.key === "Enter" && !multiline) {
+          e2.preventDefault();
+          commit();
+        }
+      }
+    };
+    return multiline ? /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { rows: 4, ...props }) : /* @__PURE__ */ jsxRuntimeExports.jsx("input", { ...props });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `nt-inline-text ${className}${value2 ? "" : " nt-inline-text-empty"}`, onClick: () => setEditing(true), title: "Düzenlemek için tıkla", children: value2 || placeholder });
+}
+function TopNav({ onBackToHub, onProjects, onCreate, currentUser, searchIssues = [], onOpenIssue, showCreate = true }) {
+  const [q, setQ] = reactExports.useState("");
+  const searchRef = reactExports.useRef(null);
+  const [open, setOpen] = reactExports.useState(false);
+  const results = q.trim() ? searchIssues.filter((i3) => `${i3.key} ${i3.summary}`.toLowerCase().includes(q.trim().toLowerCase())).slice(0, 8) : [];
+  const me2 = currentUser ? { ...currentUser, initials: initials(currentUser.name), color: colorForName(currentUser.name) } : null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "nt-topnav", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-topnav-hub", onClick: onBackToHub, title: "Hub'a dön", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Back, {}),
+      " Hub"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-topnav-brand", onClick: onProjects, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: nobletaskLogo, alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "NobleTask" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-topnav-link", onClick: onProjects, children: [
+      "Projeler ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.ChevronDown, { width: 14, height: 14 })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-topnav-search", ref: searchRef, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Search, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          placeholder: "Ara",
+          value: q,
+          onChange: (e2) => {
+            setQ(e2.target.value);
+            setOpen(true);
+          },
+          onFocus: () => setOpen(true)
+        }
+      ),
+      open && results.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(Popover, { anchorRef: searchRef, onClose: () => setOpen(false), width: searchRef.current?.offsetWidth || 320, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-menu", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-menu-label", children: "İŞ KAYITLARI" }),
+        results.map((i3) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-menu-item", onClick: () => {
+          onOpenIssue?.(i3.id);
+          setOpen(false);
+          setQ("");
+        }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: i3.type }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-search-key", children: i3.key }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-search-summary", children: i3.summary })
+        ] }, i3.id))
+      ] }) })
+    ] }),
+    showCreate && /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-btn nt-btn-primary", onClick: onCreate, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, { width: 14, height: 14 }),
+      " Oluştur"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-topnav-avatar", title: me2?.name || "Giriş yapılmadı", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: me2, size: 28 }) })
+  ] });
+}
+function CreateIssueModal({ store, currentUser, defaults = {}, onClose, onCreated }) {
+  const { project } = store;
+  const [type, setType] = reactExports.useState(defaults.type || "task");
+  const [summary, setSummary] = reactExports.useState("");
+  const [description, setDescription] = reactExports.useState("");
+  const [assigneeId, setAssigneeId] = reactExports.useState(defaults.assigneeId ?? null);
+  const [priority, setPriority] = reactExports.useState("medium");
+  const [labels, setLabels] = reactExports.useState([]);
+  const [sprintId, setSprintId] = reactExports.useState(defaults.sprintId ?? null);
+  const [status, setStatus] = reactExports.useState(defaults.status || project.columns[0]?.id);
+  const [parentId, setParentId] = reactExports.useState(defaults.parentId ?? null);
+  const [storyPoints, setStoryPoints] = reactExports.useState("");
+  const [dueDate, setDueDate] = reactExports.useState("");
+  const [createAnother, setCreateAnother] = reactExports.useState(false);
+  const [error2, setError] = reactExports.useState("");
+  const members = [...store.membersById.values()];
+  const sprintOptions = project.sprints.filter((s2) => s2.state !== "closed").map((s2) => ({ value: s2.id, label: s2.name, icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Sprint, { width: 16, height: 16 }) }));
+  const epicOptions = project.issues.filter((i3) => i3.type === "epic").map((i3) => ({ value: i3.id, label: `${i3.key} ${i3.summary}`, icon: /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: "epic" }) }));
+  const statusOptions = project.columns.map((c2) => ({ value: c2.id, label: c2.name }));
+  function submit(e2) {
+    e2?.preventDefault();
+    if (!summary.trim()) {
+      setError("Özet zorunludur.");
+      return;
+    }
+    const issue = store.addIssue({
+      type,
+      summary,
+      description,
+      assigneeId,
+      priority,
+      labels,
+      sprintId: project.type === "scrum" ? sprintId : null,
+      status,
+      parentId: type === "epic" ? null : parentId,
+      storyPoints: storyPoints === "" ? null : Number(storyPoints),
+      dueDate: dueDate || null,
+      inBacklog: defaults.inBacklog ?? project.type === "kanban"
+    });
+    onCreated?.(issue);
+    if (createAnother) {
+      setSummary("");
+      setDescription("");
+      setError("");
+    } else onClose();
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Modal,
+    {
+      title: "İş kaydı oluştur",
+      onClose,
+      width: 640,
+      className: "nt-create-modal",
+      footer: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "nt-checkbox", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "checkbox", checked: createAnother, onChange: (e2) => setCreateAnother(e2.target.checked) }),
+          "Başka bir tane oluştur"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: onClose, children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: submit, children: "Oluştur" })
+      ] }),
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "nt-form", onSubmit: submit, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "nt-form-hint", children: [
+          "Zorunlu alanlar yıldız ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" }),
+          " ile işaretlenmiştir"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "Proje ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-readonly-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-project-tile nt-project-tile-sm", style: { background: projectColor(project.key) }, children: project.key.slice(0, 2) }),
+            project.name,
+            " (",
+            project.key,
+            ")"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "İş kaydı türü ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TypePicker, { value: type, onChange: setType, allowed: ["task", "story", "bug", "epic"] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Durum" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectPicker, { options: statusOptions, value: status, onChange: (v2) => setStatus(v2 || project.columns[0]?.id), placeholder: project.columns[0]?.name }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-field-hint", children: "Bu, iş kaydının oluşturulduktan sonraki ilk durumudur." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "Özet ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { autoFocus: true, className: `nt-input${error2 ? " nt-input-error" : ""}`, value: summary, onChange: (e2) => {
+            setSummary(e2.target.value);
+            setError("");
+          } }),
+          error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-field-error", children: error2 })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Açıklama" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { className: "nt-input nt-textarea", rows: 5, value: description, onChange: (e2) => setDescription(e2.target.value), placeholder: "Bu iş kaydını açıkla…" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Atanan" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(AssigneePicker, { members, value: assigneeId, onChange: setAssigneeId, currentUserId: currentUser?.id })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Öncelik" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityPicker, { value: priority, onChange: setPriority })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Etiketler" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LabelsEditor, { value: labels, onChange: setLabels })
+        ] }),
+        project.type === "scrum" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Sprint" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectPicker, { options: sprintOptions, value: sprintId, onChange: setSprintId, placeholder: "Backlog" })
+        ] }),
+        type !== "epic" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Üst iş kaydı (Epik)" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(SelectPicker, { options: epicOptions, value: parentId, onChange: setParentId, placeholder: "Yok", width: 320 })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Hikâye puanı tahmini" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", type: "number", min: "0", step: "0.5", value: storyPoints, onChange: (e2) => setStoryPoints(e2.target.value) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Bitiş tarihi" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", type: "date", value: dueDate, onChange: (e2) => setDueDate(e2.target.value) })
+          ] })
+        ] })
+      ] })
+    }
+  );
+}
+function projectColor(key = "") {
+  const palette = ["#0052CC", "#00875A", "#FF5630", "#6554C0", "#FF991F", "#00B8D9", "#5243AA", "#36B37E"];
+  let h2 = 0;
+  for (const ch of key) h2 = h2 * 31 + ch.charCodeAt(0) >>> 0;
+  return palette[h2 % palette.length];
+}
+function ProjectsPage({ projects, currentUser, onOpen, onCreate, onDelete, onBackToHub }) {
+  const [query, setQuery] = reactExports.useState("");
+  const [typeFilter, setTypeFilter] = reactExports.useState("all");
+  const [createOpen, setCreateOpen] = reactExports.useState(false);
+  const [confirmDelete, setConfirmDelete] = reactExports.useState(null);
+  const rows = reactExports.useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return projects.filter((p2) => (typeFilter === "all" || p2.type === typeFilter) && (!q || `${p2.name} ${p2.key}`.toLowerCase().includes(q)));
+  }, [projects, query, typeFilter]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-root", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(TopNav, { onBackToHub, onProjects: () => {
+    }, onCreate: () => setCreateOpen(true), currentUser, showCreate: false }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-projects-page", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page-title-row", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "nt-page-title", children: "Projeler" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-page-actions", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: () => setCreateOpen(true), children: "Proje oluştur" }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-toolbar", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-search", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Search, {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { placeholder: "Projelerde ara", value: query, onChange: (e2) => setQuery(e2.target.value) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "nt-input nt-select nt-select-sm", value: typeFilter, onChange: (e2) => setTypeFilter(e2.target.value), children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "all", children: "Tür: Tümü" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "scrum", children: "Scrum" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "kanban", children: "Kanban" })
+        ] })
+      ] }),
+      projects.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-empty-board nt-empty-projects", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-empty-illustration", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Projects, { width: 48, height: 48 }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Henüz projen yok" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Ekibinin işlerini planlamak, takip etmek ve teslim etmek için ilk projeni oluştur." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: () => setCreateOpen(true), children: "Proje oluştur" })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-table-wrap", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "nt-table nt-projects-table", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Ad" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { style: { width: 120 }, children: "Anahtar" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { style: { width: 200 }, children: "Tür" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { style: { width: 200 }, children: "Proje sorumlusu" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { style: { width: 150 }, children: "Son güncelleme" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { style: { width: 56 } })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+          rows.map((p2) => {
+            const lead = p2.members?.find((m2) => m2.id === p2.leadId);
+            const leadMember = lead ? { ...lead, initials: initials(lead.name), color: lead.color || colorForName(lead.name) } : null;
+            return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { onClick: () => onOpen(p2.id), children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-project-cell", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-project-tile nt-project-tile-sm", style: { background: projectColor(p2.key) }, children: p2.key.slice(0, 2) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-project-cell-name", children: p2.name })
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-td-key", children: p2.key }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-muted", children: p2.type === "scrum" ? "Scrum yazılım projesi" : "Kanban yazılım projesi" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-td-assignee", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: leadMember, size: 24 }),
+                " ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: leadMember?.name || "—" })
+              ] }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-muted", children: formatRelative(p2.updatedAt) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { onClick: (e2) => e2.stopPropagation(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                MenuButton,
+                {
+                  title: "Daha fazla",
+                  items: [
+                    { label: "Aç", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Board, {}), onClick: () => onOpen(p2.id) },
+                    { separator: true },
+                    { label: "Projeyi sil", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Trash, {}), danger: true, onClick: () => setConfirmDelete(p2) }
+                  ]
+                }
+              ) })
+            ] }, p2.id);
+          }),
+          rows.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: 6, className: "nt-table-empty", children: "Eşleşen proje yok." }) })
+        ] })
+      ] }) })
+    ] }),
+    createOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CreateProjectModal,
+      {
+        existingKeys: projects.map((p2) => p2.key),
+        onClose: () => setCreateOpen(false),
+        onCreate: (data) => {
+          setCreateOpen(false);
+          onCreate(data);
+        }
+      }
+    ),
+    confirmDelete && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ConfirmModal,
+      {
+        title: `"${confirmDelete.name}" projesi silinsin mi?`,
+        message: "Projedeki tüm iş kayıtları, sprintler ve yorumlar kalıcı olarak silinecek.",
+        confirmLabel: "Projeyi sil",
+        onConfirm: () => onDelete(confirmDelete.id),
+        onClose: () => setConfirmDelete(null)
+      }
+    )
+  ] });
+}
+const TEMPLATES = [
+  {
+    id: "scrum",
+    title: "Scrum",
+    desc: "İşleri sprintler halinde planla, taahhüt et ve teslim et. Backlog, sprint planlama ve board içerir.",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Sprint, { width: 28, height: 28 })
+  },
+  {
+    id: "kanban",
+    title: "Kanban",
+    desc: "Sürekli bir akışta işleri görselleştir ve ilerlet. Backlog'dan board'a al, sütunlar arasında taşı.",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Board, { width: 28, height: 28 })
+  }
+];
+function CreateProjectModal({ existingKeys, onClose, onCreate }) {
+  const [step, setStep] = reactExports.useState("template");
+  const [type, setType] = reactExports.useState("scrum");
+  const [name, setName] = reactExports.useState("");
+  const [key, setKey] = reactExports.useState("");
+  const [keyTouched, setKeyTouched] = reactExports.useState(false);
+  const [error2, setError] = reactExports.useState("");
+  function changeName(v2) {
+    setName(v2);
+    if (!keyTouched) setKey(suggestProjectKey(v2, existingKeys));
+  }
+  function submit() {
+    const trimmed = name.trim();
+    const k2 = key.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!trimmed) return setError("Proje adı zorunludur.");
+    if (!k2 || k2.length > 10) return setError("Anahtar 1-10 karakter, sadece harf/rakam olmalı.");
+    if (existingKeys.map((x2) => x2.toUpperCase()).includes(k2)) return setError("Bu anahtar zaten kullanılıyor.");
+    onCreate({ name: trimmed, key: k2, type });
+  }
+  if (step === "template") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      Modal,
+      {
+        title: "Proje şablonu seç",
+        onClose,
+        width: 640,
+        footer: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: onClose, children: "Vazgeç" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: () => setStep("details"), children: "Şablonu kullan" })
+        ] }),
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "nt-modal-text", children: "Ekibinin çalışma şekline en uygun şablonu seç. Daha sonra sütunları ve durumları özelleştirebilirsin." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-template-grid", children: TEMPLATES.map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: `nt-template-card${type === t2.id ? " nt-active" : ""}`, onClick: () => setType(t2.id), children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-template-icon", children: t2.icon }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-template-title", children: t2.title }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-template-desc", children: t2.desc }),
+            type === t2.id && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-template-check", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Check, {}) })
+          ] }, t2.id)) })
+        ]
+      }
+    );
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Modal,
+    {
+      title: "Proje ayrıntılarını ekle",
+      onClose,
+      width: 560,
+      footer: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: () => setStep("template"), children: "Geri" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: onClose, children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: submit, children: "Proje oluştur" })
+      ] }),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "nt-form-hint", children: [
+          "Zorunlu alanlar yıldız ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" }),
+          " ile işaretlenmiştir"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "Ad ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { autoFocus: true, className: "nt-input", placeholder: "Projene bir ad ver", value: name, onChange: (e2) => {
+            changeName(e2.target.value);
+            setError("");
+          }, onKeyDown: (e2) => e2.key === "Enter" && submit() })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "Anahtar ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input nt-input-key", maxLength: 10, value: key, onChange: (e2) => {
+            setKeyTouched(true);
+            setKey(e2.target.value.toUpperCase());
+            setError("");
+          } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field-hint", children: [
+            "İş kayıtları bu anahtarla adlandırılır: ",
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("strong", { children: [
+              key || "KEY",
+              "-1"
+            ] }),
+            ", ",
+            key || "KEY",
+            "-2…"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Şablon" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-readonly-field", children: type === "scrum" ? "Scrum" : "Kanban" })
+        ] }),
+        error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-field-error", children: error2 })
+      ]
+    }
+  );
+}
+function useTaskProject(initialProject, currentUser) {
+  const [project, setProject] = reactExports.useState(initialProject);
+  const dirtyRef = reactExports.useRef(false);
+  const projectRef = reactExports.useRef(project);
+  projectRef.current = project;
+  reactExports.useEffect(() => {
+    if (!dirtyRef.current) return;
+    const t2 = setTimeout(() => {
+      dirtyRef.current = false;
+      taskStorage.save(projectRef.current);
+    }, 600);
+    return () => clearTimeout(t2);
+  }, [project]);
+  reactExports.useEffect(() => {
+    return () => {
+      if (dirtyRef.current) taskStorage.save(projectRef.current);
+    };
+  }, []);
+  const mutate = reactExports.useCallback((fn) => {
+    dirtyRef.current = true;
+    setProject((prev) => ({ ...fn(prev), updatedAt: Date.now() }));
+  }, []);
+  const log2 = reactExports.useCallback(
+    (p2, text) => ({
+      activity: [...p2.activity || [], { id: uid("act"), actorId: currentUser?.id || p2.leadId, text, createdAt: Date.now() }]
+    }),
+    [currentUser]
+  );
+  const membersById = reactExports.useMemo(() => {
+    const map = /* @__PURE__ */ new Map();
+    for (const m2 of project.members) map.set(m2.id, { ...m2, initials: initials(m2.name) });
+    return map;
+  }, [project.members]);
+  const getMember = reactExports.useCallback((id2) => id2 ? membersById.get(id2) || null : null, [membersById]);
+  reactExports.useEffect(() => {
+    if (!currentUser) return;
+    if (project.members.some((m2) => m2.id === currentUser.id)) return;
+    mutate((p2) => ({
+      ...p2,
+      members: [...p2.members, { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatarUrl || null, color: colorForName(currentUser.name) }]
+    }));
+  }, [currentUser, project.members, mutate]);
+  const addMember = reactExports.useCallback(
+    (name) => {
+      const trimmed = name.trim();
+      if (!trimmed) return;
+      mutate((p2) => ({
+        ...p2,
+        members: [...p2.members, { id: uid("m"), name: trimmed, avatarUrl: null, color: colorForName(trimmed) }],
+        ...log2(p2, `${trimmed} kişisini üyeliğe ekledi`)
+      }));
+    },
+    [mutate, log2]
+  );
+  const removeMember = reactExports.useCallback(
+    (id2) => {
+      mutate((p2) => {
+        const member = p2.members.find((m2) => m2.id === id2);
+        return {
+          ...p2,
+          members: p2.members.filter((m2) => m2.id !== id2),
+          issues: p2.issues.map((i3) => i3.assigneeId === id2 ? { ...i3, assigneeId: null } : i3),
+          ...log2(p2, `${member?.name || "Bir üyeyi"} projeden çıkardı`)
+        };
+      });
+    },
+    [mutate, log2]
+  );
+  const updateProject = reactExports.useCallback((patch) => mutate((p2) => ({ ...p2, ...patch })), [mutate]);
+  const addColumn = reactExports.useCallback(
+    (name) => {
+      const trimmed = name.trim();
+      if (!trimmed) return;
+      mutate((p2) => {
+        const doneIdx = p2.columns.findIndex((c2) => c2.category === "done");
+        const col = { id: uid("col"), name: trimmed.toUpperCase(), category: "inprogress" };
+        const cols = [...p2.columns];
+        cols.splice(doneIdx === -1 ? cols.length : doneIdx, 0, col);
+        return { ...p2, columns: cols, ...log2(p2, `"${col.name}" sütununu oluşturdu`) };
+      });
+    },
+    [mutate, log2]
+  );
+  const renameColumn = reactExports.useCallback(
+    (id2, name) => mutate((p2) => ({ ...p2, columns: p2.columns.map((c2) => c2.id === id2 ? { ...c2, name: name.trim().toUpperCase() || c2.name } : c2) })),
+    [mutate]
+  );
+  const setColumnCategory = reactExports.useCallback(
+    (id2, category) => mutate((p2) => ({ ...p2, columns: p2.columns.map((c2) => c2.id === id2 ? { ...c2, category } : c2) })),
+    [mutate]
+  );
+  const deleteColumn = reactExports.useCallback(
+    (id2) => mutate((p2) => {
+      if (p2.columns.length <= 1) return p2;
+      const col = p2.columns.find((c2) => c2.id === id2);
+      const fallback = p2.columns.find((c2) => c2.id !== id2);
+      return {
+        ...p2,
+        columns: p2.columns.filter((c2) => c2.id !== id2),
+        issues: p2.issues.map((i3) => i3.status === id2 ? { ...i3, status: fallback.id } : i3),
+        ...log2(p2, `"${col?.name}" sütununu sildi`)
+      };
+    }),
+    [mutate, log2]
+  );
+  const moveColumn = reactExports.useCallback(
+    (id2, toIndex) => mutate((p2) => {
+      const cols = [...p2.columns];
+      const from = cols.findIndex((c2) => c2.id === id2);
+      if (from === -1) return p2;
+      const [col] = cols.splice(from, 1);
+      cols.splice(toIndex, 0, col);
+      return { ...p2, columns: cols };
+    }),
+    [mutate]
+  );
+  const addIssue = reactExports.useCallback(
+    (fields) => {
+      let created = null;
+      mutate((p2) => {
+        const { issue, issueCounter } = createIssue(p2, fields, currentUser?.id || p2.leadId);
+        created = issue;
+        return { ...p2, issueCounter, issues: [...p2.issues, issue], ...log2(p2, `${issue.key} iş kaydını oluşturdu: ${issue.summary}`) };
+      });
+      return created;
+    },
+    [mutate, log2, currentUser]
+  );
+  const updateIssue = reactExports.useCallback(
+    (id2, patch) => mutate((p2) => {
+      const issue = p2.issues.find((i3) => i3.id === id2);
+      let entryText = null;
+      if (issue) {
+        if (patch.status !== void 0 && patch.status !== issue.status) {
+          const fromCol = p2.columns.find((c2) => c2.id === issue.status);
+          const toCol = p2.columns.find((c2) => c2.id === patch.status);
+          entryText = `${issue.key}'i ${fromCol?.name || "?"} sütunundan ${toCol?.name || "?"} sütununa taşıdı`;
+        } else if (patch.assigneeId !== void 0 && patch.assigneeId !== issue.assigneeId) {
+          const member = patch.assigneeId ? p2.members.find((m2) => m2.id === patch.assigneeId) : null;
+          entryText = member ? `${issue.key}'i ${member.name} kişisine atadı` : `${issue.key}'in atamasını kaldırdı`;
+        }
+      }
+      return {
+        ...p2,
+        issues: p2.issues.map((i3) => {
+          if (i3.id !== id2) return i3;
+          const next = { ...i3, ...patch, updatedAt: Date.now() };
+          if (patch.status && patch.status !== i3.status) {
+            const col = p2.columns.find((c2) => c2.id === patch.status);
+            next.resolvedAt = col?.category === "done" ? Date.now() : null;
+          }
+          return next;
+        }),
+        ...entryText ? log2(p2, entryText) : {}
+      };
+    }),
+    [mutate, log2]
+  );
+  const deleteIssue = reactExports.useCallback(
+    (id2) => mutate((p2) => {
+      const issue = p2.issues.find((i3) => i3.id === id2);
+      return {
+        ...p2,
+        issues: p2.issues.filter((i3) => i3.id !== id2 && i3.parentId !== id2).map((i3) => i3.parentId === id2 ? { ...i3, parentId: null } : i3),
+        ...issue ? log2(p2, `${issue.key} iş kaydını sildi: ${issue.summary}`) : {}
+      };
+    }),
+    [mutate, log2]
+  );
+  const moveIssue = reactExports.useCallback(
+    (id2, target2, siblingsIds, index2) => mutate((p2) => {
+      const issue = p2.issues.find((i3) => i3.id === id2);
+      if (!issue) return p2;
+      const siblings = sortByRank(siblingsIds.map((sid) => p2.issues.find((i3) => i3.id === sid)).filter((i3) => i3 && i3.id !== id2));
+      const before = siblings[index2 - 1]?.rank ?? null;
+      const after = siblings[index2]?.rank ?? null;
+      const patch = { rank: rankBetween(before, after), updatedAt: Date.now() };
+      let entryText = null;
+      if (target2.status !== void 0 && target2.status !== issue.status) {
+        patch.status = target2.status;
+        const col = p2.columns.find((c2) => c2.id === target2.status);
+        patch.resolvedAt = col?.category === "done" ? Date.now() : null;
+        const fromCol = p2.columns.find((c2) => c2.id === issue.status);
+        entryText = `${issue.key}'i ${fromCol?.name || "?"} sütunundan ${col?.name || "?"} sütununa taşıdı`;
+      }
+      if (target2.sprintId !== void 0 && target2.sprintId !== issue.sprintId) {
+        patch.sprintId = target2.sprintId;
+        if (!entryText) {
+          const sprint = target2.sprintId ? p2.sprints.find((s2) => s2.id === target2.sprintId) : null;
+          entryText = sprint ? `${issue.key}'i ${sprint.name} sprintine ekledi` : `${issue.key}'i Backlog'a taşıdı`;
+        }
+      }
+      if (target2.inBacklog !== void 0 && target2.inBacklog !== issue.inBacklog) {
+        patch.inBacklog = target2.inBacklog;
+        if (!entryText) entryText = target2.inBacklog ? `${issue.key}'i Backlog'a taşıdı` : `${issue.key}'i Board'a aldı`;
+      }
+      return {
+        ...p2,
+        issues: p2.issues.map((i3) => i3.id === id2 ? { ...i3, ...patch } : i3),
+        ...entryText ? log2(p2, entryText) : {}
+      };
+    }),
+    [mutate, log2]
+  );
+  const addComment = reactExports.useCallback(
+    (issueId, text, imageDataUrls = []) => {
+      const trimmed = text.trim();
+      if (!trimmed && imageDataUrls.length === 0) return;
+      const images = imageDataUrls.map((url2) => ({ id: uid("img"), url: url2 }));
+      mutate((p2) => {
+        const issue = p2.issues.find((i3) => i3.id === issueId);
+        return {
+          ...p2,
+          issues: p2.issues.map(
+            (i3) => i3.id === issueId ? { ...i3, updatedAt: Date.now(), comments: [...i3.comments, { id: uid("c"), authorId: currentUser?.id || p2.leadId, text: trimmed, images, createdAt: Date.now() }] } : i3
+          ),
+          ...issue ? log2(p2, `${issue.key}'e ${images.length > 0 ? "görselli " : ""}yorum ekledi`) : {}
+        };
+      });
+    },
+    [mutate, log2, currentUser]
+  );
+  const setCoverImage = reactExports.useCallback((issueId, url2) => mutate((p2) => ({ ...p2, issues: p2.issues.map((i3) => i3.id === issueId ? { ...i3, coverImage: url2 } : i3) })), [mutate]);
+  const deleteComment = reactExports.useCallback(
+    (issueId, commentId) => mutate((p2) => ({
+      ...p2,
+      issues: p2.issues.map((i3) => i3.id === issueId ? { ...i3, comments: i3.comments.filter((c2) => c2.id !== commentId) } : i3)
+    })),
+    [mutate]
+  );
+  const createSprint = reactExports.useCallback(
+    () => mutate((p2) => {
+      const sprint = { id: uid("sp"), name: nextSprintName(p2), goal: "", state: "future", startDate: null, endDate: null, createdAt: Date.now() };
+      return { ...p2, sprints: [...p2.sprints, sprint], ...log2(p2, `${sprint.name} sprintini oluşturdu`) };
+    }),
+    [mutate, log2]
+  );
+  const updateSprint = reactExports.useCallback(
+    (id2, patch) => mutate((p2) => ({ ...p2, sprints: p2.sprints.map((s2) => s2.id === id2 ? { ...s2, ...patch } : s2) })),
+    [mutate]
+  );
+  const startSprint = reactExports.useCallback(
+    (id2, { name, goal, startDate, endDate }) => mutate((p2) => ({
+      ...p2,
+      sprints: p2.sprints.map((s2) => s2.id === id2 ? { ...s2, name, goal, startDate, endDate, state: "active", startedAt: Date.now() } : s2),
+      ...log2(p2, `${name} sprintini başlattı`)
+    })),
+    [mutate, log2]
+  );
+  const completeSprint = reactExports.useCallback(
+    (id2, moveTo) => mutate((p2) => {
+      const sprintName = p2.sprints.find((s2) => s2.id === id2)?.name || "Sprint";
+      let sprints = p2.sprints.map((s2) => s2.id === id2 ? { ...s2, state: "closed", completedAt: Date.now() } : s2);
+      let targetId = moveTo === "backlog" ? null : moveTo;
+      if (moveTo === "new") {
+        const ns = { id: uid("sp"), name: nextSprintName({ ...p2, sprints }), goal: "", state: "future", startDate: null, endDate: null, createdAt: Date.now() };
+        sprints = [...sprints, ns];
+        targetId = ns.id;
+      }
+      const doneIds = new Set(p2.columns.filter((c2) => c2.category === "done").map((c2) => c2.id));
+      return {
+        ...p2,
+        sprints,
+        issues: p2.issues.map((i3) => i3.sprintId === id2 && !doneIds.has(i3.status) ? { ...i3, sprintId: targetId } : i3),
+        ...log2(p2, `${sprintName} sprintini tamamladı`)
+      };
+    }),
+    [mutate, log2]
+  );
+  const deleteSprint = reactExports.useCallback(
+    (id2) => mutate((p2) => {
+      const sprintName = p2.sprints.find((s2) => s2.id === id2)?.name || "Sprint";
+      return {
+        ...p2,
+        sprints: p2.sprints.filter((s2) => s2.id !== id2),
+        issues: p2.issues.map((i3) => i3.sprintId === id2 ? { ...i3, sprintId: null } : i3),
+        ...log2(p2, `${sprintName} sprintini sildi`)
+      };
+    }),
+    [mutate, log2]
+  );
+  const activeSprint = reactExports.useMemo(() => project.sprints.find((s2) => s2.state === "active") || null, [project.sprints]);
+  return {
+    project,
+    activeSprint,
+    getMember,
+    membersById,
+    updateProject,
+    addMember,
+    removeMember,
+    addColumn,
+    renameColumn,
+    setColumnCategory,
+    deleteColumn,
+    moveColumn,
+    addIssue,
+    updateIssue,
+    deleteIssue,
+    moveIssue,
+    addComment,
+    deleteComment,
+    setCoverImage,
+    createSprint,
+    updateSprint,
+    startSprint,
+    completeSprint,
+    deleteSprint
+  };
+}
+function ActivityFeed({ activity, getMember }) {
+  const entries = [...activity || []].reverse();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-activity-panel", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-activity-panel-header", children: "Etkinlik" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-activity-panel-body", children: [
+      entries.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-activity-empty", children: "Henüz bir etkinlik yok." }),
+      entries.map((entry) => {
+        const actor = getMember(entry.actorId);
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-activity-entry", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: actor, size: 26 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-activity-entry-body", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-activity-entry-text", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-activity-entry-actor", children: actor?.name || "Bilinmeyen" }),
+              " ",
+              entry.text
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-activity-entry-time", children: formatRelative(entry.createdAt) })
+          ] })
+        ] }, entry.id);
+      })
+    ] })
+  ] });
+}
+function BoardView({ store, currentUser, openIssue, openCreate, goBacklog }) {
+  const { project, activeSprint } = store;
+  const [query, setQuery] = reactExports.useState("");
+  const [assigneeFilter, setAssigneeFilter] = reactExports.useState(/* @__PURE__ */ new Set());
+  const [drag2, setDrag] = reactExports.useState(null);
+  const [over, setOver] = reactExports.useState(null);
+  const [addingColumn, setAddingColumn] = reactExports.useState(false);
+  const [newColumnName, setNewColumnName] = reactExports.useState("");
+  const [renamingColumnId, setRenamingColumnId] = reactExports.useState(null);
+  const [renameDraft, setRenameDraft] = reactExports.useState("");
+  const [completeOpen, setCompleteOpen] = reactExports.useState(false);
+  const [confirmDeleteCol, setConfirmDeleteCol] = reactExports.useState(null);
+  const isScrum = project.type === "scrum";
+  const boardIssues = reactExports.useMemo(() => {
+    let list = project.issues.filter((i3) => i3.type !== "epic");
+    if (isScrum) list = activeSprint ? list.filter((i3) => i3.sprintId === activeSprint.id) : [];
+    else list = list.filter((i3) => !i3.inBacklog);
+    return list;
+  }, [project.issues, isScrum, activeSprint]);
+  const visible = reactExports.useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return boardIssues.filter((i3) => {
+      if (assigneeFilter.size && !assigneeFilter.has(i3.assigneeId || "unassigned")) return false;
+      if (q && !(`${i3.key} ${i3.summary}`.toLowerCase().includes(q) || i3.labels.some((l2) => l2.toLowerCase().includes(q)))) return false;
+      return true;
+    });
+  }, [boardIssues, query, assigneeFilter]);
+  const byColumn = reactExports.useMemo(() => {
+    const map = {};
+    for (const c2 of project.columns) map[c2.id] = [];
+    for (const i3 of visible) (map[i3.status] || (map[project.columns[0]?.id] ||= [])).push(i3);
+    for (const k2 of Object.keys(map)) map[k2] = sortByRank(map[k2]);
+    return map;
+  }, [visible, project.columns]);
+  const boardAssignees = reactExports.useMemo(() => {
+    const ids = new Set(boardIssues.map((i3) => i3.assigneeId).filter(Boolean));
+    return [...ids].map((id2) => store.getMember(id2)).filter(Boolean);
+  }, [boardIssues, store]);
+  const hasUnassigned = boardIssues.some((i3) => !i3.assigneeId);
+  function toggleAssignee(id2) {
+    setAssigneeFilter((prev) => {
+      const next = new Set(prev);
+      if (next.has(id2)) next.delete(id2);
+      else next.add(id2);
+      return next;
+    });
+  }
+  function onDragStart(e2, issue) {
+    setDrag({ issueId: issue.id });
+    e2.dataTransfer.effectAllowed = "move";
+    e2.dataTransfer.setData("text/plain", issue.id);
+  }
+  function onDragOverCard(e2, columnId, index2) {
+    e2.preventDefault();
+    e2.stopPropagation();
+    const rect = e2.currentTarget.getBoundingClientRect();
+    const after = e2.clientY > rect.top + rect.height / 2;
+    const idx = after ? index2 + 1 : index2;
+    if (!over || over.columnId !== columnId || over.index !== idx) setOver({ columnId, index: idx });
+  }
+  function onDragOverColumn(e2, columnId) {
+    e2.preventDefault();
+    const idx = byColumn[columnId]?.length || 0;
+    if (!over || over.columnId !== columnId || over.index !== idx) setOver({ columnId, index: idx });
+  }
+  function onDrop(e2) {
+    e2.preventDefault();
+    if (drag2 && over) {
+      const siblings = byColumn[over.columnId] || [];
+      const selfIdx = siblings.findIndex((i3) => i3.id === drag2.issueId);
+      let index2 = over.index;
+      if (selfIdx !== -1 && selfIdx < index2) index2 -= 1;
+      store.moveIssue(drag2.issueId, { status: over.columnId }, siblings.map((i3) => i3.id), index2);
+    }
+    setDrag(null);
+    setOver(null);
+  }
+  function onDragEnd() {
+    setDrag(null);
+    setOver(null);
+  }
+  const sprintDays = activeSprint ? daysLeft(activeSprint.endDate) : null;
+  const doneIds = new Set(project.columns.filter((c2) => c2.category === "done").map((c2) => c2.id));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page nt-board-page", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-breadcrumbs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Projeler" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-breadcrumb-sep", children: "/" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: project.name })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page-title-row", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "nt-page-title", children: isScrum && activeSprint ? activeSprint.name : `${project.key} board` }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-page-actions", children: isScrum && activeSprint && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          sprintDays != null && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-sprint-days", title: `${formatDate(activeSprint.startDate)} – ${formatDate(activeSprint.endDate)}`, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Calendar, {}),
+            " ",
+            sprintDays >= 0 ? `${sprintDays} gün kaldı` : `${-sprintDays} gün gecikti`
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: () => setCompleteOpen(true), children: "Sprinti tamamla" })
+        ] }) })
+      ] }),
+      isScrum && activeSprint?.goal && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-sprint-goal", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "Sprint hedefi:" }),
+        " ",
+        activeSprint.goal
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-toolbar", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-search", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Search, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { placeholder: "Board'da ara", value: query, onChange: (e2) => setQuery(e2.target.value) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-avatar-group", children: [
+        boardAssignees.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `nt-avatar-filter${assigneeFilter.has(m2.id) ? " nt-avatar-filter-active" : ""}`, onClick: () => toggleAssignee(m2.id), title: m2.name, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: m2, size: 32 }) }, m2.id)),
+        hasUnassigned && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `nt-avatar-filter${assigneeFilter.has("unassigned") ? " nt-avatar-filter-active" : ""}`, onClick: () => toggleAssignee("unassigned"), title: "Atanmamış", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: null, size: 32 }) })
+      ] }),
+      (query || assigneeFilter.size > 0) && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", onClick: () => {
+        setQuery("");
+        setAssigneeFilter(/* @__PURE__ */ new Set());
+      }, children: "Filtreleri temizle" })
+    ] }),
+    isScrum && !activeSprint ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-empty-board", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-empty-illustration", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Sprint, { width: 48, height: 48 }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Aktif sprint yok" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Board'da iş kayıtlarını görmek için Backlog'dan bir sprint başlat." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: goBacklog, children: "Backlog'a git" })
+    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-board", onDragEnd, children: [
+      project.columns.map((col) => {
+        const items = byColumn[col.id] || [];
+        const isDone = col.category === "done";
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: `nt-column${over?.columnId === col.id && drag2 ? " nt-column-over" : ""}`,
+            onDragOver: (e2) => onDragOverColumn(e2, col.id),
+            onDrop,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-column-header", children: [
+                renamingColumnId === col.id ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    autoFocus: true,
+                    className: "nt-column-rename",
+                    value: renameDraft,
+                    onChange: (e2) => setRenameDraft(e2.target.value),
+                    onBlur: () => {
+                      store.renameColumn(col.id, renameDraft);
+                      setRenamingColumnId(null);
+                    },
+                    onKeyDown: (e2) => {
+                      if (e2.key === "Enter") {
+                        store.renameColumn(col.id, renameDraft);
+                        setRenamingColumnId(null);
+                      }
+                      if (e2.key === "Escape") setRenamingColumnId(null);
+                    }
+                  }
+                ) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-column-title", onClick: () => {
+                  setRenameDraft(col.name);
+                  setRenamingColumnId(col.id);
+                }, title: "Yeniden adlandırmak için tıkla", children: [
+                  col.name,
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-column-count", children: items.length }),
+                  isDone && /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Check, { className: "nt-column-done-check" })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  MenuButton,
+                  {
+                    title: "Sütun eylemleri",
+                    items: [
+                      { label: "Yeniden adlandır", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Edit, {}), onClick: () => {
+                        setRenameDraft(col.name);
+                        setRenamingColumnId(col.id);
+                      } },
+                      { separator: true },
+                      { label: "Kategori: Yapılacak", onClick: () => store.setColumnCategory(col.id, "todo"), icon: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-cat-dot nt-cat-todo" }) },
+                      { label: "Kategori: Devam ediyor", onClick: () => store.setColumnCategory(col.id, "inprogress"), icon: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-cat-dot nt-cat-inprogress" }) },
+                      { label: "Kategori: Tamamlandı", onClick: () => store.setColumnCategory(col.id, "done"), icon: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-cat-dot nt-cat-done" }) },
+                      { separator: true },
+                      { label: "Sola taşı", disabled: project.columns[0].id === col.id, onClick: () => store.moveColumn(col.id, project.columns.findIndex((c2) => c2.id === col.id) - 1) },
+                      { label: "Sağa taşı", disabled: project.columns[project.columns.length - 1].id === col.id, onClick: () => store.moveColumn(col.id, project.columns.findIndex((c2) => c2.id === col.id) + 1) },
+                      { separator: true },
+                      { label: "Sütunu sil", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Trash, {}), danger: true, disabled: project.columns.length <= 1, onClick: () => setConfirmDeleteCol(col) }
+                    ]
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-column-body", children: [
+                items.map((issue, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { onDragOver: (e2) => onDragOverCard(e2, col.id, index2), children: [
+                  drag2 && over?.columnId === col.id && over.index === index2 && over && drag2.issueId !== issue.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-drop-placeholder" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    IssueCard,
+                    {
+                      issue,
+                      member: store.getMember(issue.assigneeId),
+                      parent: issue.parentId ? project.issues.find((i3) => i3.id === issue.parentId) : null,
+                      done: doneIds.has(issue.status),
+                      dragging: drag2?.issueId === issue.id,
+                      onDragStart: (e2) => onDragStart(e2, issue),
+                      onClick: () => openIssue(issue.id)
+                    }
+                  )
+                ] }, issue.id)),
+                drag2 && over?.columnId === col.id && over.index >= items.length && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-drop-placeholder" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-column-create", onClick: () => openCreate({ status: col.id, sprintId: activeSprint?.id ?? null, inBacklog: false }), children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, { width: 14, height: 14 }),
+                  " İş kaydı oluştur"
+                ] })
+              ] })
+            ]
+          },
+          col.id
+        );
+      }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-column nt-column-add", children: addingColumn ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          autoFocus: true,
+          className: "nt-column-rename",
+          placeholder: "Sütun adı",
+          value: newColumnName,
+          onChange: (e2) => setNewColumnName(e2.target.value),
+          onBlur: () => {
+            if (newColumnName.trim()) store.addColumn(newColumnName);
+            setAddingColumn(false);
+            setNewColumnName("");
+          },
+          onKeyDown: (e2) => {
+            if (e2.key === "Enter") {
+              store.addColumn(newColumnName);
+              setAddingColumn(false);
+              setNewColumnName("");
+            }
+            if (e2.key === "Escape") {
+              setAddingColumn(false);
+              setNewColumnName("");
+            }
+          }
+        }
+      ) : /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-column-add-btn", onClick: () => setAddingColumn(true), title: "Sütun ekle", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, {}) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ActivityFeed, { activity: project.activity, getMember: store.getMember })
+    ] }),
+    completeOpen && activeSprint && /* @__PURE__ */ jsxRuntimeExports.jsx(CompleteSprintModal, { store, sprint: activeSprint, onClose: () => setCompleteOpen(false) }),
+    confirmDeleteCol && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ConfirmModal,
+      {
+        title: `"${confirmDeleteCol.name}" sütunu silinsin mi?`,
+        message: "Bu sütundaki iş kayıtları ilk sütuna taşınacak.",
+        onConfirm: () => store.deleteColumn(confirmDeleteCol.id),
+        onClose: () => setConfirmDeleteCol(null)
+      }
+    )
+  ] });
+}
+function IssueCard({ issue, member, parent, done, dragging, onDragStart, onClick }) {
+  const thumbnail = getIssueThumbnail(issue);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: `nt-card${dragging ? " nt-card-dragging" : ""}`,
+      draggable: true,
+      onDragStart,
+      onClick,
+      children: [
+        thumbnail && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-card-thumb", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: thumbnail, alt: "" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-card-summary", children: issue.summary }),
+        (issue.labels.length > 0 || parent) && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-card-tags", children: [
+          parent && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-epic-chip", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: "epic", size: 12 }),
+            " ",
+            parent.summary
+          ] }),
+          issue.labels.map((l2) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-label-chip nt-label-chip-sm", children: l2 }, l2))
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-card-footer", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: issue.type }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `nt-card-key${done ? " nt-card-key-done" : ""}`, children: issue.key }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+          issue.storyPoints != null && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-points", children: issue.storyPoints }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityIcon, { priority: issue.priority }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member, size: 24 })
+        ] })
+      ]
+    }
+  );
+}
+function CompleteSprintModal({ store, sprint, onClose }) {
+  const { project } = store;
+  const doneIds = new Set(project.columns.filter((c2) => c2.category === "done").map((c2) => c2.id));
+  const inSprint = project.issues.filter((i3) => i3.sprintId === sprint.id && i3.type !== "epic");
+  const done = inSprint.filter((i3) => doneIds.has(i3.status));
+  const open = inSprint.filter((i3) => !doneIds.has(i3.status));
+  const futureSprints = project.sprints.filter((s2) => s2.state === "future");
+  const [moveTo, setMoveTo] = reactExports.useState(futureSprints[0]?.id || "new");
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Modal,
+    {
+      title: `${sprint.name} sprintini tamamla`,
+      onClose,
+      width: 520,
+      footer: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: onClose, children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: () => {
+          store.completeSprint(sprint.id, open.length ? moveTo : "backlog");
+          onClose();
+        }, children: "Sprinti tamamla" })
+      ] }),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "nt-modal-text", children: "Bu sprintte:" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "nt-bullets", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: done.length }),
+            " iş kaydı ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "tamamlandı" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: open.length }),
+            " iş kaydı ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "açık" })
+          ] })
+        ] }),
+        open.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Açık iş kayıtlarını şuraya taşı" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "nt-input nt-select", value: moveTo, onChange: (e2) => setMoveTo(e2.target.value), children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "new", children: "Yeni sprint" }),
+            futureSprints.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: s2.id, children: s2.name }, s2.id)),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "backlog", children: "Backlog" })
+          ] })
+        ] })
+      ]
+    }
+  );
+}
+function BacklogView({ store, currentUser, openIssue, openCreate }) {
+  const { project, activeSprint } = store;
+  const isScrum = project.type === "scrum";
+  const [query, setQuery] = reactExports.useState("");
+  const [collapsed, setCollapsed] = reactExports.useState(() => /* @__PURE__ */ new Set());
+  const [drag2, setDrag] = reactExports.useState(null);
+  const [over, setOver] = reactExports.useState(null);
+  const [startSprintId, setStartSprintId] = reactExports.useState(null);
+  const [editSprintId, setEditSprintId] = reactExports.useState(null);
+  const [completeSprintId, setCompleteSprintId] = reactExports.useState(null);
+  const [confirmDeleteSprint, setConfirmDeleteSprint] = reactExports.useState(null);
+  const [inlineCreate, setInlineCreate] = reactExports.useState(null);
+  const doneIds = reactExports.useMemo(() => new Set(project.columns.filter((c2) => c2.category === "done").map((c2) => c2.id)), [project.columns]);
+  const q = query.trim().toLowerCase();
+  const matches = (i3) => !q || `${i3.key} ${i3.summary}`.toLowerCase().includes(q);
+  const nonEpics = project.issues.filter((i3) => i3.type !== "epic");
+  const sections = reactExports.useMemo(() => {
+    const out = [];
+    if (isScrum) {
+      const ordered = [...project.sprints.filter((s2) => s2.state === "active"), ...project.sprints.filter((s2) => s2.state === "future")];
+      for (const s2 of ordered) out.push({ id: s2.id, kind: "sprint", sprint: s2, issues: sortByRank(nonEpics.filter((i3) => i3.sprintId === s2.id && matches(i3))) });
+      const openSprintIds = new Set(project.sprints.filter((s2) => s2.state !== "closed").map((s2) => s2.id));
+      out.push({ id: "backlog", kind: "backlog", issues: sortByRank(nonEpics.filter((i3) => (!i3.sprintId || !openSprintIds.has(i3.sprintId)) && matches(i3))) });
+    } else {
+      out.push({ id: "board", kind: "board", issues: sortByRank(nonEpics.filter((i3) => !i3.inBacklog && matches(i3))) });
+      out.push({ id: "backlog", kind: "backlog", issues: sortByRank(nonEpics.filter((i3) => i3.inBacklog && matches(i3))) });
+    }
+    return out;
+  }, [project.sprints, nonEpics, isScrum, q]);
+  function toggleCollapse(id2) {
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(id2)) next.delete(id2);
+      else next.add(id2);
+      return next;
+    });
+  }
+  function targetFor(section) {
+    if (section.kind === "sprint") return { sprintId: section.sprint.id };
+    if (section.kind === "board") return { inBacklog: false };
+    return isScrum ? { sprintId: null } : { inBacklog: true };
+  }
+  function onDragStart(e2, issue) {
+    setDrag({ issueId: issue.id });
+    e2.dataTransfer.effectAllowed = "move";
+    e2.dataTransfer.setData("text/plain", issue.id);
+  }
+  function onDragOverRow(e2, sectionId, index2) {
+    e2.preventDefault();
+    e2.stopPropagation();
+    const rect = e2.currentTarget.getBoundingClientRect();
+    const idx = e2.clientY > rect.top + rect.height / 2 ? index2 + 1 : index2;
+    if (!over || over.sectionId !== sectionId || over.index !== idx) setOver({ sectionId, index: idx });
+  }
+  function onDragOverSection(e2, section) {
+    e2.preventDefault();
+    const idx = section.issues.length;
+    if (!over || over.sectionId !== section.id || over.index !== idx) setOver({ sectionId: section.id, index: idx });
+  }
+  function onDrop(e2) {
+    e2.preventDefault();
+    if (drag2 && over) {
+      const section = sections.find((s2) => s2.id === over.sectionId);
+      if (section) {
+        const selfIdx = section.issues.findIndex((i3) => i3.id === drag2.issueId);
+        let index2 = over.index;
+        if (selfIdx !== -1 && selfIdx < index2) index2 -= 1;
+        store.moveIssue(drag2.issueId, targetFor(section), section.issues.map((i3) => i3.id), index2);
+      }
+    }
+    setDrag(null);
+    setOver(null);
+  }
+  function commitInlineCreate() {
+    if (!inlineCreate?.summary.trim()) {
+      setInlineCreate(null);
+      return;
+    }
+    const section = sections.find((s2) => s2.id === inlineCreate.sectionId);
+    const target2 = section ? targetFor(section) : {};
+    store.addIssue({ type: inlineCreate.type, summary: inlineCreate.summary, sprintId: target2.sprintId ?? null, inBacklog: target2.inBacklog ?? project.type === "kanban" });
+    setInlineCreate({ ...inlineCreate, summary: "" });
+  }
+  const members = [...store.membersById.values()];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page nt-backlog-page", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-breadcrumbs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Projeler" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-breadcrumb-sep", children: "/" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: project.name })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-page-title-row", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "nt-page-title", children: "Backlog" }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-toolbar", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-search", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Search, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { placeholder: "Backlog'da ara", value: query, onChange: (e2) => setQuery(e2.target.value) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-avatar-group", children: members.slice(0, 8).map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: m2, size: 32, className: "nt-avatar-stack" }, m2.id)) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-backlog-sections", onDragEnd: () => {
+      setDrag(null);
+      setOver(null);
+    }, children: sections.map((section) => {
+      const isCollapsed = collapsed.has(section.id);
+      const s2 = section.sprint;
+      const pts = section.issues.reduce(
+        (acc, i3) => {
+          const cat = project.columns.find((c2) => c2.id === i3.status)?.category || "todo";
+          acc[cat] += i3.storyPoints || 0;
+          return acc;
+        },
+        { todo: 0, inprogress: 0, done: 0 }
+      );
+      const title = section.kind === "sprint" ? s2.name : section.kind === "board" ? "Board" : "Backlog";
+      const canStart = section.kind === "sprint" && s2.state === "future" && !activeSprint;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: `nt-backlog-section${over?.sectionId === section.id && drag2 ? " nt-section-over" : ""}${section.kind === "sprint" && s2.state === "active" ? " nt-section-active" : ""}`,
+          onDragOver: (e2) => onDragOverSection(e2, section),
+          onDrop,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-section-header", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-icon-btn nt-collapse-btn", onClick: () => toggleCollapse(section.id), children: isCollapsed ? /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.ChevronRight, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.ChevronDown, {}) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-section-title", children: [
+                title,
+                section.kind === "sprint" && s2.state === "active" && s2.startDate && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-section-dates", children: [
+                  formatDate(s2.startDate),
+                  " – ",
+                  formatDate(s2.endDate)
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-section-count", children: [
+                  "(",
+                  section.issues.length,
+                  " iş kaydı)"
+                ] })
+              ] }),
+              section.kind === "sprint" && s2.goal && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-section-goal", title: s2.goal, children: s2.goal }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-points-summary", title: "Hikâye puanı: Yapılacak / Devam ediyor / Tamamlandı", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-lozenge nt-lozenge-todo", children: pts.todo }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-lozenge nt-lozenge-inprogress", children: pts.inprogress }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-lozenge nt-lozenge-done", children: pts.done })
+              ] }),
+              section.kind === "backlog" && isScrum && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", onClick: () => store.createSprint(), children: "Sprint oluştur" }),
+              section.kind === "sprint" && s2.state === "future" && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", disabled: !canStart || section.issues.length === 0, title: activeSprint ? "Zaten aktif bir sprint var" : section.issues.length === 0 ? "Önce sprinte iş kaydı ekle" : "", onClick: () => setStartSprintId(s2.id), children: "Sprinti başlat" }),
+              section.kind === "sprint" && s2.state === "active" && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", onClick: () => setCompleteSprintId(s2.id), children: "Sprinti tamamla" }),
+              section.kind === "sprint" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                MenuButton,
+                {
+                  title: "Sprint eylemleri",
+                  items: [
+                    { label: "Sprinti düzenle", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Edit, {}), onClick: () => setEditSprintId(s2.id) },
+                    { label: "Sprinti sil", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Trash, {}), danger: true, disabled: s2.state === "active", onClick: () => setConfirmDeleteSprint(s2) }
+                  ]
+                }
+              )
+            ] }),
+            !isCollapsed && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-section-body", children: [
+              section.issues.length === 0 && !(drag2 && over?.sectionId === section.id) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-section-empty", children: section.kind === "sprint" ? "Sprinti planlamak için iş kayıtlarını buraya sürükle ya da aşağıdan oluştur." : section.kind === "board" ? "Backlog'dan iş kayıtlarını buraya sürükleyerek board'a al." : "Backlog boş." }),
+              section.issues.map((issue, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { onDragOver: (e2) => onDragOverRow(e2, section.id, index2), children: [
+                drag2 && over?.sectionId === section.id && over.index === index2 && drag2.issueId !== issue.id && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-drop-line" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  BacklogRow,
+                  {
+                    issue,
+                    store,
+                    currentUser,
+                    done: doneIds.has(issue.status),
+                    dragging: drag2?.issueId === issue.id,
+                    onDragStart: (e2) => onDragStart(e2, issue),
+                    onClick: () => openIssue(issue.id),
+                    parent: issue.parentId ? project.issues.find((i3) => i3.id === issue.parentId) : null
+                  }
+                )
+              ] }, issue.id)),
+              drag2 && over?.sectionId === section.id && over.index >= section.issues.length && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-drop-line" }),
+              inlineCreate?.sectionId === section.id ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-inline-create", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TypePicker, { compact: true, value: inlineCreate.type, onChange: (t2) => setInlineCreate({ ...inlineCreate, type: t2 }), allowed: ["task", "story", "bug"] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    autoFocus: true,
+                    placeholder: "Ne yapılması gerekiyor?",
+                    value: inlineCreate.summary,
+                    onChange: (e2) => setInlineCreate({ ...inlineCreate, summary: e2.target.value }),
+                    onKeyDown: (e2) => {
+                      if (e2.key === "Enter") commitInlineCreate();
+                      if (e2.key === "Escape") setInlineCreate(null);
+                    },
+                    onBlur: () => {
+                      if (!inlineCreate.summary.trim()) setInlineCreate(null);
+                    }
+                  }
+                )
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-inline-create-btn", onClick: () => setInlineCreate({ sectionId: section.id, type: "task", summary: "" }), children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, { width: 14, height: 14 }),
+                " İş kaydı oluştur"
+              ] })
+            ] })
+          ]
+        },
+        section.id
+      );
+    }) }),
+    startSprintId && /* @__PURE__ */ jsxRuntimeExports.jsx(StartSprintModal, { store, sprint: project.sprints.find((s2) => s2.id === startSprintId), onClose: () => setStartSprintId(null) }),
+    editSprintId && /* @__PURE__ */ jsxRuntimeExports.jsx(EditSprintModal, { store, sprint: project.sprints.find((s2) => s2.id === editSprintId), onClose: () => setEditSprintId(null) }),
+    completeSprintId && /* @__PURE__ */ jsxRuntimeExports.jsx(CompleteSprintModal, { store, sprint: project.sprints.find((s2) => s2.id === completeSprintId), onClose: () => setCompleteSprintId(null) }),
+    confirmDeleteSprint && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ConfirmModal,
+      {
+        title: `${confirmDeleteSprint.name} silinsin mi?`,
+        message: "Sprintteki iş kayıtları Backlog'a taşınacak. Bu işlem geri alınamaz.",
+        onConfirm: () => store.deleteSprint(confirmDeleteSprint.id),
+        onClose: () => setConfirmDeleteSprint(null)
+      }
+    )
+  ] });
+}
+function BacklogRow({ issue, store, currentUser, done, dragging, onDragStart, onClick, parent }) {
+  const { project } = store;
+  const members = [...store.membersById.values()];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `nt-backlog-row${dragging ? " nt-row-dragging" : ""}`, draggable: true, onDragStart, onClick, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-row-drag", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Drag, {}) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: issue.type }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `nt-row-key${done ? " nt-card-key-done" : ""}`, children: issue.key }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-row-summary", children: issue.summary }),
+    parent && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-epic-chip", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: "epic", size: 12 }),
+      " ",
+      parent.summary
+    ] }),
+    issue.labels.map((l2) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-label-chip nt-label-chip-sm", children: l2 }, l2)),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: (e2) => e2.stopPropagation(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusPicker, { columns: project.columns, value: issue.status, onChange: (v2) => store.updateIssue(issue.id, { status: v2 }), size: "sm" }) }),
+    issue.storyPoints != null && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-points", children: issue.storyPoints }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityIcon, { priority: issue.priority }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { onClick: (e2) => e2.stopPropagation(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AssigneePicker, { compact: true, members, value: issue.assigneeId, onChange: (v2) => store.updateIssue(issue.id, { assigneeId: v2 }), currentUserId: currentUser?.id }) })
+  ] });
+}
+const DURATIONS = [
+  { value: "1", label: "1 hafta" },
+  { value: "2", label: "2 hafta" },
+  { value: "3", label: "3 hafta" },
+  { value: "4", label: "4 hafta" },
+  { value: "custom", label: "Özel" }
+];
+function addWeeks(dateStr, weeks) {
+  const d2 = new Date(dateStr);
+  d2.setDate(d2.getDate() + weeks * 7);
+  return toDateInputValue(d2.getTime());
+}
+function StartSprintModal({ store, sprint, onClose }) {
+  const [name, setName] = reactExports.useState(sprint.name);
+  const [duration, setDuration] = reactExports.useState("2");
+  const [startDate, setStartDate] = reactExports.useState(toDateInputValue());
+  const [endDate, setEndDate] = reactExports.useState(addWeeks(toDateInputValue(), 2));
+  const [goal, setGoal] = reactExports.useState(sprint.goal || "");
+  const [error2, setError] = reactExports.useState("");
+  const count = store.project.issues.filter((i3) => i3.sprintId === sprint.id && i3.type !== "epic").length;
+  function changeDuration(v2) {
+    setDuration(v2);
+    if (v2 !== "custom") setEndDate(addWeeks(startDate, Number(v2)));
+  }
+  function changeStart(v2) {
+    setStartDate(v2);
+    if (duration !== "custom") setEndDate(addWeeks(v2, Number(duration)));
+  }
+  function submit() {
+    if (!name.trim()) return setError("Sprint adı zorunludur.");
+    if (!startDate || !endDate) return setError("Başlangıç ve bitiş tarihi zorunludur.");
+    if (new Date(endDate) <= new Date(startDate)) return setError("Bitiş tarihi başlangıçtan sonra olmalı.");
+    store.startSprint(sprint.id, { name: name.trim(), goal: goal.trim(), startDate: new Date(startDate).getTime(), endDate: new Date(endDate).getTime() });
+    onClose();
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Modal,
+    {
+      title: "Sprinti başlat",
+      onClose,
+      width: 520,
+      footer: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: onClose, children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: submit, children: "Başlat" })
+      ] }),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "nt-modal-text", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: count }),
+          " iş kaydı bu sprinte dahil olacak."
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "nt-form-hint", children: [
+          "Zorunlu alanlar yıldız ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" }),
+          " ile işaretlenmiştir"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "Sprint adı ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", value: name, onChange: (e2) => setName(e2.target.value) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "Süre ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "nt-input nt-select", value: duration, onChange: (e2) => changeDuration(e2.target.value), children: DURATIONS.map((d2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: d2.value, children: d2.label }, d2.value)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+              "Başlangıç tarihi ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", type: "date", value: startDate, onChange: (e2) => changeStart(e2.target.value) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+              "Bitiş tarihi ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", type: "date", value: endDate, disabled: duration !== "custom", onChange: (e2) => setEndDate(e2.target.value) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Sprint hedefi" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { className: "nt-input nt-textarea", rows: 3, value: goal, onChange: (e2) => setGoal(e2.target.value) })
+        ] }),
+        error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-field-error", children: error2 })
+      ]
+    }
+  );
+}
+function EditSprintModal({ store, sprint, onClose }) {
+  const [name, setName] = reactExports.useState(sprint.name);
+  const [goal, setGoal] = reactExports.useState(sprint.goal || "");
+  const [startDate, setStartDate] = reactExports.useState(sprint.startDate ? toDateInputValue(sprint.startDate) : "");
+  const [endDate, setEndDate] = reactExports.useState(sprint.endDate ? toDateInputValue(sprint.endDate) : "");
+  const remaining = sprint.state === "active" ? daysLeft(sprint.endDate) : null;
+  function submit() {
+    if (!name.trim()) return;
+    store.updateSprint(sprint.id, {
+      name: name.trim(),
+      goal: goal.trim(),
+      startDate: startDate ? new Date(startDate).getTime() : sprint.startDate,
+      endDate: endDate ? new Date(endDate).getTime() : sprint.endDate
+    });
+    onClose();
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Modal,
+    {
+      title: "Sprinti düzenle",
+      onClose,
+      width: 520,
+      footer: /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle", onClick: onClose, children: "Vazgeç" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: submit, children: "Güncelle" })
+      ] }),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+            "Sprint adı ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", value: name, onChange: (e2) => setName(e2.target.value) })
+        ] }),
+        sprint.state === "active" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Başlangıç tarihi" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", type: "date", value: startDate, onChange: (e2) => setStartDate(e2.target.value) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+              "Bitiş tarihi ",
+              remaining != null && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-muted nt-small", children: [
+                "(",
+                remaining,
+                " gün kaldı)"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", type: "date", value: endDate, onChange: (e2) => setEndDate(e2.target.value) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Sprint hedefi" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { className: "nt-input nt-textarea", rows: 3, value: goal, onChange: (e2) => setGoal(e2.target.value) })
+        ] })
+      ]
+    }
+  );
+}
+const COLUMNS = [
+  { id: "type", label: "Tür", width: 60 },
+  { id: "key", label: "Anahtar", width: 100 },
+  { id: "summary", label: "Özet" },
+  { id: "status", label: "Durum", width: 150 },
+  { id: "priority", label: "Öncelik", width: 120 },
+  { id: "assignee", label: "Atanan", width: 160 },
+  { id: "sprint", label: "Sprint", width: 150 },
+  { id: "created", label: "Oluşturulma", width: 120 },
+  { id: "updated", label: "Güncelleme", width: 120 }
+];
+function ListView({ store, openIssue }) {
+  const { project } = store;
+  const [query, setQuery] = reactExports.useState("");
+  const [sort, setSort] = reactExports.useState({ id: "created", dir: "desc" });
+  const [typeFilter, setTypeFilter] = reactExports.useState("all");
+  const [statusFilter, setStatusFilter] = reactExports.useState("all");
+  const rows = reactExports.useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const colIndex = new Map(project.columns.map((c2, i3) => [c2.id, i3]));
+    let list = project.issues.filter((i3) => {
+      if (typeFilter !== "all" && i3.type !== typeFilter) return false;
+      if (statusFilter !== "all" && i3.status !== statusFilter) return false;
+      if (q && !`${i3.key} ${i3.summary} ${i3.labels.join(" ")}`.toLowerCase().includes(q)) return false;
+      return true;
+    });
+    const dir = sort.dir === "asc" ? 1 : -1;
+    const val = (i3) => {
+      switch (sort.id) {
+        case "type":
+          return i3.type;
+        case "key":
+          return i3.number;
+        case "summary":
+          return i3.summary.toLowerCase();
+        case "status":
+          return colIndex.get(i3.status) ?? 99;
+        case "priority":
+          return PRIORITY_ORDER.indexOf(i3.priority);
+        case "assignee":
+          return store.getMember(i3.assigneeId)?.name?.toLowerCase() || "zzz";
+        case "sprint":
+          return project.sprints.find((s2) => s2.id === i3.sprintId)?.name || "zzz";
+        case "updated":
+          return i3.updatedAt;
+        default:
+          return i3.createdAt;
+      }
+    };
+    list = [...list].sort((a2, b2) => {
+      const av = val(a2);
+      const bv = val(b2);
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return 0;
+    });
+    return list;
+  }, [project, query, sort, typeFilter, statusFilter, store]);
+  function toggleSort(id2) {
+    setSort((s2) => s2.id === id2 ? { id: id2, dir: s2.dir === "asc" ? "desc" : "asc" } : { id: id2, dir: "asc" });
+  }
+  const visibleColumns = COLUMNS.filter((c2) => c2.id !== "sprint" || project.type === "scrum");
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page nt-list-page", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-breadcrumbs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Projeler" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-breadcrumb-sep", children: "/" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: project.name })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-page-title-row", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "nt-page-title", children: "Liste" }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-toolbar", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-search", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Search, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { placeholder: "Listede ara", value: query, onChange: (e2) => setQuery(e2.target.value) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "nt-input nt-select nt-select-sm", value: typeFilter, onChange: (e2) => setTypeFilter(e2.target.value), children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "all", children: "Tür: Tümü" }),
+        Object.values(ISSUE_TYPES).map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: t2.id, children: t2.label }, t2.id))
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { className: "nt-input nt-select nt-select-sm", value: statusFilter, onChange: (e2) => setStatusFilter(e2.target.value), children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "all", children: "Durum: Tümü" }),
+        project.columns.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: c2.id, children: c2.name }, c2.id))
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-muted nt-small", children: [
+        rows.length,
+        " iş kaydı"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-table-wrap", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "nt-table", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: visibleColumns.map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { style: { width: c2.width }, onClick: () => toggleSort(c2.id), className: sort.id === c2.id ? "nt-th-sorted" : "", children: [
+        c2.label,
+        sort.id === c2.id && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-sort-arrow", children: sort.dir === "asc" ? "▲" : "▼" })
+      ] }, c2.id)) }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("tbody", { children: [
+        rows.map((i3) => {
+          const col = project.columns.find((c2) => c2.id === i3.status);
+          const member = store.getMember(i3.assigneeId);
+          const sprint = project.sprints.find((s2) => s2.id === i3.sprintId);
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { onClick: () => openIssue(i3.id), children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: i3.type }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-td-key", children: i3.key }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-td-summary", children: i3.summary }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusLozenge, { column: col }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "nt-td-priority", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityIcon, { priority: i3.priority }),
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: priorityLabel(i3.priority) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: "nt-td-assignee", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member, size: 22 }),
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: member ? "" : "nt-muted", children: member?.name || "Atanmamış" })
+            ] }),
+            project.type === "scrum" && /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-muted", children: sprint?.name || "—" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-muted", children: formatDate(i3.createdAt) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "nt-muted", children: formatDate(i3.updatedAt) })
+          ] }, i3.id);
+        }),
+        rows.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("tr", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("td", { colSpan: visibleColumns.length, className: "nt-table-empty", children: "Eşleşen iş kaydı yok." }) })
+      ] })
+    ] }) })
+  ] });
+}
+function priorityLabel(p2) {
+  return { highest: "En yüksek", high: "Yüksek", medium: "Orta", low: "Düşük", lowest: "En düşük" }[p2] || p2;
+}
+const WEEK = 7 * 24 * 60 * 60 * 1e3;
+const CATEGORY_COLORS = { todo: "#8C9BAB", inprogress: "#579DFF", done: "#4BCE97" };
+function SummaryView({ store, openList }) {
+  const { project } = store;
+  const issues = project.issues;
+  const now2 = Date.now();
+  const stats = reactExports.useMemo(() => {
+    const doneIds = new Set(project.columns.filter((c2) => c2.category === "done").map((c2) => c2.id));
+    return {
+      done7: issues.filter((i3) => i3.resolvedAt && now2 - i3.resolvedAt < WEEK).length,
+      updated7: issues.filter((i3) => now2 - i3.updatedAt < WEEK).length,
+      created7: issues.filter((i3) => now2 - i3.createdAt < WEEK).length,
+      due7: issues.filter((i3) => i3.dueDate && !doneIds.has(i3.status) && new Date(i3.dueDate).getTime() - now2 < WEEK).length
+    };
+  }, [issues, project.columns, now2]);
+  const byStatus = reactExports.useMemo(() => project.columns.map((c2) => ({ column: c2, count: issues.filter((i3) => i3.status === c2.id).length })), [issues, project.columns]);
+  const byPriority = reactExports.useMemo(() => PRIORITY_ORDER.map((p2) => ({ priority: p2, count: issues.filter((i3) => i3.priority === p2).length })), [issues]);
+  const byType = reactExports.useMemo(() => ISSUE_TYPE_ORDER.map((t2) => ({ type: t2, count: issues.filter((i3) => i3.type === t2).length })).filter((x2) => x2.count > 0), [issues]);
+  const byAssignee = reactExports.useMemo(() => {
+    const doneIds = new Set(project.columns.filter((c2) => c2.category === "done").map((c2) => c2.id));
+    const open = issues.filter((i3) => !doneIds.has(i3.status));
+    const map = /* @__PURE__ */ new Map();
+    for (const i3 of open) {
+      const k2 = i3.assigneeId || "unassigned";
+      map.set(k2, (map.get(k2) || 0) + 1);
+    }
+    return [...map.entries()].map(([id2, count]) => ({ member: id2 === "unassigned" ? null : store.getMember(id2), count, total: open.length })).sort((a2, b2) => b2.count - a2.count);
+  }, [issues, project.columns, store]);
+  const total = issues.length;
+  const maxPriority = Math.max(1, ...byPriority.map((p2) => p2.count));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page nt-summary-page", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-breadcrumbs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Projeler" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-breadcrumb-sep", children: "/" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: project.name })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-page-title-row", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "nt-page-title", children: "Özet" }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-summary-tiles", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(StatTile, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Check, {}), color: "#4BCE97", value: stats.done7, label: "tamamlandı", hint: "son 7 günde", onClick: openList }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(StatTile, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Edit, {}), color: "#579DFF", value: stats.updated7, label: "güncellendi", hint: "son 7 günde", onClick: openList }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(StatTile, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, {}), color: "#B8ACF6", value: stats.created7, label: "oluşturuldu", hint: "son 7 günde", onClick: openList }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(StatTile, { icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Calendar, {}), color: "#F5CD47", value: stats.due7, label: "vadesi yaklaşıyor", hint: "önümüzdeki 7 gün", onClick: openList })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-summary-grid", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-summary-card", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-title", children: "Durum genel bakışı" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-sub", children: "Tüm iş kayıtlarınızın durumuna hızlı bir bakış." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-donut-row", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Donut, { segments: byStatus.map((s2) => ({ value: s2.count, color: CATEGORY_COLORS[s2.column.category] })), total }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-legend", children: byStatus.map((s2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-legend-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-legend-dot", style: { background: CATEGORY_COLORS[s2.column.category] } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+              s2.column.name,
+              ": ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: s2.count })
+            ] })
+          ] }, s2.column.id)) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-summary-card", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-title", children: "Öncelik dağılımı" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-sub", children: "Ekibinizin işleri nasıl önceliklendirdiğine bakın." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-bars", children: byPriority.map((p2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-bar-col", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-bar-track", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-bar-fill", style: { height: `${p2.count / maxPriority * 100}%`, background: PRIORITIES[p2.priority].color } }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-bar-value", children: p2.count }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-bar-label", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityIcon, { priority: p2.priority, size: 14 }),
+            " ",
+            PRIORITIES[p2.priority].label
+          ] })
+        ] }, p2.priority)) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-summary-card", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-title", children: "İş türleri" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-sub", children: "İş kayıtlarının türlere göre dağılımı." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-hbars", children: [
+          byType.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-muted nt-small", children: "Henüz iş kaydı yok." }),
+          byType.map((t2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-hbar-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-hbar-label", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: t2.type }),
+              " ",
+              ISSUE_TYPES[t2.type].label
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-hbar-track", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-hbar-fill", style: { width: `${total ? t2.count / total * 100 : 0}%`, background: ISSUE_TYPES[t2.type].color } }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-hbar-pct", children: [
+              total ? Math.round(t2.count / total * 100) : 0,
+              "%"
+            ] })
+          ] }, t2.type))
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-summary-card", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-title", children: "Ekip iş yükü" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-summary-card-sub", children: "Açık iş kayıtlarının ekip üyelerine dağılımı." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-hbars", children: [
+          byAssignee.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-muted nt-small", children: "Açık iş kaydı yok." }),
+          byAssignee.map((a2, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-hbar-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-hbar-label", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: a2.member, size: 22 }),
+              " ",
+              a2.member?.name || "Atanmamış"
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-hbar-track", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-hbar-fill", style: { width: `${a2.count / a2.total * 100}%`, background: a2.member ? a2.member.color : "#8C9BAB" } }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-hbar-pct", children: [
+              Math.round(a2.count / a2.total * 100),
+              "%"
+            ] })
+          ] }, a2.member?.id || "unassigned"))
+        ] })
+      ] })
+    ] })
+  ] });
+}
+function StatTile({ icon, color: color2, value: value2, label, hint, onClick }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-stat-tile", onClick, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-stat-icon", style: { background: color2 + "22", color: color2 }, children: icon }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-stat-body", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-stat-value", children: [
+        value2,
+        " ",
+        label
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-stat-hint", children: hint })
+    ] })
+  ] });
+}
+function Donut({ segments, total }) {
+  const r2 = 52;
+  const c2 = 2 * Math.PI * r2;
+  let offset = 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { width: "140", height: "140", viewBox: "0 0 140 140", className: "nt-donut", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "70", cy: "70", r: r2, fill: "none", stroke: "#2C333A", strokeWidth: "18" }),
+    total > 0 && segments.map((s2, i3) => {
+      const len = s2.value / total * c2;
+      const el = /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: "70", cy: "70", r: r2, fill: "none", stroke: s2.color, strokeWidth: "18", strokeDasharray: `${len} ${c2 - len}`, strokeDashoffset: -offset, transform: "rotate(-90 70 70)" }, i3);
+      offset += len;
+      return el;
+    }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("text", { x: "70", y: "66", textAnchor: "middle", className: "nt-donut-total", children: total }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("text", { x: "70", y: "84", textAnchor: "middle", className: "nt-donut-label", children: "Toplam" })
+  ] });
+}
+function SettingsView({ store, onDeleteProject }) {
+  const { project } = store;
+  const [tab, setTab] = reactExports.useState("details");
+  const [name, setName] = reactExports.useState(project.name);
+  const [key, setKey] = reactExports.useState(project.key);
+  const [saved, setSaved] = reactExports.useState(false);
+  const [newMember, setNewMember] = reactExports.useState("");
+  const [newColumn, setNewColumn] = reactExports.useState("");
+  const [confirmDelete, setConfirmDelete] = reactExports.useState(false);
+  const [error2, setError] = reactExports.useState("");
+  function saveDetails() {
+    const trimmedName = name.trim();
+    const trimmedKey = key.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!trimmedName) return setError("Proje adı zorunludur.");
+    if (!trimmedKey || trimmedKey.length > 10) return setError("Anahtar 1-10 karakter, sadece harf/rakam olmalı.");
+    setError("");
+    const patch = { name: trimmedName, key: trimmedKey };
+    if (trimmedKey !== project.key) {
+      patch.issues = project.issues.map((i3) => ({ ...i3, key: `${trimmedKey}-${i3.number}` }));
+      patch.sprints = project.sprints.map((s2) => ({ ...s2, name: s2.name.startsWith(`${project.key} `) ? s2.name.replace(`${project.key} `, `${trimmedKey} `) : s2.name }));
+    }
+    store.updateProject(patch);
+    setKey(trimmedKey);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 1500);
+  }
+  const members = [...store.membersById.values()];
+  const leadOptions = members.map((m2) => ({ value: m2.id, label: m2.name, icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: m2, size: 20 }) }));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page nt-settings-page", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-page-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-breadcrumbs", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Projeler" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-breadcrumb-sep", children: "/" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: project.name }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-breadcrumb-sep", children: "/" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Proje ayarları" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-page-title-row", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "nt-page-title", children: "Proje ayarları" }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-settings-layout", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-settings-nav", children: [
+        ["details", "Ayrıntılar"],
+        ["columns", "Sütunlar ve durumlar"],
+        ["members", "Erişim (Üyeler)"],
+        ["danger", "Projeyi sil"]
+      ].map(([id2, label]) => /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `nt-settings-nav-item${tab === id2 ? " nt-active" : ""}`, onClick: () => setTab(id2), children: label }, id2)) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-settings-content", children: [
+        tab === "details" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-settings-section", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-settings-avatar-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-project-tile nt-project-tile-lg", style: { background: projectColor(project.key) }, children: project.key.slice(0, 2) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-muted nt-small", children: "Proje simgesi anahtardan otomatik türetilir." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+              "Ad ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", value: name, onChange: (e2) => setName(e2.target.value) })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { children: [
+              "Anahtar ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-required", children: "*" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input", value: key, maxLength: 10, onChange: (e2) => setKey(e2.target.value.toUpperCase()) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field-hint", children: [
+              "Anahtarı değiştirmek, mevcut tüm iş kaydı anahtarlarını (örn. ",
+              project.key,
+              "-1) yeni anahtarla yeniden adlandırır."
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Proje türü" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-readonly-field", children: project.type === "scrum" ? "Scrum (sprint tabanlı)" : "Kanban (sürekli akış)" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-field-hint", children: "Proje türü oluşturulduktan sonra değiştirilemez." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-field", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Proje sorumlusu" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(SelectPicker, { options: leadOptions, value: project.leadId, onChange: (v2) => v2 && store.updateProject({ leadId: v2 }), placeholder: "Seç" })
+          ] }),
+          error2 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-field-error", children: error2 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-inline-actions", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary", onClick: saveDetails, children: "Kaydet" }),
+            saved && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-success-text", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Check, {}),
+              " Kaydedildi"
+            ] })
+          ] })
+        ] }),
+        tab === "columns" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-settings-section", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "nt-settings-desc", children: `Board'daki sütunlar aynı zamanda iş kayıtlarının durumlarıdır. Her sütun bir kategoriye (Yapılacak / Devam ediyor / Tamamlandı) bağlıdır; raporlar ve "tamamlandı" sayımları bu kategoriye göre çalışır.` }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-columns-list", children: project.columns.map((c2, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-column-setting-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-row-drag", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Drag, {}) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input nt-input-sm", defaultValue: c2.name, onBlur: (e2) => e2.target.value.trim() && e2.target.value.trim().toUpperCase() !== c2.name && store.renameColumn(c2.id, e2.target.value) }, c2.name),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("select", { className: "nt-input nt-select nt-select-sm", value: c2.category, onChange: (e2) => store.setColumnCategory(c2.id, e2.target.value), children: Object.values(STATUS_CATEGORIES).map((cat) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: cat.id, children: cat.label }, cat.id)) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-muted nt-small nt-col-count", children: [
+              project.issues.filter((i3) => i3.status === c2.id).length,
+              " iş kaydı"
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-icon-btn", disabled: idx === 0, onClick: () => store.moveColumn(c2.id, idx - 1), title: "Yukarı", children: "▲" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-icon-btn", disabled: idx === project.columns.length - 1, onClick: () => store.moveColumn(c2.id, idx + 1), title: "Aşağı", children: "▼" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-icon-btn nt-icon-btn-danger", disabled: project.columns.length <= 1, onClick: () => store.deleteColumn(c2.id), title: "Sil", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Trash, {}) })
+          ] }, c2.id)) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-inline-add", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input nt-input-sm", placeholder: "Yeni sütun adı", value: newColumn, onChange: (e2) => setNewColumn(e2.target.value), onKeyDown: (e2) => {
+              if (e2.key === "Enter" && newColumn.trim()) {
+                store.addColumn(newColumn);
+                setNewColumn("");
+              }
+            } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", disabled: !newColumn.trim(), onClick: () => {
+              store.addColumn(newColumn);
+              setNewColumn("");
+            }, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, { width: 14, height: 14 }),
+              " Sütun ekle"
+            ] })
+          ] })
+        ] }),
+        tab === "members" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-settings-section", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "nt-settings-desc", children: "Bu projede iş kaydı atanabilecek kişiler. NobleCore hesabınla giriş yaptıysan otomatik eklenirsin; diğer ekip üyelerini adlarıyla ekleyebilirsin." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-members-list", children: members.map((m2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-member-row", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: m2, size: 32 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-member-name", children: m2.name }),
+            m2.id === project.leadId && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-lozenge nt-lozenge-inprogress", children: "SORUMLU" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-muted nt-small", children: [
+              project.issues.filter((i3) => i3.assigneeId === m2.id).length,
+              " iş kaydı"
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-spacer" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-icon-btn nt-icon-btn-danger", disabled: m2.id === project.leadId, title: m2.id === project.leadId ? "Proje sorumlusu kaldırılamaz" : "Kaldır", onClick: () => store.removeMember(m2.id), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Trash, {}) })
+          ] }, m2.id)) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-inline-add", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input nt-input-sm", placeholder: "Üye adı", value: newMember, onChange: (e2) => setNewMember(e2.target.value), onKeyDown: (e2) => {
+              if (e2.key === "Enter" && newMember.trim()) {
+                store.addMember(newMember);
+                setNewMember("");
+              }
+            } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", disabled: !newMember.trim(), onClick: () => {
+              store.addMember(newMember);
+              setNewMember("");
+            }, children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, { width: 14, height: 14 }),
+              " Üye ekle"
+            ] })
+          ] })
+        ] }),
+        tab === "danger" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-settings-section", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "nt-settings-desc", children: "Projeyi silmek, içindeki tüm iş kayıtlarını, sprintleri ve yorumları kalıcı olarak kaldırır. Bu işlem geri alınamaz." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-btn nt-btn-danger", onClick: () => setConfirmDelete(true), children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Trash, {}),
+            " Projeyi sil"
+          ] })
+        ] })
+      ] })
+    ] }),
+    confirmDelete && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ConfirmModal,
+      {
+        title: `"${project.name}" projesi silinsin mi?`,
+        message: `${project.issues.length} iş kaydı ve ${project.sprints.length} sprint kalıcı olarak silinecek.`,
+        confirmLabel: "Projeyi sil",
+        onConfirm: onDeleteProject,
+        onClose: () => setConfirmDelete(false)
+      }
+    )
+  ] });
+}
+const MAX_SIZE = 1600;
+const QUALITY = 0.82;
+function fileToCompressedDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = async () => {
+      try {
+        const bitmap = await createImageBitmap(await (await fetch(reader.result)).blob());
+        const ratio = Math.min(MAX_SIZE / bitmap.width, MAX_SIZE / bitmap.height, 1);
+        const width = Math.max(1, Math.round(bitmap.width * ratio));
+        const height = Math.max(1, Math.round(bitmap.height * ratio));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+        bitmap.close();
+        resolve(canvas.toDataURL("image/jpeg", QUALITY));
+      } catch {
+        resolve(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function ImageViewer({ url: url2, label, onClose }) {
+  reactExports.useEffect(() => {
+    function onKey(e2) {
+      if (e2.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  async function handleSave() {
+    const suggested = `${(label || "gorsel").replace(/[\\/:*?"<>|]/g, "")}.jpg`;
+    await window.api?.saveImage?.(url2, suggested);
+  }
+  return reactDomExports.createPortal(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-lightbox-overlay", onMouseDown: (e2) => e2.target === e2.currentTarget && onClose(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-lightbox-card", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-icon-btn nt-lightbox-close", onClick: onClose, title: "Kapat", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Close, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "nt-lightbox-img", src: url2, alt: label || "" }),
+      window.api?.saveImage && /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary nt-lightbox-save", onClick: handleSave, children: "💾 Bilgisayara Kaydet" })
+    ] }) }),
+    document.body
+  );
+}
+const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+function IssueModal({ store, issueId, currentUser, onClose, onOpenIssue, onCreateChild }) {
+  const { project } = store;
+  const issue = project.issues.find((i3) => i3.id === issueId);
+  const [comment, setComment] = reactExports.useState("");
+  const [pendingImages, setPendingImages] = reactExports.useState([]);
+  const [attaching, setAttaching] = reactExports.useState(false);
+  const [confirmDelete, setConfirmDelete] = reactExports.useState(false);
+  const [editingDesc, setEditingDesc] = reactExports.useState(false);
+  const [descDraft, setDescDraft] = reactExports.useState("");
+  const [lightboxUrl, setLightboxUrl] = reactExports.useState(null);
+  const fileInputRef = reactExports.useRef(null);
+  if (!issue) return null;
+  const thumbnail = getIssueThumbnail(issue);
+  const members = [...store.membersById.values()];
+  const parent = issue.parentId ? project.issues.find((i3) => i3.id === issue.parentId) : null;
+  const children2 = project.issues.filter((i3) => i3.parentId === issue.id);
+  project.columns.find((c2) => c2.id === issue.status);
+  const sprint = issue.sprintId ? project.sprints.find((s2) => s2.id === issue.sprintId) : null;
+  const sprintOptions = project.sprints.filter((s2) => s2.state !== "closed").map((s2) => ({ value: s2.id, label: s2.name, icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Sprint, { width: 16, height: 16 }) }));
+  const epicOptions = project.issues.filter((i3) => i3.type === "epic" && i3.id !== issue.id).map((i3) => ({ value: i3.id, label: `${i3.key} ${i3.summary}`, icon: /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: "epic" }) }));
+  const reporter = store.getMember(issue.reporterId);
+  const doneCount = children2.filter((c2) => project.columns.find((col) => col.id === c2.status)?.category === "done").length;
+  function update(patch) {
+    store.updateIssue(issue.id, patch);
+  }
+  function submitComment() {
+    if (!comment.trim() && pendingImages.length === 0) return;
+    store.addComment(issue.id, comment, pendingImages);
+    setComment("");
+    setPendingImages([]);
+  }
+  async function handleAttachFiles(fileList) {
+    const files = [...fileList].filter((f2) => ACCEPTED_IMAGE_TYPES.includes(f2.type));
+    if (files.length === 0) return;
+    setAttaching(true);
+    try {
+      const urls = await Promise.all(files.map(fileToCompressedDataUrl));
+      setPendingImages((prev) => [...prev, ...urls]);
+    } finally {
+      setAttaching(false);
+    }
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    Modal,
+    {
+      onClose,
+      width: 1e3,
+      className: "nt-issue-modal",
+      title: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-breadcrumb", children: [
+        parent && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-link-btn", onClick: () => onOpenIssue(parent.id), children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: parent.type }),
+            " ",
+            parent.key
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-breadcrumb-sep", children: "/" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-issue-key-crumb", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: issue.type }),
+          " ",
+          issue.key
+        ] })
+      ] }),
+      headerExtra: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        MenuButton,
+        {
+          title: "Eylemler",
+          items: [
+            { label: "Alt iş kaydı oluştur", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: "subtask" }), onClick: () => onCreateChild?.(issue), disabled: issue.type === "subtask" },
+            { separator: true },
+            { label: "Sil", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Trash, {}), danger: true, onClick: () => setConfirmDelete(true) }
+          ]
+        }
+      ),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-layout", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-main", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(InlineEditText, { value: issue.summary, onCommit: (v2) => v2 && update({ summary: v2 }), className: "nt-issue-title", inputClassName: "nt-issue-title-input" }),
+            thumbnail && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-cover-banner", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: thumbnail, alt: "", onClick: () => setLightboxUrl(thumbnail) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-btn nt-btn-subtle nt-btn-sm nt-cover-banner-remove", onClick: () => store.setCoverImage(issue.id, null), children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Close, { width: 12, height: 12 }),
+                " Kapağı kaldır"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-issue-quick-actions", children: issue.type !== "subtask" && /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", onClick: () => onCreateChild?.(issue), children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Plus, { width: 14, height: 14 }),
+              " ",
+              issue.type === "epic" ? "Alt iş kaydı ekle" : "Alt görev ekle"
+            ] }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-section", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-issue-section-title", children: "Açıklama" }),
+              editingDesc ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("textarea", { autoFocus: true, className: "nt-input nt-textarea", rows: 6, value: descDraft, onChange: (e2) => setDescDraft(e2.target.value) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-inline-actions", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary nt-btn-sm", onClick: () => {
+                    update({ description: descDraft });
+                    setEditingDesc(false);
+                  }, children: "Kaydet" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", onClick: () => setEditingDesc(false), children: "Vazgeç" })
+                ] })
+              ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `nt-issue-description${issue.description ? "" : " nt-muted"}`, onClick: () => {
+                setDescDraft(issue.description);
+                setEditingDesc(true);
+              }, children: issue.description || "Açıklama ekle…" })
+            ] }),
+            children2.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-section", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-section-title", children: [
+                issue.type === "epic" ? "Alt iş kayıtları" : "Alt görevler",
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "nt-muted nt-small", children: [
+                  " ",
+                  doneCount,
+                  "/",
+                  children2.length,
+                  " tamamlandı"
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-progress", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-progress-bar", style: { width: `${children2.length ? doneCount / children2.length * 100 : 0}%` } }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-child-list", children: children2.map((c2) => {
+                const col = project.columns.find((x2) => x2.id === c2.status);
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-child-row", onClick: () => onOpenIssue(c2.id), children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(IssueTypeIcon, { type: c2.type }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-child-key", children: c2.key }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-child-summary", children: c2.summary }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: store.getMember(c2.assigneeId), size: 22 }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(StatusLozenge, { column: col })
+                ] }, c2.id);
+              }) })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-section", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-issue-section-title", children: "Etkinlik" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-activity-tabs", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-muted nt-small", children: "Göster:" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-chip nt-chip-selected", children: "Yorumlar" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment-compose", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: store.getMember(currentUser?.id) || members[0], size: 32 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment-compose-body", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "textarea",
+                    {
+                      className: "nt-input nt-textarea",
+                      rows: comment ? 3 : 1,
+                      placeholder: "Yorum ekle…",
+                      value: comment,
+                      onChange: (e2) => setComment(e2.target.value),
+                      onKeyDown: (e2) => {
+                        if (e2.key === "Enter" && (e2.ctrlKey || e2.metaKey)) submitComment();
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "input",
+                    {
+                      ref: fileInputRef,
+                      type: "file",
+                      accept: "image/png,image/jpeg,image/webp,image/gif",
+                      multiple: true,
+                      style: { display: "none" },
+                      onChange: (e2) => {
+                        handleAttachFiles(e2.target.files);
+                        e2.target.value = "";
+                      }
+                    }
+                  ),
+                  pendingImages.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-comment-image-grid nt-comment-image-grid-pending", children: pendingImages.map((url2, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment-image", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: url2, alt: "" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-comment-image-remove", onClick: () => setPendingImages((prev) => prev.filter((_2, i3) => i3 !== idx)), title: "Kaldır", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Close, { width: 12, height: 12 }) })
+                  ] }, idx)) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-inline-actions", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", disabled: attaching, onClick: () => fileInputRef.current?.click(), children: [
+                      "🖼️ ",
+                      attaching ? "Yükleniyor…" : "Görsel ekle"
+                    ] }),
+                    (comment || pendingImages.length > 0) && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-primary nt-btn-sm", onClick: submitComment, children: "Kaydet" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-btn nt-btn-subtle nt-btn-sm", onClick: () => {
+                        setComment("");
+                        setPendingImages([]);
+                      }, children: "Vazgeç" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-muted nt-small", children: "Ctrl+Enter ile gönder" })
+                    ] })
+                  ] })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment-list", children: [
+                [...issue.comments].reverse().map((c2) => {
+                  const author = store.getMember(c2.authorId);
+                  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: author, size: 32 }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment-body", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment-meta", children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-comment-author", children: author?.name || "Bilinmeyen" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-muted nt-small", children: formatRelative(c2.createdAt) })
+                      ] }),
+                      c2.text && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-comment-text", children: c2.text }),
+                      c2.images?.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-comment-image-grid", children: c2.images.map((img) => {
+                        const isCover = thumbnail === img.url;
+                        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-comment-image", children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: img.url, alt: "", onClick: () => setLightboxUrl(img.url) }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "button",
+                            {
+                              className: `nt-comment-image-cover-btn${isCover ? " nt-comment-image-cover-btn-active" : ""}`,
+                              title: isCover ? "Bu görsel şu anki kapak" : "Kapak yap",
+                              onClick: () => store.setCoverImage(issue.id, isCover ? void 0 : img.url),
+                              children: isCover ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Check, { width: 12, height: 12 }),
+                                " Kapak"
+                              ] }) : "Kapak yap"
+                            }
+                          )
+                        ] }, img.id);
+                      }) }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-link-btn nt-small", onClick: () => store.deleteComment(issue.id, c2.id), children: "Sil" })
+                    ] })
+                  ] }, c2.id);
+                }),
+                issue.comments.length === 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-muted nt-small", children: "Henüz yorum yok." })
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-side", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-issue-side-top", children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusPicker, { columns: project.columns, value: issue.status, onChange: (v2) => update({ status: v2 }), size: "lg" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-details-card", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-header", children: "Ayrıntılar" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-details-grid", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Atanan" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(AssigneePicker, { members, value: issue.assigneeId, onChange: (v2) => update({ assigneeId: v2 }), currentUserId: currentUser?.id }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Etiketler" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(LabelsEditor, { value: issue.labels, onChange: (v2) => update({ labels: v2 }) }) }),
+                project.type === "scrum" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Sprint" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectPicker, { options: sprintOptions, value: sprint && sprint.state !== "closed" ? issue.sprintId : null, onChange: (v2) => update({ sprintId: v2 }), placeholder: sprint?.state === "closed" ? `${sprint.name} (kapalı)` : "Yok" }) })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Hikâye puanı" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "input",
+                  {
+                    className: "nt-input nt-input-sm",
+                    type: "number",
+                    min: "0",
+                    step: "0.5",
+                    value: issue.storyPoints ?? "",
+                    placeholder: "Yok",
+                    onChange: (e2) => update({ storyPoints: e2.target.value === "" ? null : Number(e2.target.value) })
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Öncelik" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(PriorityPicker, { value: issue.priority, onChange: (v2) => update({ priority: v2 }) }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Tür" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(TypePicker, { value: issue.type, onChange: (v2) => update({ type: v2, parentId: v2 === "epic" ? null : issue.parentId }) }) }),
+                issue.type !== "epic" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Üst iş kaydı" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectPicker, { options: epicOptions, value: issue.parentId, onChange: (v2) => update({ parentId: v2 }), placeholder: "Yok", width: 320 }) })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Bitiş tarihi" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("input", { className: "nt-input nt-input-sm", type: "date", value: issue.dueDate || "", onChange: (e2) => update({ dueDate: e2.target.value || null }) }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-details-label", children: "Bildiren" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-details-static", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { member: reporter, size: 24 }),
+                  " ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: reporter?.name || "Bilinmeyen" })
+                ] })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-issue-timestamps", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                "Oluşturulma: ",
+                formatDateTime(issue.createdAt)
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                "Güncelleme: ",
+                formatDateTime(issue.updatedAt)
+              ] }),
+              issue.resolvedAt && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                "Çözülme: ",
+                formatDateTime(issue.resolvedAt)
+              ] })
+            ] })
+          ] })
+        ] }),
+        confirmDelete && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          ConfirmModal,
+          {
+            title: `${issue.key} silinsin mi?`,
+            message: `"${issue.summary}" kalıcı olarak silinecek${children2.length ? `, ${children2.length} alt iş kaydı üst bağlantısını kaybedecek` : ""}. Bu işlem geri alınamaz.`,
+            onConfirm: () => {
+              store.deleteIssue(issue.id);
+              onClose();
+            },
+            onClose: () => setConfirmDelete(false)
+          }
+        ),
+        lightboxUrl && /* @__PURE__ */ jsxRuntimeExports.jsx(ImageViewer, { url: lightboxUrl, label: issue.key, onClose: () => setLightboxUrl(null) })
+      ]
+    }
+  );
+}
+const NAV = [
+  { id: "summary", label: "Özet", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Summary, {}) },
+  { id: "timeline", label: "Zaman çizelgesi", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Timeline, {}), soon: true },
+  { id: "backlog", label: "Backlog", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Backlog, {}) },
+  { id: "board", label: "Board", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Board, {}) },
+  { id: "list", label: "Liste", icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.List, {}) }
+];
+function ProjectShell({ project: initialProject, currentUser, onBackToProjects, onBackToHub, onProjectDeleted }) {
+  const store = useTaskProject(initialProject, currentUser);
+  const { project } = store;
+  const [view2, setView] = reactExports.useState("board");
+  const [openIssueId, setOpenIssueId] = reactExports.useState(null);
+  const [createDefaults, setCreateDefaults] = reactExports.useState(null);
+  const [collapsed, setCollapsed] = reactExports.useState(false);
+  const openIssue = reactExports.useCallback((id2) => setOpenIssueId(id2), []);
+  const openCreate = reactExports.useCallback((defaults = {}) => setCreateDefaults(defaults), []);
+  const viewProps = { store, currentUser, openIssue, openCreate };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-root", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      TopNav,
+      {
+        onBackToHub,
+        onProjects: onBackToProjects,
+        onCreate: () => openCreate({}),
+        currentUser,
+        searchIssues: project.issues,
+        onOpenIssue: openIssue
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-body", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: `nt-sidebar${collapsed ? " nt-sidebar-collapsed" : ""}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "nt-sidebar-toggle", onClick: () => setCollapsed((c2) => !c2), title: collapsed ? "Genişlet" : "Daralt", children: collapsed ? /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.ChevronRight, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Back, {}) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-sidebar-project", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-project-tile", style: { background: projectColor(project.key) }, children: project.key.slice(0, 2) }),
+          !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "nt-sidebar-project-text", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-sidebar-project-name", title: project.name, children: project.name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-sidebar-project-type", children: project.type === "scrum" ? "Scrum yazılım projesi" : "Kanban yazılım projesi" })
+          ] })
+        ] }),
+        !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-sidebar-group-label", children: "PLANLAMA" }),
+        NAV.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            className: `nt-sidebar-item${view2 === item.id ? " nt-active" : ""}${item.soon ? " nt-sidebar-item-soon" : ""}`,
+            disabled: item.soon,
+            title: item.soon ? `${item.label} (yakında)` : item.label,
+            onClick: () => setView(item.id),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-sidebar-item-icon", children: item.icon }),
+              !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label }),
+              !collapsed && item.soon && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-soon-badge", children: "YAKINDA" })
+            ]
+          },
+          item.id
+        )),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-sidebar-divider" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: `nt-sidebar-item${view2 === "settings" ? " nt-active" : ""}`, onClick: () => setView("settings"), title: "Proje ayarları", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "nt-sidebar-item-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon.Settings, {}) }),
+          !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Proje ayarları" })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "nt-main", children: [
+        view2 === "board" && /* @__PURE__ */ jsxRuntimeExports.jsx(BoardView, { ...viewProps, goBacklog: () => setView("backlog") }),
+        view2 === "backlog" && /* @__PURE__ */ jsxRuntimeExports.jsx(BacklogView, { ...viewProps }),
+        view2 === "list" && /* @__PURE__ */ jsxRuntimeExports.jsx(ListView, { ...viewProps }),
+        view2 === "summary" && /* @__PURE__ */ jsxRuntimeExports.jsx(SummaryView, { ...viewProps, openList: () => setView("list") }),
+        view2 === "settings" && /* @__PURE__ */ jsxRuntimeExports.jsx(SettingsView, { store, onDeleteProject: () => onProjectDeleted(project.id) })
+      ] })
+    ] }),
+    openIssueId && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      IssueModal,
+      {
+        store,
+        issueId: openIssueId,
+        currentUser,
+        onClose: () => setOpenIssueId(null),
+        onOpenIssue: (id2) => setOpenIssueId(id2),
+        onCreateChild: (parent) => openCreate({ parentId: parent.type === "epic" ? parent.id : parent.parentId || parent.id, type: parent.type === "epic" ? "task" : "subtask", sprintId: parent.sprintId, inBacklog: parent.inBacklog })
+      }
+    ),
+    createDefaults && /* @__PURE__ */ jsxRuntimeExports.jsx(CreateIssueModal, { store, currentUser, defaults: createDefaults, onClose: () => setCreateDefaults(null) })
+  ] });
+}
+function NobleTaskApp({ onBack }) {
+  const [projects, setProjects] = reactExports.useState([]);
+  const [loading2, setLoading] = reactExports.useState(true);
+  const [activeProject, setActiveProject] = reactExports.useState(null);
+  const [currentUser, setCurrentUser] = reactExports.useState(null);
+  const refresh = reactExports.useCallback(async () => {
+    setProjects(await taskStorage.list());
+    setLoading(false);
+  }, []);
+  reactExports.useEffect(() => {
+    refresh();
+  }, [refresh]);
+  reactExports.useEffect(() => {
+    let cancelled = false;
+    async function loadUser() {
+      try {
+        const token = await window.api?.getNobleCoreToken?.();
+        if (token) {
+          const { user } = await me(token);
+          if (!cancelled && user) {
+            setCurrentUser({ id: `nc-${user.id}`, name: user.username, avatarUrl: user.avatar_url || null });
+            return;
+          }
+        }
+      } catch {
+      }
+      if (!cancelled) setCurrentUser({ id: "local-user", name: "Kullanıcı", avatarUrl: null });
+    }
+    loadUser();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  async function handleCreate({ name, key, type }) {
+    const project = createProject({ name, key, type, lead: currentUser });
+    await taskStorage.save(project);
+    await refresh();
+    setActiveProject(project);
+  }
+  async function handleDelete(id2) {
+    await taskStorage.remove(id2);
+    setActiveProject((p2) => p2?.id === id2 ? null : p2);
+    await refresh();
+  }
+  async function handleOpen(id2) {
+    const full = await taskStorage.get(id2);
+    if (full) setActiveProject(full);
+  }
+  async function handleBackToProjects() {
+    setActiveProject(null);
+    await refresh();
+  }
+  if (loading2) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-root nt-loading", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "nt-muted", children: "Yükleniyor…" }) });
+  }
+  if (activeProject) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ProjectShell,
+      {
+        project: activeProject,
+        currentUser,
+        onBackToProjects: handleBackToProjects,
+        onBackToHub: onBack,
+        onProjectDeleted: handleDelete
+      },
+      activeProject.id
+    );
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ProjectsPage,
+    {
+      projects,
+      currentUser,
+      onOpen: handleOpen,
+      onCreate: handleCreate,
+      onDelete: handleDelete,
+      onBackToHub: onBack
+    }
+  );
 }
 const nodeTypes = {
   imageUpload: ImageUploadNode,
@@ -81755,23 +84588,24 @@ function App() {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(StudioApp, { onExitStudio: () => setScreen("hub") });
   }
   if (screen === "board") {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(BoardScreen, { onBack: () => setScreen("hub") });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(NobleTaskApp, { onBack: () => setScreen("hub") });
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(HubScreen, { onOpenStudio: () => setScreen("studio"), onOpenBoard: () => setScreen("board") });
 }
 export {
   App as A,
   BASE_URL as B,
-  NobleCoreAuthModal as N,
+  NobleTaskApp as N,
   ReactDOM as R,
   StudioApp as S,
   VoiceStatusBar as V,
   React as a,
   mergeHubContent as b,
   APPS as c,
-  AppIcon as d,
-  NobleCoreView as e,
-  ServerModal as f,
+  NobleCoreAuthModal as d,
+  AppIcon as e,
+  NobleCoreView as f,
+  ServerModal as g,
   heroBanner as h,
   jsxRuntimeExports as j,
   listServers as l,

@@ -1,4 +1,4 @@
-import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, b as mergeHubContent, c as APPS, j as jsxRuntimeExports, S as StudioApp, n as noblecoreLogo, N as NobleCoreAuthModal, d as AppIcon, e as NobleCoreView, h as heroBanner, f as ServerModal, V as VoiceStatusBar, R as ReactDOM, a as React } from "./App-C_6363hw.js";
+import { r as reactExports, u as useNobleCoreConnection, m as me, l as listServers, B as BASE_URL, p as preloadHubImages, b as mergeHubContent, c as APPS, j as jsxRuntimeExports, S as StudioApp, N as NobleTaskApp, n as noblecoreLogo, d as NobleCoreAuthModal, e as AppIcon, f as NobleCoreView, h as heroBanner, g as ServerModal, V as VoiceStatusBar, R as ReactDOM, a as React } from "./App-D0xKsBEL.js";
 const STORE_URL = "https://apps.microsoft.com/detail/9NKLQ2P3X6DZ";
 function WebApp() {
   const [token, setTokenState] = reactExports.useState(null);
@@ -12,9 +12,11 @@ function WebApp() {
   const [checkingSession, setCheckingSession] = reactExports.useState(true);
   const [desktopPromptOpen, setDesktopPromptOpen] = reactExports.useState(false);
   const [showStudio, setShowStudio] = reactExports.useState(false);
+  const [showTask, setShowTask] = reactExports.useState(false);
   const connection = useNobleCoreConnection(token);
   function handlePlayClick() {
-    if (activeApp === "board" || activeApp === "ref") setDesktopPromptOpen(true);
+    if (activeApp === "ref") setDesktopPromptOpen(true);
+    else if (activeApp === "board") setShowTask(true);
     else setShowStudio(true);
   }
   reactExports.useEffect(() => {
@@ -91,6 +93,9 @@ function WebApp() {
   }
   if (showStudio) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(StudioApp, { onExitStudio: () => setShowStudio(false) });
+  }
+  if (showTask) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(NobleTaskApp, { onBack: () => setShowTask(false) });
   }
   if (!token) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "web-landing", children: [
@@ -181,7 +186,7 @@ function WebApp() {
             {
               className: `launcher-tab launcher-tab-board${activeApp === "board" ? " launcher-tab-active" : ""}`,
               onClick: () => setActiveApp("board"),
-              title: "Kanban",
+              title: "NobleTask",
               children: /* @__PURE__ */ jsxRuntimeExports.jsx(AppIcon, { icon: APPS.board.icon, className: "launcher-tab-icon" })
             }
           )
@@ -254,7 +259,7 @@ function WebApp() {
     ),
     desktopPromptOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "modal-overlay", onClick: () => setDesktopPromptOpen(false), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal", onClick: (e) => e.stopPropagation(), children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Masaüstü uygulaması gerekiyor" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "AI Studio, Kanban ve NobleRef gibi üretim araçları şu an sadece Windows masaüstü uygulamasında çalışıyor. Bu tarayıcı sürümü sadece sohbet özelliklerini içerir." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "NobleRef şu an sadece Windows masaüstü uygulamasında çalışıyor. AI Studio, NobleTask ve sohbet özellikleri bu tarayıcı sürümünde de kullanılabiliyor." }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "modal-actions", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "btn", onClick: () => setDesktopPromptOpen(false), children: "Kapat" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "btn btn-primary", href: STORE_URL, target: "_blank", rel: "noopener", children: "Masaüstü Uygulamasını İndir" })
